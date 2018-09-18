@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.snxy.business.dao.mapper.LoadTypeMapper">
+  <resultMap id="BaseResultMap" type="com.snxy.business.domain.LoadType">
+    <id column="id" jdbcType="TINYINT" property="id" />
+    <result column="type_desc" jdbcType="VARCHAR" property="typeDesc" />
+    <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, type_desc, is_delete
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Byte" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from load_type
+    where id = #{id,jdbcType=TINYINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Byte">
+    delete from load_type
+    where id = #{id,jdbcType=TINYINT}
+  </delete>
+  <insert id="insert" parameterType="com.snxy.business.domain.LoadType">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Byte">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into load_type (type_desc, is_delete)
+    values (#{typeDesc,jdbcType=VARCHAR}, #{isDelete,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.snxy.business.domain.LoadType">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Byte">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into load_type
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="typeDesc != null">
+        type_desc,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="typeDesc != null">
+        #{typeDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.snxy.business.domain.LoadType">
+    update load_type
+    <set>
+      <if test="typeDesc != null">
+        type_desc = #{typeDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=TINYINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.snxy.business.domain.LoadType">
+    update load_type
+    set type_desc = #{typeDesc,jdbcType=VARCHAR},
+      is_delete = #{isDelete,jdbcType=TINYINT}
+    where id = #{id,jdbcType=TINYINT}
+  </update>
+</mapper>

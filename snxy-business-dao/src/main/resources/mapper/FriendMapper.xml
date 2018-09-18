@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.snxy.business.dao.mapper.FriendMapper">
+  <resultMap id="BaseResultMap" type="com.snxy.business.domain.Friend">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="group_id" jdbcType="BIGINT" property="groupId" />
+    <result column="friend_id" jdbcType="BIGINT" property="friendId" />
+    <result column="friend_name" jdbcType="VARCHAR" property="friendName" />
+    <result column="friend_mobile" jdbcType="VARCHAR" property="friendMobile" />
+    <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, group_id, friend_id, friend_name, friend_mobile, is_delete
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from friend
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from friend
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.snxy.business.domain.Friend">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into friend (group_id, friend_id, friend_name, 
+      friend_mobile, is_delete)
+    values (#{groupId,jdbcType=BIGINT}, #{friendId,jdbcType=BIGINT}, #{friendName,jdbcType=VARCHAR}, 
+      #{friendMobile,jdbcType=VARCHAR}, #{isDelete,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.snxy.business.domain.Friend">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into friend
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="groupId != null">
+        group_id,
+      </if>
+      <if test="friendId != null">
+        friend_id,
+      </if>
+      <if test="friendName != null">
+        friend_name,
+      </if>
+      <if test="friendMobile != null">
+        friend_mobile,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="groupId != null">
+        #{groupId,jdbcType=BIGINT},
+      </if>
+      <if test="friendId != null">
+        #{friendId,jdbcType=BIGINT},
+      </if>
+      <if test="friendName != null">
+        #{friendName,jdbcType=VARCHAR},
+      </if>
+      <if test="friendMobile != null">
+        #{friendMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.snxy.business.domain.Friend">
+    update friend
+    <set>
+      <if test="groupId != null">
+        group_id = #{groupId,jdbcType=BIGINT},
+      </if>
+      <if test="friendId != null">
+        friend_id = #{friendId,jdbcType=BIGINT},
+      </if>
+      <if test="friendName != null">
+        friend_name = #{friendName,jdbcType=VARCHAR},
+      </if>
+      <if test="friendMobile != null">
+        friend_mobile = #{friendMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.snxy.business.domain.Friend">
+    update friend
+    set group_id = #{groupId,jdbcType=BIGINT},
+      friend_id = #{friendId,jdbcType=BIGINT},
+      friend_name = #{friendName,jdbcType=VARCHAR},
+      friend_mobile = #{friendMobile,jdbcType=VARCHAR},
+      is_delete = #{isDelete,jdbcType=TINYINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

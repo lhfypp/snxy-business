@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.snxy.business.dao.mapper.VegetablePriceHistoryMapper">
+  <resultMap id="BaseResultMap" type="com.snxy.business.domain.VegetablePriceHistory">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="vegetable_price_id" jdbcType="BIGINT" property="vegetablePriceId" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="vegetable_name" jdbcType="VARCHAR" property="vegetableName" />
+    <result column="vegetable_category_id" jdbcType="BIGINT" property="vegetableCategoryId" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="effective_starting_time" jdbcType="TIMESTAMP" property="effectiveStartingTime" />
+    <result column="effective_end_time" jdbcType="TIMESTAMP" property="effectiveEndTime" />
+    <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, vegetable_price_id, code, vegetable_name, vegetable_category_id, price, effective_starting_time, 
+    effective_end_time, is_delete
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from vegetable_price_history
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from vegetable_price_history
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.snxy.business.domain.VegetablePriceHistory">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into vegetable_price_history (vegetable_price_id, code, vegetable_name, 
+      vegetable_category_id, price, effective_starting_time, 
+      effective_end_time, is_delete)
+    values (#{vegetablePriceId,jdbcType=BIGINT}, #{code,jdbcType=VARCHAR}, #{vegetableName,jdbcType=VARCHAR}, 
+      #{vegetableCategoryId,jdbcType=BIGINT}, #{price,jdbcType=DECIMAL}, #{effectiveStartingTime,jdbcType=TIMESTAMP}, 
+      #{effectiveEndTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.snxy.business.domain.VegetablePriceHistory">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into vegetable_price_history
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="vegetablePriceId != null">
+        vegetable_price_id,
+      </if>
+      <if test="code != null">
+        code,
+      </if>
+      <if test="vegetableName != null">
+        vegetable_name,
+      </if>
+      <if test="vegetableCategoryId != null">
+        vegetable_category_id,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="effectiveStartingTime != null">
+        effective_starting_time,
+      </if>
+      <if test="effectiveEndTime != null">
+        effective_end_time,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="vegetablePriceId != null">
+        #{vegetablePriceId,jdbcType=BIGINT},
+      </if>
+      <if test="code != null">
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="vegetableName != null">
+        #{vegetableName,jdbcType=VARCHAR},
+      </if>
+      <if test="vegetableCategoryId != null">
+        #{vegetableCategoryId,jdbcType=BIGINT},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="effectiveStartingTime != null">
+        #{effectiveStartingTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="effectiveEndTime != null">
+        #{effectiveEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.snxy.business.domain.VegetablePriceHistory">
+    update vegetable_price_history
+    <set>
+      <if test="vegetablePriceId != null">
+        vegetable_price_id = #{vegetablePriceId,jdbcType=BIGINT},
+      </if>
+      <if test="code != null">
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="vegetableName != null">
+        vegetable_name = #{vegetableName,jdbcType=VARCHAR},
+      </if>
+      <if test="vegetableCategoryId != null">
+        vegetable_category_id = #{vegetableCategoryId,jdbcType=BIGINT},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="effectiveStartingTime != null">
+        effective_starting_time = #{effectiveStartingTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="effectiveEndTime != null">
+        effective_end_time = #{effectiveEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.snxy.business.domain.VegetablePriceHistory">
+    update vegetable_price_history
+    set vegetable_price_id = #{vegetablePriceId,jdbcType=BIGINT},
+      code = #{code,jdbcType=VARCHAR},
+      vegetable_name = #{vegetableName,jdbcType=VARCHAR},
+      vegetable_category_id = #{vegetableCategoryId,jdbcType=BIGINT},
+      price = #{price,jdbcType=DECIMAL},
+      effective_starting_time = #{effectiveStartingTime,jdbcType=TIMESTAMP},
+      effective_end_time = #{effectiveEndTime,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=TINYINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
