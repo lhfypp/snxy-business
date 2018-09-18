@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.snxy.business.dao.mapper.GuaranteeDepositMapper">
+  <resultMap id="BaseResultMap" type="com.snxy.business.domain.GuaranteeDeposit">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="delivery_order_id" jdbcType="BIGINT" property="deliveryOrderId" />
+    <result column="guarantee_deposit" jdbcType="DECIMAL" property="guaranteeDeposit" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="pay_time" jdbcType="TIMESTAMP" property="payTime" />
+    <result column="pay_method" jdbcType="INTEGER" property="payMethod" />
+    <result column="refund_time" jdbcType="TIMESTAMP" property="refundTime" />
+    <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, delivery_order_id, guarantee_deposit, status, remark, pay_time, pay_method, refund_time, 
+    is_delete
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from guarantee_deposit
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from guarantee_deposit
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.snxy.business.domain.GuaranteeDeposit">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into guarantee_deposit (delivery_order_id, guarantee_deposit, 
+      status, remark, pay_time, 
+      pay_method, refund_time, is_delete
+      )
+    values (#{deliveryOrderId,jdbcType=BIGINT}, #{guaranteeDeposit,jdbcType=DECIMAL}, 
+      #{status,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{payTime,jdbcType=TIMESTAMP}, 
+      #{payMethod,jdbcType=INTEGER}, #{refundTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=TINYINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.snxy.business.domain.GuaranteeDeposit">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into guarantee_deposit
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="deliveryOrderId != null">
+        delivery_order_id,
+      </if>
+      <if test="guaranteeDeposit != null">
+        guarantee_deposit,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="payTime != null">
+        pay_time,
+      </if>
+      <if test="payMethod != null">
+        pay_method,
+      </if>
+      <if test="refundTime != null">
+        refund_time,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="deliveryOrderId != null">
+        #{deliveryOrderId,jdbcType=BIGINT},
+      </if>
+      <if test="guaranteeDeposit != null">
+        #{guaranteeDeposit,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="payTime != null">
+        #{payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payMethod != null">
+        #{payMethod,jdbcType=INTEGER},
+      </if>
+      <if test="refundTime != null">
+        #{refundTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.snxy.business.domain.GuaranteeDeposit">
+    update guarantee_deposit
+    <set>
+      <if test="deliveryOrderId != null">
+        delivery_order_id = #{deliveryOrderId,jdbcType=BIGINT},
+      </if>
+      <if test="guaranteeDeposit != null">
+        guarantee_deposit = #{guaranteeDeposit,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="payTime != null">
+        pay_time = #{payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payMethod != null">
+        pay_method = #{payMethod,jdbcType=INTEGER},
+      </if>
+      <if test="refundTime != null">
+        refund_time = #{refundTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.snxy.business.domain.GuaranteeDeposit">
+    update guarantee_deposit
+    set delivery_order_id = #{deliveryOrderId,jdbcType=BIGINT},
+      guarantee_deposit = #{guaranteeDeposit,jdbcType=DECIMAL},
+      status = #{status,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      pay_time = #{payTime,jdbcType=TIMESTAMP},
+      pay_method = #{payMethod,jdbcType=INTEGER},
+      refund_time = #{refundTime,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=TINYINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

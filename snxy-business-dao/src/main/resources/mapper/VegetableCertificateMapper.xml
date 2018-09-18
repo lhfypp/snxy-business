@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.snxy.business.dao.mapper.VegetableCertificateMapper">
+  <resultMap id="BaseResultMap" type="com.snxy.business.domain.VegetableCertificate">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="delivery_order_id" jdbcType="BIGINT" property="deliveryOrderId" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="upload_time" jdbcType="TIMESTAMP" property="uploadTime" />
+    <result column="certificate_type" jdbcType="INTEGER" property="certificateType" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, delivery_order_id, url, upload_time, certificate_type, status, is_delete
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from vegetable_certificate
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from vegetable_certificate
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.snxy.business.domain.VegetableCertificate">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into vegetable_certificate (delivery_order_id, url, upload_time, 
+      certificate_type, status, is_delete
+      )
+    values (#{deliveryOrderId,jdbcType=BIGINT}, #{url,jdbcType=VARCHAR}, #{uploadTime,jdbcType=TIMESTAMP}, 
+      #{certificateType,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{isDelete,jdbcType=TINYINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.snxy.business.domain.VegetableCertificate">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into vegetable_certificate
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="deliveryOrderId != null">
+        delivery_order_id,
+      </if>
+      <if test="url != null">
+        url,
+      </if>
+      <if test="uploadTime != null">
+        upload_time,
+      </if>
+      <if test="certificateType != null">
+        certificate_type,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="deliveryOrderId != null">
+        #{deliveryOrderId,jdbcType=BIGINT},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="uploadTime != null">
+        #{uploadTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="certificateType != null">
+        #{certificateType,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.snxy.business.domain.VegetableCertificate">
+    update vegetable_certificate
+    <set>
+      <if test="deliveryOrderId != null">
+        delivery_order_id = #{deliveryOrderId,jdbcType=BIGINT},
+      </if>
+      <if test="url != null">
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="uploadTime != null">
+        upload_time = #{uploadTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="certificateType != null">
+        certificate_type = #{certificateType,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.snxy.business.domain.VegetableCertificate">
+    update vegetable_certificate
+    set delivery_order_id = #{deliveryOrderId,jdbcType=BIGINT},
+      url = #{url,jdbcType=VARCHAR},
+      upload_time = #{uploadTime,jdbcType=TIMESTAMP},
+      certificate_type = #{certificateType,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      is_delete = #{isDelete,jdbcType=TINYINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

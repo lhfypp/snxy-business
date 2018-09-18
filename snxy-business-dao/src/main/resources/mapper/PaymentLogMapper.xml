@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.snxy.business.dao.mapper.PaymentLogMapper">
+  <resultMap id="BaseResultMap" type="com.snxy.business.domain.PaymentLog">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="card_no" jdbcType="VARCHAR" property="cardNo" />
+    <result column="delivery_order_id" jdbcType="BIGINT" property="deliveryOrderId" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="money" jdbcType="DECIMAL" property="money" />
+    <result column="serial_no" jdbcType="BIGINT" property="serialNo" />
+    <result column="finish_time" jdbcType="TIMESTAMP" property="finishTime" />
+    <result column="status_code" jdbcType="VARCHAR" property="statusCode" />
+    <result column="callback_times" jdbcType="INTEGER" property="callbackTimes" />
+    <result column="callback_msg" jdbcType="VARCHAR" property="callbackMsg" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+    <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, card_no, delivery_order_id, remark, money, serial_no, finish_time, status_code, 
+    callback_times, callback_msg, gmt_create, gmt_modified, is_delete
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from payment_log
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from payment_log
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.snxy.business.domain.PaymentLog">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into payment_log (card_no, delivery_order_id, remark, 
+      money, serial_no, finish_time, 
+      status_code, callback_times, callback_msg, 
+      gmt_create, gmt_modified, is_delete
+      )
+    values (#{cardNo,jdbcType=VARCHAR}, #{deliveryOrderId,jdbcType=BIGINT}, #{remark,jdbcType=VARCHAR}, 
+      #{money,jdbcType=DECIMAL}, #{serialNo,jdbcType=BIGINT}, #{finishTime,jdbcType=TIMESTAMP}, 
+      #{statusCode,jdbcType=VARCHAR}, #{callbackTimes,jdbcType=INTEGER}, #{callbackMsg,jdbcType=VARCHAR}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=TINYINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.snxy.business.domain.PaymentLog">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into payment_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="cardNo != null">
+        card_no,
+      </if>
+      <if test="deliveryOrderId != null">
+        delivery_order_id,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="money != null">
+        money,
+      </if>
+      <if test="serialNo != null">
+        serial_no,
+      </if>
+      <if test="finishTime != null">
+        finish_time,
+      </if>
+      <if test="statusCode != null">
+        status_code,
+      </if>
+      <if test="callbackTimes != null">
+        callback_times,
+      </if>
+      <if test="callbackMsg != null">
+        callback_msg,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="cardNo != null">
+        #{cardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryOrderId != null">
+        #{deliveryOrderId,jdbcType=BIGINT},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="money != null">
+        #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="serialNo != null">
+        #{serialNo,jdbcType=BIGINT},
+      </if>
+      <if test="finishTime != null">
+        #{finishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="statusCode != null">
+        #{statusCode,jdbcType=VARCHAR},
+      </if>
+      <if test="callbackTimes != null">
+        #{callbackTimes,jdbcType=INTEGER},
+      </if>
+      <if test="callbackMsg != null">
+        #{callbackMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.snxy.business.domain.PaymentLog">
+    update payment_log
+    <set>
+      <if test="cardNo != null">
+        card_no = #{cardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryOrderId != null">
+        delivery_order_id = #{deliveryOrderId,jdbcType=BIGINT},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="money != null">
+        money = #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="serialNo != null">
+        serial_no = #{serialNo,jdbcType=BIGINT},
+      </if>
+      <if test="finishTime != null">
+        finish_time = #{finishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="statusCode != null">
+        status_code = #{statusCode,jdbcType=VARCHAR},
+      </if>
+      <if test="callbackTimes != null">
+        callback_times = #{callbackTimes,jdbcType=INTEGER},
+      </if>
+      <if test="callbackMsg != null">
+        callback_msg = #{callbackMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.snxy.business.domain.PaymentLog">
+    update payment_log
+    set card_no = #{cardNo,jdbcType=VARCHAR},
+      delivery_order_id = #{deliveryOrderId,jdbcType=BIGINT},
+      remark = #{remark,jdbcType=VARCHAR},
+      money = #{money,jdbcType=DECIMAL},
+      serial_no = #{serialNo,jdbcType=BIGINT},
+      finish_time = #{finishTime,jdbcType=TIMESTAMP},
+      status_code = #{statusCode,jdbcType=VARCHAR},
+      callback_times = #{callbackTimes,jdbcType=INTEGER},
+      callback_msg = #{callbackMsg,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=TINYINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

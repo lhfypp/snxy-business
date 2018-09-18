@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.snxy.business.dao.mapper.VehicleGpsRecordMapper">
+  <resultMap id="BaseResultMap" type="com.snxy.business.domain.VehicleGpsRecord">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="delivery_order_id" jdbcType="BIGINT" property="deliveryOrderId" />
+    <result column="longitude" jdbcType="REAL" property="longitude" />
+    <result column="latitude" jdbcType="REAL" property="latitude" />
+    <result column="height" jdbcType="REAL" property="height" />
+    <result column="online_user_id" jdbcType="BIGINT" property="onlineUserId" />
+    <result column="collection_time" jdbcType="TIMESTAMP" property="collectionTime" />
+    <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, delivery_order_id, longitude, latitude, height, online_user_id, collection_time, 
+    is_delete
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from vehicle_gps_record
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from vehicle_gps_record
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.snxy.business.domain.VehicleGpsRecord">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into vehicle_gps_record (delivery_order_id, longitude, latitude, 
+      height, online_user_id, collection_time, 
+      is_delete)
+    values (#{deliveryOrderId,jdbcType=BIGINT}, #{longitude,jdbcType=REAL}, #{latitude,jdbcType=REAL}, 
+      #{height,jdbcType=REAL}, #{onlineUserId,jdbcType=BIGINT}, #{collectionTime,jdbcType=TIMESTAMP}, 
+      #{isDelete,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.snxy.business.domain.VehicleGpsRecord">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into vehicle_gps_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="deliveryOrderId != null">
+        delivery_order_id,
+      </if>
+      <if test="longitude != null">
+        longitude,
+      </if>
+      <if test="latitude != null">
+        latitude,
+      </if>
+      <if test="height != null">
+        height,
+      </if>
+      <if test="onlineUserId != null">
+        online_user_id,
+      </if>
+      <if test="collectionTime != null">
+        collection_time,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="deliveryOrderId != null">
+        #{deliveryOrderId,jdbcType=BIGINT},
+      </if>
+      <if test="longitude != null">
+        #{longitude,jdbcType=REAL},
+      </if>
+      <if test="latitude != null">
+        #{latitude,jdbcType=REAL},
+      </if>
+      <if test="height != null">
+        #{height,jdbcType=REAL},
+      </if>
+      <if test="onlineUserId != null">
+        #{onlineUserId,jdbcType=BIGINT},
+      </if>
+      <if test="collectionTime != null">
+        #{collectionTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.snxy.business.domain.VehicleGpsRecord">
+    update vehicle_gps_record
+    <set>
+      <if test="deliveryOrderId != null">
+        delivery_order_id = #{deliveryOrderId,jdbcType=BIGINT},
+      </if>
+      <if test="longitude != null">
+        longitude = #{longitude,jdbcType=REAL},
+      </if>
+      <if test="latitude != null">
+        latitude = #{latitude,jdbcType=REAL},
+      </if>
+      <if test="height != null">
+        height = #{height,jdbcType=REAL},
+      </if>
+      <if test="onlineUserId != null">
+        online_user_id = #{onlineUserId,jdbcType=BIGINT},
+      </if>
+      <if test="collectionTime != null">
+        collection_time = #{collectionTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.snxy.business.domain.VehicleGpsRecord">
+    update vehicle_gps_record
+    set delivery_order_id = #{deliveryOrderId,jdbcType=BIGINT},
+      longitude = #{longitude,jdbcType=REAL},
+      latitude = #{latitude,jdbcType=REAL},
+      height = #{height,jdbcType=REAL},
+      online_user_id = #{onlineUserId,jdbcType=BIGINT},
+      collection_time = #{collectionTime,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=TINYINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

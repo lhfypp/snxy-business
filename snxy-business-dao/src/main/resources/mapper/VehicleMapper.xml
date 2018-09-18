@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.snxy.business.dao.mapper.VehicleMapper">
+  <resultMap id="BaseResultMap" type="com.snxy.business.domain.Vehicle">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="driver_info_id" jdbcType="BIGINT" property="driverInfoId" />
+    <result column="plate_number" jdbcType="VARCHAR" property="plateNumber" />
+    <result column="truck_type_id" jdbcType="BIGINT" property="truckTypeId" />
+    <result column="vehicle_driving_license_number" jdbcType="VARCHAR" property="vehicleDrivingLicenseNumber" />
+    <result column="vehicle_driving_license_url" jdbcType="VARCHAR" property="vehicleDrivingLicenseUrl" />
+    <result column="vehicle_url" jdbcType="VARCHAR" property="vehicleUrl" />
+    <result column="operation_certificate" jdbcType="VARCHAR" property="operationCertificate" />
+    <result column="tonnage" jdbcType="VARCHAR" property="tonnage" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+    <result column="online_user_id" jdbcType="BIGINT" property="onlineUserId" />
+    <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, driver_info_id, plate_number, truck_type_id, vehicle_driving_license_number, 
+    vehicle_driving_license_url, vehicle_url, operation_certificate, tonnage, gmt_create, 
+    gmt_modified, online_user_id, is_delete
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from vehicle
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from vehicle
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.snxy.business.domain.Vehicle">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into vehicle (driver_info_id, plate_number, truck_type_id, 
+      vehicle_driving_license_number, vehicle_driving_license_url, 
+      vehicle_url, operation_certificate, tonnage, 
+      gmt_create, gmt_modified, online_user_id, 
+      is_delete)
+    values (#{driverInfoId,jdbcType=BIGINT}, #{plateNumber,jdbcType=VARCHAR}, #{truckTypeId,jdbcType=BIGINT}, 
+      #{vehicleDrivingLicenseNumber,jdbcType=VARCHAR}, #{vehicleDrivingLicenseUrl,jdbcType=VARCHAR}, 
+      #{vehicleUrl,jdbcType=VARCHAR}, #{operationCertificate,jdbcType=VARCHAR}, #{tonnage,jdbcType=VARCHAR}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, #{onlineUserId,jdbcType=BIGINT}, 
+      #{isDelete,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.snxy.business.domain.Vehicle">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into vehicle
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="driverInfoId != null">
+        driver_info_id,
+      </if>
+      <if test="plateNumber != null">
+        plate_number,
+      </if>
+      <if test="truckTypeId != null">
+        truck_type_id,
+      </if>
+      <if test="vehicleDrivingLicenseNumber != null">
+        vehicle_driving_license_number,
+      </if>
+      <if test="vehicleDrivingLicenseUrl != null">
+        vehicle_driving_license_url,
+      </if>
+      <if test="vehicleUrl != null">
+        vehicle_url,
+      </if>
+      <if test="operationCertificate != null">
+        operation_certificate,
+      </if>
+      <if test="tonnage != null">
+        tonnage,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
+      <if test="onlineUserId != null">
+        online_user_id,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="driverInfoId != null">
+        #{driverInfoId,jdbcType=BIGINT},
+      </if>
+      <if test="plateNumber != null">
+        #{plateNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="truckTypeId != null">
+        #{truckTypeId,jdbcType=BIGINT},
+      </if>
+      <if test="vehicleDrivingLicenseNumber != null">
+        #{vehicleDrivingLicenseNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="vehicleDrivingLicenseUrl != null">
+        #{vehicleDrivingLicenseUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="vehicleUrl != null">
+        #{vehicleUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="operationCertificate != null">
+        #{operationCertificate,jdbcType=VARCHAR},
+      </if>
+      <if test="tonnage != null">
+        #{tonnage,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="onlineUserId != null">
+        #{onlineUserId,jdbcType=BIGINT},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.snxy.business.domain.Vehicle">
+    update vehicle
+    <set>
+      <if test="driverInfoId != null">
+        driver_info_id = #{driverInfoId,jdbcType=BIGINT},
+      </if>
+      <if test="plateNumber != null">
+        plate_number = #{plateNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="truckTypeId != null">
+        truck_type_id = #{truckTypeId,jdbcType=BIGINT},
+      </if>
+      <if test="vehicleDrivingLicenseNumber != null">
+        vehicle_driving_license_number = #{vehicleDrivingLicenseNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="vehicleDrivingLicenseUrl != null">
+        vehicle_driving_license_url = #{vehicleDrivingLicenseUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="vehicleUrl != null">
+        vehicle_url = #{vehicleUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="operationCertificate != null">
+        operation_certificate = #{operationCertificate,jdbcType=VARCHAR},
+      </if>
+      <if test="tonnage != null">
+        tonnage = #{tonnage,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="onlineUserId != null">
+        online_user_id = #{onlineUserId,jdbcType=BIGINT},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.snxy.business.domain.Vehicle">
+    update vehicle
+    set driver_info_id = #{driverInfoId,jdbcType=BIGINT},
+      plate_number = #{plateNumber,jdbcType=VARCHAR},
+      truck_type_id = #{truckTypeId,jdbcType=BIGINT},
+      vehicle_driving_license_number = #{vehicleDrivingLicenseNumber,jdbcType=VARCHAR},
+      vehicle_driving_license_url = #{vehicleDrivingLicenseUrl,jdbcType=VARCHAR},
+      vehicle_url = #{vehicleUrl,jdbcType=VARCHAR},
+      operation_certificate = #{operationCertificate,jdbcType=VARCHAR},
+      tonnage = #{tonnage,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      online_user_id = #{onlineUserId,jdbcType=BIGINT},
+      is_delete = #{isDelete,jdbcType=TINYINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
