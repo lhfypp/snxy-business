@@ -48,6 +48,18 @@
         </dependency>
 
         <dependency>
+            <groupId>io.github.openfeign.form</groupId>
+            <artifactId>feign-form</artifactId>
+            <version>2.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.openfeign.form</groupId>
+            <artifactId>feign-form-spring</artifactId>
+            <version>2.1.0</version>
+        </dependency>
+
+
+        <dependency>
             <groupId>com.snxy.business</groupId>
             <artifactId>snxy-business-service</artifactId>
             <version>1.0-SNAPSHOT</version>
