@@ -38,7 +38,7 @@ public class MybatisConfig {
         log.info("配置SqlSessionFactory");
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
         sqlSessionFactoryBean.setDataSource(dataSource());
-        sqlSessionFactoryBean.setTypeAliasesPackage("com.snxy.user.agent.domain");
+        sqlSessionFactoryBean.setTypeAliasesPackage("com.snxy.business.domain");
         ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         sqlSessionFactoryBean.setMapperLocations(resolver.getResources("classpath*:/mapper/*.xml"));
         return sqlSessionFactoryBean.getObject();
