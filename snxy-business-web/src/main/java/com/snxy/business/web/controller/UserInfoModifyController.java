@@ -54,7 +54,7 @@ public class UserInfoModifyController {
     }
 
     /*
-    * 修改手机验证码
+    * 前端输入验证码，正确则修改成新手机号
     * */
     @RequestMapping("/modifyPhone")
     public ResultData modifyPhone(Long userId,String smsCode){
@@ -81,11 +81,37 @@ public class UserInfoModifyController {
     }
 
     /*
-    * 忘记密码
+    * 忘记密码，向用户手机号发送验证码，并把验证码放入redis
     * */
     @RequestMapping("/password/reset")
-    public ResultData passwordReset(Long userId,String newPassword,String oldPassword){
-        systemUserService.passwordReset(userId,newPassword,oldPassword);
+    public ResultData passwordReset(Long userId){
+        systemUserService.passwordReset(userId);
         return ResultData.success("");
     }
+    /*
+    *验证验证码 不返还报错就是正确？？
+    * */
+    @RequestMapping("/password/checkSmsCode")
+    public ResultData passwordCheckSmsCode(Long userId,String smsCode){
+        systemUserService.checkSmsCode(userId,smsCode);
+        return ResultData.success("");
+    }
+    /*
+    * 验证码正确，进入下一步，填写新的密码点击保存
+    * */
+    @RequestMapping("/password/resetNew")
+    public ResultData passwordResetNew(Long userId,String newPassword){
+        systemUserService.passwordResetNew(userId,newPassword);
+        return ResultData.success("");
+    }
+
+    /*
+    * 修改密码
+    * */
+    @RequestMapping("/password/modify")
+    public ResultData passwordModify(Long userId,String oldPassword,String newPassword){
+        systemUserService.passwordModify(userId,oldPassword,newPassword);
+        return ResultData.success("");
+    }
+
 }
