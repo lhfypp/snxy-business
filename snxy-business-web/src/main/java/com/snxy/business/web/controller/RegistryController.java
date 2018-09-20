@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * Created by 24398 on 2018/9/19.
@@ -31,15 +32,40 @@ public class RegistryController {
         this.registryService.getRegistrySmsCode(mobile);
     }
 
-
+    /***
+     * 校验输入的验证码
+     * @param mobile
+     * @param smsCode
+     * @return
+     */
     @RequestMapping("/user/registry/checkSmsCode")
     public ResultData  checkSMsCode(String mobile,String smsCode){
         CheckUtil.isTrue(StringUtil.isNotBlank(smsCode),"验证码不能为空");
         StringUtil.checkMobile(mobile);
-        this.registryService.checkSmsCode(mobile,smsCode);
-        return null;
+        this.registryService.checkSmsCodeAndRegister(mobile,smsCode);
+        return ResultData.success(null);
     }
 
+    /***
+     * 修改初始化密码
+     * @param systemUserId
+     * @param password
+     * @return
+     */
+     @RequestMapping("/user/registry/password")
+    public ResultData  changeInitPassword(Long systemUserId,String password){
+        CheckUtil.isTrue(StringUtil.isNotBlank(password),"密码不能为空");
+        this.registryService.changeInitPassword(systemUserId,password);
+        return ResultData.success(null);
+    }
+
+
+    @RequestMapping("/user/registry/identity/save")
+    public ResultData  saveIdentity(String name, List<Integer> identities){
+        log.info("name : [[]]",name);
+        log.info("identities :  [{}]",identities);
+        return ResultData.success(null);
+    }
 
 
 }

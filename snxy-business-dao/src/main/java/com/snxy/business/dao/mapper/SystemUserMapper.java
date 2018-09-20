@@ -1,6 +1,7 @@
 package com.snxy.business.dao.mapper;
 
 import com.snxy.business.domain.SystemUser;
+import org.apache.ibatis.annotations.Param;
 
 public interface SystemUserMapper {
     int deleteByPrimaryKey(Long id);
@@ -16,4 +17,6 @@ public interface SystemUserMapper {
     int updateByPrimaryKey(SystemUser record);
 
     String selectMobileById(Long userId);
+
+    SystemUser selectByMobile(@Param("mobile") String mobile, @Param("isDelete") Byte isDelete);
 }

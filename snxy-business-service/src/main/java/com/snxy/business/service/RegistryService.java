@@ -6,5 +6,7 @@ package com.snxy.business.service;
 public interface RegistryService {
     void getRegistrySmsCode(String mobile);
 
-    void checkSmsCode(String mobile, String smsCode);
+    void checkSmsCodeAndRegister(String mobile, String smsCode);
+
+    void changeInitPassword(Long systemUserId, String password);
 }

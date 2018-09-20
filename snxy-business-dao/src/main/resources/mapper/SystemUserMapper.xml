@@ -177,4 +177,14 @@
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="selectByMobile"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from system_user
+    where mobile = #{mobile,jdbcType=VARCHAR}
+           AND is_delete = #{isDelete,jdbcType=TINYINT}
+
+  </select>
+
 </mapper>

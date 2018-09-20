@@ -5,13 +5,16 @@ import com.snxy.business.domain.SystemUser;
 import com.snxy.business.domain.UserMobileCode;
 import com.snxy.business.service.SystemUserService;
 import com.snxy.common.exception.BizException;
+import com.snxy.common.util.MD5Util;
 import com.snxy.common.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -83,6 +86,41 @@ public class SystemUserServiceImpl implements SystemUserService {
 
     @Override
     public void passwordReset(Long userId, String newPassword, String oldPassword) {
+
+    }
+
+    @Override
+    public void identityAuthorize(Long userId, String identityNo, List<MultipartFile> identityImages) {
+
+    }
+
+    @Override
+    public SystemUser selectByMobile(String mobile) {
+        // 查询未被删除的SystemUser 用户
+        SystemUser systemUser = this.systemUserMapper.selectByMobile(mobile,(byte)1);
+        return systemUser;
+    }
+
+    @Override
+    public boolean newSystemUser(SystemUser systemUser) {
+        int n =  this.systemUserMapper.insertSelective(systemUser);
+        if(n == 1){
+            return true;
+        }
+        return false;
+    }
+
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void changeInitPassword(Long systemUserId, String password) {
+        SystemUser systemUser = new SystemUser();
+           systemUser.setId(systemUserId);
+           systemUser.setPwd(MD5Util.encrypt(password));
+        int n = this.systemUserMapper.updateByPrimaryKeySelective(systemUser);
+        if( n !=1 ){
+            throw new BizException("修改初始密码失败");
+        }
 
     }
 }
