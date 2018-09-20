@@ -4,14 +4,12 @@
   <resultMap id="BaseResultMap" type="com.snxy.business.domain.OnlineUser">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="system_user_id" jdbcType="BIGINT" property="systemUserId" />
-    <result column="company_type" jdbcType="INTEGER" property="companyType" />
-    <result column="is_responsible" jdbcType="INTEGER" property="isResponsible" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="phone" jdbcType="VARCHAR" property="phone" />
     <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, system_user_id, company_type, is_responsible, name, phone, is_delete
+    id, system_user_id, name, phone, is_delete
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -27,12 +25,10 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into online_user (system_user_id, company_type, is_responsible, 
-      name, phone, is_delete
-      )
-    values (#{systemUserId,jdbcType=BIGINT}, #{companyType,jdbcType=INTEGER}, #{isResponsible,jdbcType=INTEGER}, 
-      #{name,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{isDelete,jdbcType=TINYINT}
-      )
+    insert into online_user (system_user_id, name, phone, 
+      is_delete)
+    values (#{systemUserId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
+      #{isDelete,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.snxy.business.domain.OnlineUser">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -42,12 +38,6 @@
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="systemUserId != null">
         system_user_id,
-      </if>
-      <if test="companyType != null">
-        company_type,
-      </if>
-      <if test="isResponsible != null">
-        is_responsible,
       </if>
       <if test="name != null">
         name,
@@ -62,12 +52,6 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="systemUserId != null">
         #{systemUserId,jdbcType=BIGINT},
-      </if>
-      <if test="companyType != null">
-        #{companyType,jdbcType=INTEGER},
-      </if>
-      <if test="isResponsible != null">
-        #{isResponsible,jdbcType=INTEGER},
       </if>
       <if test="name != null">
         #{name,jdbcType=VARCHAR},
@@ -86,12 +70,6 @@
       <if test="systemUserId != null">
         system_user_id = #{systemUserId,jdbcType=BIGINT},
       </if>
-      <if test="companyType != null">
-        company_type = #{companyType,jdbcType=INTEGER},
-      </if>
-      <if test="isResponsible != null">
-        is_responsible = #{isResponsible,jdbcType=INTEGER},
-      </if>
       <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
       </if>
@@ -107,8 +85,6 @@
   <update id="updateByPrimaryKey" parameterType="com.snxy.business.domain.OnlineUser">
     update online_user
     set system_user_id = #{systemUserId,jdbcType=BIGINT},
-      company_type = #{companyType,jdbcType=INTEGER},
-      is_responsible = #{isResponsible,jdbcType=INTEGER},
       name = #{name,jdbcType=VARCHAR},
       phone = #{phone,jdbcType=VARCHAR},
       is_delete = #{isDelete,jdbcType=TINYINT}

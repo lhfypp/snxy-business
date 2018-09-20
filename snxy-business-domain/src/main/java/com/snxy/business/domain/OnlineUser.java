@@ -5,10 +5,6 @@ public class OnlineUser {
 
     private Long systemUserId;
 
-    private Integer companyType;
-
-    private Integer isResponsible;
-
     private String name;
 
     private String phone;
@@ -29,22 +25,6 @@ public class OnlineUser {
 
     public void setSystemUserId(Long systemUserId) {
         this.systemUserId = systemUserId;
-    }
-
-    public Integer getCompanyType() {
-        return companyType;
-    }
-
-    public void setCompanyType(Integer companyType) {
-        this.companyType = companyType;
-    }
-
-    public Integer getIsResponsible() {
-        return isResponsible;
-    }
-
-    public void setIsResponsible(Integer isResponsible) {
-        this.isResponsible = isResponsible;
     }
 
     public String getName() {
