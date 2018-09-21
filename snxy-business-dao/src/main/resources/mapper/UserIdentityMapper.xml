@@ -3,7 +3,7 @@
 <mapper namespace="com.snxy.business.dao.mapper.UserIdentityMapper">
   <resultMap id="BaseResultMap" type="com.snxy.business.domain.UserIdentity">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="online_user_id" jdbcType="TINYINT" property="onlineUserId" />
+    <result column="online_user_id" jdbcType="BIGINT" property="onlineUserId" />
     <result column="identity_id" jdbcType="INTEGER" property="identityId" />
     <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
   </resultMap>
@@ -26,7 +26,7 @@
     </selectKey>
     insert into user_identity (online_user_id, identity_id, is_delete
       )
-    values (#{onlineUserId,jdbcType=TINYINT}, #{identityId,jdbcType=INTEGER}, #{isDelete,jdbcType=TINYINT}
+    values (#{onlineUserId,jdbcType=BIGINT}, #{identityId,jdbcType=INTEGER}, #{isDelete,jdbcType=TINYINT}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.snxy.business.domain.UserIdentity">
@@ -61,7 +61,7 @@
     update user_identity
     <set>
       <if test="onlineUserId != null">
-        online_user_id = #{onlineUserId,jdbcType=TINYINT},
+        online_user_id = #{onlineUserId,jdbcType=BIGINT},
       </if>
       <if test="identityId != null">
         identity_id = #{identityId,jdbcType=INTEGER},
@@ -74,9 +74,29 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.snxy.business.domain.UserIdentity">
     update user_identity
-    set online_user_id = #{onlineUserId,jdbcType=TINYINT},
+    set online_user_id = #{onlineUserId,jdbcType=BIGINT},
       identity_id = #{identityId,jdbcType=INTEGER},
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <delete id="deleteIdentity">
+    DELETE  FROM user_identity
+    WHERE online_user_id = #{onlineUserId,jdbcType=BIGINT}
+
+  </delete>
+
+  <insert id="insertBatch" >
+     insert into user_identity
+     (online_user_id, identity_id, is_delete)
+     VALUES
+    <foreach collection="list" item="userIdentity" separator="," >
+      (
+       #{userIdentity.onlineUserId,jdbcType=BIGINT},
+       #{userIdentity.identityId,jdbcType=INTEGER},
+       #{userIdentity.isDelete,jdbcType=TINYINT})
+    </foreach>
+  </insert>
+
+
 </mapper>

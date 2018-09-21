@@ -23,6 +23,13 @@
             <artifactId>spring-web</artifactId>
             <version>4.3.11.RELEASE</version>
         </dependency>
+
+        <!--登陆模块-->
+        <dependency>
+            <groupId>com.snxy.user.agent</groupId>
+            <artifactId>snxy-user-agent-service</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 

@@ -3,13 +3,13 @@
 <mapper namespace="com.snxy.business.dao.mapper.IdentityTypeMapper">
   <resultMap id="BaseResultMap" type="com.snxy.business.domain.IdentityType">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="identy_type" jdbcType="TINYINT" property="identyType" />
-    <result column="identy_name" jdbcType="VARCHAR" property="identyName" />
+    <result column="identity_type" jdbcType="TINYINT" property="identityType" />
+    <result column="identity_name" jdbcType="VARCHAR" property="identityName" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, identy_type, identy_name, remark, is_delete
+    id, identity_type, identity_name, remark, is_delete
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -25,9 +25,9 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into identity_type (identy_type, identy_name, remark, 
+    insert into identity_type (identity_type, identity_name, remark, 
       is_delete)
-    values (#{identyType,jdbcType=TINYINT}, #{identyName,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+    values (#{identityType,jdbcType=TINYINT}, #{identityName,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
       #{isDelete,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.snxy.business.domain.IdentityType">
@@ -36,11 +36,11 @@
     </selectKey>
     insert into identity_type
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="identyType != null">
-        identy_type,
+      <if test="identityType != null">
+        identity_type,
       </if>
-      <if test="identyName != null">
-        identy_name,
+      <if test="identityName != null">
+        identity_name,
       </if>
       <if test="remark != null">
         remark,
@@ -50,11 +50,11 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="identyType != null">
-        #{identyType,jdbcType=TINYINT},
+      <if test="identityType != null">
+        #{identityType,jdbcType=TINYINT},
       </if>
-      <if test="identyName != null">
-        #{identyName,jdbcType=VARCHAR},
+      <if test="identityName != null">
+        #{identityName,jdbcType=VARCHAR},
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
@@ -67,11 +67,11 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.snxy.business.domain.IdentityType">
     update identity_type
     <set>
-      <if test="identyType != null">
-        identy_type = #{identyType,jdbcType=TINYINT},
+      <if test="identityType != null">
+        identity_type = #{identityType,jdbcType=TINYINT},
       </if>
-      <if test="identyName != null">
-        identy_name = #{identyName,jdbcType=VARCHAR},
+      <if test="identityName != null">
+        identity_name = #{identityName,jdbcType=VARCHAR},
       </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
@@ -84,10 +84,22 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.snxy.business.domain.IdentityType">
     update identity_type
-    set identy_type = #{identyType,jdbcType=TINYINT},
-      identy_name = #{identyName,jdbcType=VARCHAR},
+    set identity_type = #{identityType,jdbcType=TINYINT},
+      identity_name = #{identityName,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+
+  <select id="listAll"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from identity_type
+    <if test="isDelete == 1">
+      where  is_delete = #{isDelete,jdbcType=TINYINT}
+    </if>
+
+
+  </select>
 </mapper>
