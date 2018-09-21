@@ -25,7 +25,7 @@
     from system_user
     where id = #{id,jdbcType=BIGINT}
   </select>
-  <select id="selectMobileById" parameterType="java.lang.Long" resultType="String">
+  <select id="selectMobileById" parameterType="java.lang.Long" resultType="java.lang.String">
     select mobile
     from system_user
     where id = #{id,jdbcType=BIGINT}
