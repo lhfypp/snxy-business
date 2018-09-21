@@ -24,4 +24,10 @@ public class OnlineUserServiceImpl implements OnlineUserService {
         }
         return false;
     }
+
+    @Override
+    public OnlineUser selectById(Long onlineUserId) {
+        OnlineUser onlineUser = this.onlineUserMapper.selectByPrimaryKey(onlineUserId);
+        return onlineUser;
+    }
 }

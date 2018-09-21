@@ -29,6 +29,12 @@ public class SystemUserServiceImpl implements SystemUserService {
 
     private final String SMS_CODE = "123456";
 
+
+    @Override
+    public void passwordReset(Long userId, String newPassword, String oldPassword) {
+
+    }
+
     @Override
     public void modifyName(String name, Long userId) {
         if (name==null) {
@@ -84,10 +90,6 @@ public class SystemUserServiceImpl implements SystemUserService {
 
     }
 
-    @Override
-    public void identityAuthorize(Long userId, String identityNo, List<MultipartFile> identityImages) {
-
-    }
 
     @Override
     public void passwordReset(Long userId) {
@@ -171,5 +173,18 @@ public class SystemUserServiceImpl implements SystemUserService {
             throw new BizException("修改初始密码失败");
         }
 
+    }
+
+    @Override
+    public boolean saveUserName(Long systemUserId,String name) {
+        SystemUser systemUser = new SystemUser();
+          systemUser.setId(systemUserId);
+          systemUser.setChineseName(name);
+        int n = this.systemUserMapper.updateByPrimaryKeySelective(systemUser);
+        if( n == 1){
+            return true;
+        }
+
+        return false;
     }
 }

@@ -3,9 +3,9 @@ package com.snxy.business.domain;
 public class IdentityType {
     private Integer id;
 
-    private Byte identyType;
+    private Byte identityType;
 
-    private String identyName;
+    private String identityName;
 
     private String remark;
 
@@ -19,20 +19,20 @@ public class IdentityType {
         this.id = id;
     }
 
-    public Byte getIdentyType() {
-        return identyType;
+    public Byte getIdentityType() {
+        return identityType;
     }
 
-    public void setIdentyType(Byte identyType) {
-        this.identyType = identyType;
+    public void setIdentityType(Byte identityType) {
+        this.identityType = identityType;
     }
 
-    public String getIdentyName() {
-        return identyName;
+    public String getIdentityName() {
+        return identityName;
     }
 
-    public void setIdentyName(String identyName) {
-        this.identyName = identyName;
+    public void setIdentityName(String identityName) {
+        this.identityName = identityName;
     }
 
     public String getRemark() {

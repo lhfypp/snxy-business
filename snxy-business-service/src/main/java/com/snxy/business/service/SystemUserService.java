@@ -7,7 +7,6 @@ import com.snxy.business.domain.SystemUser;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 
 public interface SystemUserService {
     void modifyName(String name, Long userId);
@@ -37,4 +36,5 @@ public interface SystemUserService {
 
     void passwordModify(Long userId, String oldPassword, String newPassword);
 
+    boolean saveUserName(Long systemUserId,String name);
 }
