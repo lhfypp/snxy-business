@@ -36,8 +36,9 @@ public class SystemUserServiceImpl implements SystemUserService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void modifyName(String name, Long userId) {
-        if (name==null) {
+        if (StringUtil.isBlank(name)) {
             throw new BizException("要修改的姓名为空");
         }
         SystemUser systemUser = new SystemUser();
@@ -47,9 +48,8 @@ public class SystemUserServiceImpl implements SystemUserService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void smsCode(Long userId,String newMobile) {
-        if(newMobile == null){
+        if(StringUtil.isBlank(newMobile)){
             throw new BizException("没有手机号");
         }
         if(!StringUtil.checkMobile(newMobile)){
@@ -70,12 +70,12 @@ public class SystemUserServiceImpl implements SystemUserService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void modifyPhone(Long userId, String smsCode) {
-        if(smsCode == null){
+        if(StringUtil.isBlank(smsCode)){
             throw new BizException("验证码为空");
         }
         UserMobileCode userMobileCode = (UserMobileCode) redisTemplate.opsForValue().get(userId.toString()+"smsCode");
         if (userMobileCode.getSmsCode().equals(smsCode)){
-            SystemUser systemUser = null;
+            SystemUser systemUser = new SystemUser();
             systemUser.setId(userId);
             systemUser.setMobile(userMobileCode.getMobile());
             systemUserMapper.updateByPrimaryKeySelective(systemUser);
@@ -99,7 +99,7 @@ public class SystemUserServiceImpl implements SystemUserService {
 
     @Override
     public void checkSmsCode(Long userId, String smsCode) {
-        if(smsCode == null){
+        if(StringUtil.isBlank(smsCode)){
             throw new BizException("验证码是空的");
         }
         if(!redisTemplate.opsForValue().get(userId.toString()+"passwordReset").toString().equals(smsCode)){
@@ -108,11 +108,12 @@ public class SystemUserServiceImpl implements SystemUserService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void passwordResetNew(Long userId, String newPassword) {
-        if (newPassword == null){
+        if (StringUtil.isBlank(newPassword)){
             throw new BizException("新密码为空");
         }
-        SystemUser systemUser = null;
+        SystemUser systemUser = new SystemUser();
         systemUser.setId(userId);
         systemUser.setPwd(MD5Util.encrypt(newPassword));
 
@@ -120,13 +121,25 @@ public class SystemUserServiceImpl implements SystemUserService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void passwordModify(Long userId, String oldPassword, String newPassword) {
-        if (oldPassword == null){
+        if (StringUtil.isBlank(oldPassword)){
             throw new BizException("旧密码为空");
         }
-        if (newPassword == null){
+        if (StringUtil.isBlank(newPassword)){
             throw new BizException("新密码为空");
         }
+        SystemUser systemUser = systemUserMapper.selectByPrimaryKey(userId);
+        if(systemUser.getPwd().equals(MD5Util.encrypt(oldPassword))){
+            SystemUser newSystemUser = new SystemUser();
+            newSystemUser.setId(userId);
+            newSystemUser.setPwd(MD5Util.encrypt(newPassword));
+
+            systemUserMapper.updateByPrimaryKeySelective(newSystemUser);
+        }else {
+            throw new BizException("旧密码错误");
+        }
+
     }
 
     //调用外部接口，获取短信验证码

@@ -2,6 +2,7 @@ package com.snxy.business.web.controller;
 
 import com.snxy.business.service.SystemUserService;
 import com.snxy.business.service.UserImageService;
+import com.snxy.common.exception.BizException;
 import com.snxy.common.response.ResultData;
 import com.snxy.common.util.CheckUtil;
 import com.snxy.common.util.StringUtil;
@@ -9,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -17,7 +19,7 @@ import java.util.List;
 /*
 * 基础信息设置
 * */
-@Controller
+@RestController
 @Slf4j
 @RequestMapping("/user")
 public class UserInfoModifyController {
