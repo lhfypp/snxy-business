@@ -136,8 +136,5 @@
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
-<<<<<<< HEAD
-=======
 
->>>>>>> 5aa03420024b12fd6bb4bf194298ba0c71cb8587
 </mapper>
