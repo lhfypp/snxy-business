@@ -2,6 +2,10 @@ package com.snxy.business.dao.mapper;
 
 import com.snxy.business.domain.MerchantCompany;
 
+import java.util.List;
+import java.util.Map;
+
+
 public interface MerchantCompanyMapper {
     int deleteByPrimaryKey(Long id);
 
@@ -9,9 +13,10 @@ public interface MerchantCompanyMapper {
 
     int insertSelective(MerchantCompany record);
 
-    MerchantCompany selectByPrimaryKey(Long id);
+    List<MerchantCompany> selectByPrimaryKey(List list);
 
     int updateByPrimaryKeySelective(MerchantCompany record);
 
     int updateByPrimaryKey(MerchantCompany record);
+
 }

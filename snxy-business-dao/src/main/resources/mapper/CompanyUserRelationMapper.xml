@@ -21,6 +21,9 @@
     from company_user_relation
     where id = #{id,jdbcType=BIGINT}
   </select>
+  <select id="selectByOnlineId" parameterType="java.lang.Long" resultType="java.lang.Long">
+    select company_id from company_user_relation where onlline_user_id = #{id,jdbcType=BIGINT}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from company_user_relation
     where id = #{id,jdbcType=BIGINT}

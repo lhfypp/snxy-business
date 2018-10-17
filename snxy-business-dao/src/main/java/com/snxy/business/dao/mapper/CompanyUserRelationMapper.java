@@ -2,6 +2,8 @@ package com.snxy.business.dao.mapper;
 
 import com.snxy.business.domain.CompanyUserRelation;
 
+import java.util.List;
+
 public interface CompanyUserRelationMapper {
     int deleteByPrimaryKey(Long id);
 
@@ -14,4 +16,6 @@ public interface CompanyUserRelationMapper {
     int updateByPrimaryKeySelective(CompanyUserRelation record);
 
     int updateByPrimaryKey(CompanyUserRelation record);
+
+    List<Long> selectByOnlineId(Long id);
 }
