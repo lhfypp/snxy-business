@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
+
 import java.util.List;
 
 @Service
@@ -45,11 +45,18 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
         vegetableDeliveryRelationMapper.insertSelective(vegetableDeliveryRelation);
     }
     @Override
-    public List<BillInfo> searchDeliveryOrder(Long useId, String orderStatus, String serchName) {
+    public List<BillInfo> searchDeliveryOrder(Long useId, String orderStatus, String searchName) {
 
         //用于存放商户或者代办所有的手机信息
-        List<String>sendPhones=new ArrayList<String>();
+        List <String> sendPhones ;
         sendPhones= systemUserInfoMapper.searchPhones(useId);
-        return  deliveryOrderMapper.searchDeliveryOrder(sendPhones,orderStatus,serchName);
+        return  deliveryOrderMapper.searchDeliveryOrder(sendPhones,orderStatus,searchName);
     }
+
+    @Override
+    public DeliveryOrder searchDeliverOrderinfo(Long deliveryOrderId) {
+        return deliveryOrderMapper.selectBydDeliveryOrderId(deliveryOrderId);
+    }
+
+
 }
