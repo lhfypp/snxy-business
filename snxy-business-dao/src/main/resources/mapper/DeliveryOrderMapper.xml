@@ -69,12 +69,20 @@
     <if test ="orderStatus!=null and orderStatus!=''">
       and status =#{orderStatus}
   </if>
-  <if test="serchName!=null and serchName!=''">
-    or start_addr=#{serchName} or order_no=#{serchName} or sender_name=#{serchName}
+  <if test="searchName!=null and searchName!=''">
+    or start_addr=#{searchName} or order_no=#{searchName} or sender_name=#{searchName}
   </if>
   </select>
 
   <!--     end -->
+  <!-- 查询订单详情 start-->
+  <select id="selectBydDeliveryOrderId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from delivery_order
+    where order_no = #{deliveryOrderId}
+  </select>
+  <!-- 查询订单详情 end -->
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
