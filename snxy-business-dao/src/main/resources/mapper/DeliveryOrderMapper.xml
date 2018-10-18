@@ -32,6 +32,49 @@
     load_status, location_certificate, quality_certificate, gmt_create, gmt_modified, 
     delivery_fee, qrcode_url, status, is_delete
   </sql>
+
+
+  <!--查询订单信息 start -->
+  <resultMap id="DeliveryResultMap" type="com.snxy.business.domain.BillInfo">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="sender_name" jdbcType="VARCHAR" property="senderName" />
+    <result column="receiver_name" jdbcType="VARCHAR" property="receiverName" />
+    <result column="start_addr" jdbcType="VARCHAR" property="startAddr" />
+    <result column="end_addr" jdbcType="VARCHAR" property="endAddr" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+  </resultMap>
+  <sql id="delvery_order_info">
+    id,order_no,gmt_create,start_addr,end_Addr,sender_name,receiver_name,status
+  </sql>
+  <select id="searchDeliveryOrder" resultMap="DeliveryResultMap">
+    select
+    <include refid="delvery_order_info"/>
+    from delivery_order
+    where  1=1
+    <choose>
+      <when test="sendPhones!=null and sendPhones.size()>0">
+      and sender_mobile  in
+
+
+    <foreach collection="sendPhones" open="(" close=")" separator="," item="sendPhone">
+      #{sendPhone}
+    </foreach>
+    </when>
+      <otherwise>
+        and 1=2
+      </otherwise>
+    </choose>
+    <if test ="orderStatus!=null and orderStatus!=''">
+      and status =#{orderStatus}
+  </if>
+  <if test="serchName!=null and serchName!=''">
+    or start_addr=#{serchName} or order_no=#{serchName} or sender_name=#{serchName}
+  </if>
+  </select>
+
+  <!--     end -->
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
