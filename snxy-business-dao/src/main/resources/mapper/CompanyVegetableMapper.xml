@@ -19,10 +19,24 @@
     price, effective_start_time, gmt_create, gmt_modified, is_delete
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from company_vegetable
     where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectByCompanyId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from company_vegetable
+    where company_id = #{userCompanyId,jdbcType=BIGINT}
+    AND is_delete = 0
+  </select>
+  <select id="selectByGoodsName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from company_vegetable
+    where vegetable_name LIKE #{goodsName}
+    AND is_delete = 0
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from company_vegetable
