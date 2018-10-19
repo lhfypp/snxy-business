@@ -17,7 +17,7 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class DeliveryOrderServiceImpl implements DeliveryOrderService {
+    public class DeliveryOrderServiceImpl implements DeliveryOrderService {
     @Resource
     private SystemUserInfoMapper systemUserInfoMapper;
     @Resource
@@ -67,7 +67,7 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
     }
 
     @Override
-    public DeliveryOrder searchDeliverOrderinfo(Long deliveryOrderId) {
+    public BillInfoDetail searchDeliverOrderinfo(Long deliveryOrderId) {
         return deliveryOrderMapper.selectBydDeliveryOrderId(deliveryOrderId);
     }
 
@@ -90,6 +90,11 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
         List<BillInfo> listBillInfo=deliveryOrderMapper.searchDeliveryOrder(sendPhones, orderStatus, searchName);
         PageInfo<BillInfo> pageInfo = new PageInfo<BillInfo>(listBillInfo);
         return pageInfo;
+    }
+
+    @Override
+    public void cancelOrder(Long orderId) {
+        deliveryOrderMapper.cancelOrderByOrderId(orderId);
     }
 
 
