@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface DeliveryOrderService {
     void createDeliveryOrder(DeliveryOrder deliveryOrder, VegetableDeliveryRelation vegetableDeliveryRelation, VegetableCertificate vegetableCertificate, VegetableImage vegetableImage);
-    List<BillInfo>  searchDeliveryOrder(Long useId, String orderStatus, String searchName);
+    List<BillInfo>  searchDeliveryOrder( String orderStatus, String searchName);
     DeliveryOrder searchDeliverOrderinfo(Long deliveryOrderId);
 }
