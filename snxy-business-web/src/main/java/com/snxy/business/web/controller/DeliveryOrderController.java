@@ -107,13 +107,13 @@ public class DeliveryOrderController {
 
     @RequestMapping(value = "/seller/order/list")
     public ResultData<List<BillInfo>> searchDeliveryOrder(HttpServletRequest request) {
-        long userId = Long.parseLong(request.getParameter("userId"));//用户标识
+
         String orderStatus = request.getParameter("orderStatus");//订单状态
         String searchName = request.getParameter("searchName");//地点or联系人or单号
 
 
         ResultData<List<BillInfo>> listResultData = new ResultData<List<BillInfo>>();
-        listResultData.setData(deliveryOrderService.searchDeliveryOrder(userId, orderStatus, searchName));
+        listResultData.setData(deliveryOrderService.searchDeliveryOrder(orderStatus, searchName));
 
         return listResultData;
     }
@@ -124,11 +124,6 @@ public class DeliveryOrderController {
         return ResultData.success (deliveryOrderService.searchDeliverOrderinfo(deliveryOrderId));
 
     }
-    @RequestMapping("/failed")
-    public ResultData requestFailed() {
 
-
-        return ResultData.fail("用户id为空");
-    }
 
 }
