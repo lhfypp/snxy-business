@@ -1,5 +1,6 @@
 package com.snxy.business.web.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.snxy.business.domain.*;
 import com.snxy.business.service.CompanyUserRelationService;
 import com.snxy.business.service.CompanyVegetableService;
@@ -24,7 +25,7 @@ import java.util.List;
 public class DeliveryOrderController {
 
     @Resource
-    private DeliveryOrderService deliveryOrderService;
+    private DeliveryOrderService    deliveryOrderService;
 
 
 
@@ -124,6 +125,14 @@ public class DeliveryOrderController {
         return ResultData.success (deliveryOrderService.searchDeliverOrderinfo(deliveryOrderId));
 
     }
-
+    //实现分页查询
+    @RequestMapping(value = "/seller/order/list2")
+    public ResultData<PageInfo<BillInfo>>searchDeliveryOrderbypage(HttpServletRequest request){
+        PageInfo<BillInfo> pageInfo=null;
+        String orderStatus = request.getParameter("orderStatus");//订单状态
+        String searchName = request.getParameter("searchName");//地点or联系人or单号
+        pageInfo=deliveryOrderService.searchDeliveryOrderByPage(orderStatus, searchName);
+        return ResultData.success(pageInfo);
+    }
 
 }
