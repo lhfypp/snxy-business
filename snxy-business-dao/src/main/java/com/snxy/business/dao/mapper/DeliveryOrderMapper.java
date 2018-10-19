@@ -1,6 +1,7 @@
 package com.snxy.business.dao.mapper;
 
 import com.snxy.business.domain.BillInfo;
+import com.snxy.business.domain.BillInfoDetail;
 import com.snxy.business.domain.DeliveryOrder;
 import org.apache.ibatis.annotations.Param;
 
@@ -20,5 +21,7 @@ public interface DeliveryOrderMapper {
 
     int updateByPrimaryKey(DeliveryOrder record);
     List<BillInfo> searchDeliveryOrder(@Param("sendPhones") List<String >sendPhones,@Param("orderStatus") String orderStatus,@Param("searchName") String searchName);
-    DeliveryOrder selectBydDeliveryOrderId(@Param("deliveryOrderId") Long deliveryOrderId);
+    BillInfoDetail selectBydDeliveryOrderId(@Param("deliveryOrderId") Long deliveryOrderId);
+    void  cancelOrderByOrderId(@Param("orderId")Long orderId);
+
 }
