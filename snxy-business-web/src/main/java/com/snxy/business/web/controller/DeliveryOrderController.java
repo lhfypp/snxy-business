@@ -105,7 +105,7 @@ public class DeliveryOrderController {
 
         return ResultData.success("订单发布成功");
     }
-
+    // 查看订单列表
     @RequestMapping(value = "/seller/order/list")
     public ResultData<List<BillInfo>> searchDeliveryOrder(HttpServletRequest request) {
 
@@ -118,9 +118,9 @@ public class DeliveryOrderController {
 
         return listResultData;
     }
-
+    //查看订单详情
     @RequestMapping(value = "/seller/order/detail")
-    public ResultData<DeliveryOrder >searchDeliveryOrderInfo(HttpServletRequest request) {
+    public ResultData<BillInfoDetail >searchDeliveryOrderInfo(HttpServletRequest request) {
         long deliveryOrderId= Long.parseLong(request.getParameter("deliveryOrderId"));
         return ResultData.success (deliveryOrderService.searchDeliverOrderinfo(deliveryOrderId));
 
@@ -134,5 +134,13 @@ public class DeliveryOrderController {
         pageInfo=deliveryOrderService.searchDeliveryOrderByPage(orderStatus, searchName);
         return ResultData.success(pageInfo);
     }
+   //商户取消订单
+    @RequestMapping("/seller/bill/cancel")
+    public ResultData cancelOrder(HttpServletRequest request){
+        long logisticOrderId= Long.parseLong(request.getParameter("logisticOrderId"));
+        deliveryOrderService.cancelOrder(logisticOrderId);
+        return ResultData.success("商户取消订单成功");
+    }
+
 
 }
