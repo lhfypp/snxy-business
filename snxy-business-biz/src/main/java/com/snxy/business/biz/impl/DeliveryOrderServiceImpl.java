@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -45,12 +46,22 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
         vegetableDeliveryRelationMapper.insertSelective(vegetableDeliveryRelation);
     }
     @Override
-    public List<BillInfo> searchDeliveryOrder(Long useId, String orderStatus, String searchName) {
-
+    public List<BillInfo> searchDeliveryOrder(String orderStatus, String searchName) {
+        //从用户对象获取
+        String userPhone="15101267019";
+        String identityName="2";
         //用于存放商户或者代办所有的手机信息
-        List <String> sendPhones ;
-        sendPhones= systemUserInfoMapper.searchPhones(useId);
-        return  deliveryOrderMapper.searchDeliveryOrder(sendPhones,orderStatus,searchName);
+        List<String> sendPhones=new ArrayList<String>();
+        if("2".equals(identityName)) {
+            sendPhones.add(userPhone);
+        }else if ("1".equals(identityName)){
+
+            sendPhones = systemUserInfoMapper.searchPhones(userPhone);
+        }else{
+            return null;
+        }
+            return deliveryOrderMapper.searchDeliveryOrder(sendPhones, orderStatus, searchName);
+
     }
 
     @Override
