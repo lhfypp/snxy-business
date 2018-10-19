@@ -32,7 +32,8 @@
               User_identity c,
               identity_type d,
               company_user_relation e
-               where a.system_user_id=b.system_user_id
+               where a.system_user_id=b
+               .system_user_id
                    and b.id=c.online_user_id
                    and c.identity_id=d.id
                    and d.identy_name ="经销商"
