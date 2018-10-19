@@ -1,5 +1,8 @@
 package com.snxy.business.domain;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 public class DeliveryOrderVo {
     //订单号
     private String orderNo;
@@ -18,25 +21,71 @@ public class DeliveryOrderVo {
     //收货地址
     private String buyAddr;
     //货品id
-    private Integer goodsId;
+    private Long goodsId;
+    //货品名称
+    private String goodsName;
+    //货品照片上传时间
+    private Date GoodsImgUploadTime;
     //货品重量
-    private String goodsWeight;
+    private Integer goodsWeight;
     //货品价格
-    private String goodsPrice;
+    private BigDecimal goodsPrice;
     //货车类型
-    private Integer truckType;
+    private Integer truckTypeId;
     //运费
-    private String price;
+    private BigDecimal price;
     //司机姓名
     private String driverName;
     //联系电话
     private String driverMobile;
     //产地证明
     private String locationCertificate;
+    //产地证明上传时间
+    private Date locationCertificateUploadTime;
     //检测证明
     private String qualityCertificate;
+    //检测证明上传时间
+    private Date qualityCertificateUploadTime;
     //货物照片
     private String goodsImg;
+    //距离
+    private float distance;
+    //发货时间
+    private Date sendTime;
+    //预计到达时间
+    private Date estArrivalTime;
+
+    public Date getGoodsImgUploadTime() {
+        return GoodsImgUploadTime;
+    }
+
+    public void setGoodsImgUploadTime(Date goodsImgUploadTime) {
+        GoodsImgUploadTime = goodsImgUploadTime;
+    }
+
+    public Date getLocationCertificateUploadTime() {
+        return locationCertificateUploadTime;
+    }
+
+    public void setLocationCertificateUploadTime(Date locationCertificateUploadTime) {
+        this.locationCertificateUploadTime = locationCertificateUploadTime;
+    }
+
+    public Date getQualityCertificateUploadTime() {
+        return qualityCertificateUploadTime;
+    }
+
+    public void setQualityCertificateUploadTime(Date qualityCertificateUploadTime) {
+        this.qualityCertificateUploadTime = qualityCertificateUploadTime;
+    }
+
+    public String getGoodsName() {
+        return goodsName;
+    }
+
+    public void setGoodsName(String goodsName) {
+        this.goodsName = goodsName;
+    }
 
     public String getOrderNo() {
         return orderNo;
@@ -94,43 +143,51 @@ public class DeliveryOrderVo {
         this.buyerCompany = buyerCompany;
     }
 
-    public Integer getGoodsId() {
+    public String getBuyAddr() {
+        return buyAddr;
+    }
+
+    public void setBuyAddr(String buyAddr) {
+        this.buyAddr = buyAddr;
+    }
+
+    public Long getGoodsId() {
         return goodsId;
     }
 
-    public void setGoodsId(Integer goodsId) {
+    public void setGoodsId(Long goodsId) {
         this.goodsId = goodsId;
     }
 
-    public String getGoodsWeight() {
+    public Integer getGoodsWeight() {
         return goodsWeight;
     }
 
-    public void setGoodsWeight(String goodsWeight) {
+    public void setGoodsWeight(Integer goodsWeight) {
         this.goodsWeight = goodsWeight;
     }
 
-    public String getGoodsPrice() {
+    public BigDecimal getGoodsPrice() {
         return goodsPrice;
     }
 
-    public void setGoodsPrice(String goodsPrice) {
+    public void setGoodsPrice(BigDecimal goodsPrice) {
         this.goodsPrice = goodsPrice;
     }
 
-    public Integer getTruckType() {
-        return truckType;
+    public Integer getTruckTypeId() {
+        return truckTypeId;
     }
 
-    public void setTruckType(Integer truckType) {
-        this.truckType = truckType;
+    public void setTruckTypeId(Integer truckTypeId) {
+        this.truckTypeId = truckTypeId;
     }
 
-    public String getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
@@ -174,11 +231,27 @@ public class DeliveryOrderVo {
         this.goodsImg = goodsImg;
     }
 
-    public String getBuyAddr() {
-        return buyAddr;
+    public float getDistance() {
+        return distance;
     }
 
-    public void setBuyAddr(String buyAddr) {
-        this.buyAddr = buyAddr;
+    public void setDistance(float distance) {
+        this.distance = distance;
+    }
+
+    public Date getSendTime() {
+        return sendTime;
+    }
+
+    public void setSendTime(Date sendTime) {
+        this.sendTime = sendTime;
+    }
+
+    public Date getEstArrivalTime() {
+        return estArrivalTime;
+    }
+
+    public void setEstArrivalTime(Date estArrivalTime) {
+        this.estArrivalTime = estArrivalTime;
     }
 }

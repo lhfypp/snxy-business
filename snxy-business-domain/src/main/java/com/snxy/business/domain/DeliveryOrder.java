@@ -50,6 +50,16 @@ public class DeliveryOrder {
 
     private Byte isDelete;
 
+    private Integer truckTypeId;
+
+    public Integer getTruckTypeId() {
+        return truckTypeId;
+    }
+
+    public void setTruckTypeId(Integer truckTypeId) {
+        this.truckTypeId = truckTypeId;
+    }
+
     public Long getId() {
         return id;
     }
