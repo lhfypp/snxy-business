@@ -138,8 +138,15 @@ public class DeliveryOrderController {
     @RequestMapping("/seller/bill/cancel")
     public ResultData cancelOrder(HttpServletRequest request){
         long logisticOrderId= Long.parseLong(request.getParameter("logisticOrderId"));
+        //从用户对象获取
+        String identityName="1";//商户
+        if("1".equals(identityName)){
+
         deliveryOrderService.cancelOrder(logisticOrderId);
         return ResultData.success("商户取消订单成功");
+        }else{
+            return ResultData.fail("该用户没有权限取消订单");
+        }
     }
 
 
