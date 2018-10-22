@@ -12,8 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -22,7 +25,8 @@ import java.util.List;
     private SystemUserInfoMapper systemUserInfoMapper;
     @Resource
     private DeliveryOrderMapper deliveryOrderMapper;
-
+    @Resource
+    private VehicleMapper vehicleMapper;
     @Resource
     private VegetableCertificateMapper vegetableCertificateMapper;
 
@@ -31,7 +35,8 @@ import java.util.List;
 
     @Resource
     private VegetableDeliveryRelationMapper vegetableDeliveryRelationMapper;
-
+    @Resource
+    private CurrOrderReceiverMapper currOrderReceiverMapper;
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void createDeliveryOrder(DeliveryOrder deliveryOrder, VegetableDeliveryRelation vegetableDeliveryRelation, VegetableCertificate vegetableCertificate, VegetableImage vegetableImage) {
@@ -67,7 +72,7 @@ import java.util.List;
     }
 
     @Override
-    public BillInfoDetail searchDeliverOrderinfo(Long deliveryOrderId) {
+    public BillInfoDetail searchDeliverOrderinfo(String  deliveryOrderId) {
         return deliveryOrderMapper.selectBydDeliveryOrderId(deliveryOrderId);
     }
 
@@ -93,9 +98,33 @@ import java.util.List;
     }
 
     @Override
-    public void cancelOrder(Long orderId) {
-        deliveryOrderMapper.cancelOrderByOrderId(orderId);
+    public void cancelOrder(String orderNO) {
+        int status=6;//1.取消，6合格关闭，7不合格关闭
+        deliveryOrderMapper.cancelOrderByOrderId(orderNO,status);
+
     }
 
+    @Override
+    public void changeDriver(String orderId, String driverName, String drivePhone) {
 
+        currOrderReceiverMapper.changeDriver(Long.parseLong(orderId),driverName,drivePhone);
+    }
+    public void updateOrder(UpdateBillInfoDetail billInfoDetail){
+        deliveryOrderMapper.updateOrder(billInfoDetail);
+    }
+   public void acceptOrder(String orderNo){
+        int status=2;//接收订单
+       deliveryOrderMapper.cancelOrderByOrderId(orderNo,status);
+   }
+
+    @Override
+    public Map<String ,Object> getVehiclesForDriver(String orderNO) {
+        //用在线用户id进行查询该用户的所有车辆信息（driverinfo，vehicle表）
+        long onlineUserId=1;
+        List<VehiclePartInfo> VehiclePartInfoList=vehicleMapper.searchVehiclePartInfo( onlineUserId);
+        Map<String ,Object>vehicleInfosMap=new HashMap<>();
+        vehicleInfosMap.put("orderNO",orderNO);
+        vehicleInfosMap.put("vehiclePartInfo",VehiclePartInfoList);
+        return vehicleInfosMap;
+    }
 }
