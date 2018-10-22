@@ -18,5 +18,5 @@ public interface SystemUserInfoMapper {
 
     int updateByPrimaryKey(SystemUserInfo record);
     // 查询产地发货单要用到
-    List<String> searchPhones(@Param("userID") Long userID);
+    List<String> searchPhones(@Param("phone") String phone);
 }

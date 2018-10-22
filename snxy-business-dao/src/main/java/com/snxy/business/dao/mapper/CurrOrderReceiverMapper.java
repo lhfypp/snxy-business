@@ -2,6 +2,8 @@ package com.snxy.business.dao.mapper;
 
 import com.snxy.business.domain.CurrOrderReceiver;
 
+import java.util.List;
+
 public interface CurrOrderReceiverMapper {
     int deleteByPrimaryKey(Long id);
 
@@ -14,4 +16,6 @@ public interface CurrOrderReceiverMapper {
     int updateByPrimaryKeySelective(CurrOrderReceiver record);
 
     int updateByPrimaryKey(CurrOrderReceiver record);
+
+    List selectOrderIdByPrimaryKey(Long userId);
 }

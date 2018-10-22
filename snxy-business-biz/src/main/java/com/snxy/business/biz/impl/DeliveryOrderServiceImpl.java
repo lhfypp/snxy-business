@@ -11,15 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Service
 @Slf4j
 public class DeliveryOrderServiceImpl implements DeliveryOrderService {
-    @Resource
-    private SystemUserInfoMapper systemUserInfoMapper;
     @Resource
     private DeliveryOrderMapper deliveryOrderMapper;
 
@@ -31,6 +28,9 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
 
     @Resource
     private VegetableDeliveryRelationMapper vegetableDeliveryRelationMapper;
+
+    @Resource
+    private CurrOrderReceiverMapper currOrderReceiverMapper;
 
     @Resource
     private RedisTemplate<String,Object> redisTemplate;
@@ -56,6 +56,7 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
         deliveryOrder.setGmtCreate(new Date());
         deliveryOrder.setQrcodeUrl("二维码地址");
         deliveryOrder.setTruckTypeId(deliveryOrderVo.getTruckTypeId());
+        deliveryOrder.setStatus(0);
 
         deliveryOrderMapper.insertSelective(deliveryOrder);
         Long id = deliveryOrder.getId();
@@ -95,14 +96,6 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
 
 
     }
-    @Override
-    public List<BillInfo> searchDeliveryOrder(Long useId, String orderStatus, String serchName) {
-
-        //用于存放商户或者代办所有的手机信息
-        List<String>sendPhones=new ArrayList<String>();
-        sendPhones= systemUserInfoMapper.searchPhones(useId);
-        return  deliveryOrderMapper.searchDeliveryOrder(sendPhones,orderStatus,serchName);
-    }
 
     @Override
     public String getOrderNo() {
@@ -122,6 +115,22 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
         }
 
         return orderNo;
+    }
+
+    @Override
+    public List<BillInfo> selectDriverOrder(Long userId) {
+        List list = currOrderReceiverMapper.selectOrderIdByPrimaryKey(userId);
+
+        List<BillInfo> driverOrders = deliveryOrderMapper.selectDriverOrder(list);
+        return driverOrders;
+    }
+
+    @Override
+    public DriverOrderInfo selectOrderByOrderId(Long orderId) {
+        List<GoodsInfo> goodsInfos = vegetableDeliveryRelationMapper.selectByOrderId(orderId);
+        DriverOrderInfo driverOrderInfo = deliveryOrderMapper.selectDriverOrderBydDeliveryOrderId(orderId);
+        driverOrderInfo.setGoodsInfos(goodsInfos);
+        return driverOrderInfo;
     }
 
 

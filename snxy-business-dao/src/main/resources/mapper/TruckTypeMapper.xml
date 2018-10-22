@@ -15,6 +15,11 @@
     from truck_type
     where id = #{id,jdbcType=BIGINT}
   </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from truck_type
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from truck_type
     where id = #{id,jdbcType=BIGINT}

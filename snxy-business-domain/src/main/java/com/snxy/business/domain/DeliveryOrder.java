@@ -46,6 +46,7 @@ public class DeliveryOrder {
 
     private String qrcodeUrl;
 
+    //待接单0，取消1，已接单2，装货完成3，运输中4，检测中5，合格关闭6，不合格关闭7 -- 被遣离8
     private Integer status;
 
     private Byte isDelete;

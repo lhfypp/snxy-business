@@ -4,14 +4,13 @@ import com.snxy.business.domain.*;
 import com.snxy.business.service.CompanyUserRelationService;
 import com.snxy.business.service.CompanyVegetableService;
 import com.snxy.business.service.DeliveryOrderService;
+import com.snxy.business.service.SystemUserService;
 import com.snxy.common.response.ResultData;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 
@@ -24,7 +23,7 @@ import java.util.List;
 public class DeliveryOrderController {
 
     @Resource
-    private DeliveryOrderService deliveryOrderService;
+    private DeliveryOrderService    deliveryOrderService;
 
     @Resource
     private CompanyVegetableService companyVegetableService;
@@ -32,10 +31,8 @@ public class DeliveryOrderController {
     @Resource
     private CompanyUserRelationService companyUserRelationService;
 
-    @RequestMapping("/test")
-    public ResultData test(){
-        return ResultData.success("ahha");
-    }
+    @Resource
+    private SystemUserService systemUserService;
 
 
     //货品信息添加页展示
@@ -66,7 +63,7 @@ public class DeliveryOrderController {
             return ResultData.fail("你还没有完成认证");
         }
 
-        //如果已认证则新建一个订单,此处系统生成订单号暂时写死
+        //如果已认证则新建一个订单,此处系统生成订单号
 
         String orderNo = deliveryOrderService.getOrderNo();
 
@@ -80,26 +77,33 @@ public class DeliveryOrderController {
 
         deliveryOrderService.createDeliveryOrder(deliveryOrderVo);
 
+        //发布订单对司机手机号进行判断是否注册
+        SystemUser systemUser = systemUserService.selectByMobile(deliveryOrderVo.getDriverMobile());
+        if (systemUser==null){
+            //当查询不到司机的手机号注册信息时给司机手机号发送app下载了短信链接
+
+        }else {
+            //如果司机已经注册则app推送订单消息
+
+        }
+
         return ResultData.success("订单发布成功");
     }
 
-    @RequestMapping(value = "/seller/order/list")
-    public ResultData<List<BillInfo>> searchDeliveryOrder(HttpServletRequest request) {
-        long userId = Long.parseLong(request.getParameter("userId"));//用户标识
-        String orderStatus = request.getParameter("orderStatus");//订单状态
-        String serchName = request.getParameter("serchName");//地点or联系人or单号
+    //司机查看订单
+    @RequestMapping(value = "/driver/order/list")
+    public ResultData showDriverOrder(Long userId){
 
+        List<BillInfo> driverOrders = deliveryOrderService.selectDriverOrder(userId);
 
-        ResultData<List<BillInfo>> listResultData = new ResultData<List<BillInfo>>();
-        listResultData.setData(deliveryOrderService.searchDeliveryOrder(userId, orderStatus, serchName));
-
-        return listResultData;
+        return ResultData.success(driverOrders);
     }
 
-    @RequestMapping("/failed")
-    public ResultData requestFailed() {
-
-
-        return ResultData.fail("用户id为空");
+    //司机订单详情
+    @RequestMapping(value = "/driver/bill/bill/detail")
+    public ResultData selectOrderByOrderId(Long orderId){
+        DriverOrderInfo driverOrderInfo = deliveryOrderService.selectOrderByOrderId(orderId);
+        return ResultData.success(driverOrderInfo);
     }
+
 }
