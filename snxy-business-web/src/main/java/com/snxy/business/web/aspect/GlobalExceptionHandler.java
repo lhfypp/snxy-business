@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * Created by 24398 on 2018/8/30.
@@ -23,7 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping( value = "/error")
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+  /*  @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResultData httpRequestMethodNotSupportedException(HttpServletResponse response) {
         //  response.setStatus(200);
         log.error("method 方法不支持");
@@ -55,8 +59,7 @@ public class GlobalExceptionHandler {
         response.setStatus(200);
         log.error("没有访问权限");
         return ResultData.fail("没有访问权限",403);
-    }
-
+    }*/
 
   //  @ExceptionHandler({BizException.class, ValidateException.class})
     @ExceptionHandler(Exception.class)
@@ -73,13 +76,32 @@ public class GlobalExceptionHandler {
         }else if(e instanceof ValidateException){
             ValidateException validateException = (ValidateException) e;
             String errMsg = validateException.getErrMsg();
+
             if(  validateException.getErrCode() != null){
                 Integer  errCode = Integer.parseInt(validateException.getErrCode());
                 return ResultData.fail(errMsg,errCode);
             };
+
             return ResultData.fail(errMsg);
+        }
+        else if (e instanceof ConstraintViolationException){
+            Set<ConstraintViolation<?>> constraintViolations =((ConstraintViolationException) e).getConstraintViolations();
+            Iterator<ConstraintViolation<?>> iterator = constraintViolations.iterator();
+            StringBuffer errMsg=new StringBuffer();
+            while (iterator.hasNext()) {
+                ConstraintViolation<?> cvl = iterator.next();
+                errMsg.append(cvl.getMessageTemplate());
+                if(iterator.hasNext()){
+                    errMsg.append(",");
+                }
+            }
+            return ResultData.fail(errMsg.toString());
+        }else{
+
         }
 
         return ResultData.fail(e.getMessage());
     }
+
+
 }

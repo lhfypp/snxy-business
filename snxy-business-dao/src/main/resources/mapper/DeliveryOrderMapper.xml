@@ -34,7 +34,7 @@
   </sql>
 
 
-  <!--查询订单信息 start -->
+  <!--查询订单列表 start -->
   <resultMap id="DeliveryResultMap" type="com.snxy.business.domain.BillInfo">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
@@ -72,17 +72,89 @@
   <if test="searchName!=null and searchName!=''">
     or start_addr=#{searchName} or order_no=#{searchName} or sender_name=#{searchName}
   </if>
-    order by gmt_create desc
+    and is_delete=0
+      order by gmt_create desc
   </select>
 
-  <!--     end -->
-  <!-- 查询订单详情 start-->
-  <select id="selectBydDeliveryOrderId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <!-- 查询订单列表 end -->
+
+  <!-- 取消订单 start-->
+  <update id="cancelOrderByOrderId">
+  update delivery_order
+    set status = 1
+    where
+      order_no=#{orderId}
+  </update>
+  <!-- 取消订单 end -->
+
+
+
+
+  <!--查看订单详情 start-->
+
+  <resultMap id="DeliveryResultDetailMap" type="com.snxy.business.domain.BillInfoDetail">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="sender_name" jdbcType="VARCHAR" property="senderName" />
+    <result column="sender_mobile" jdbcType="VARCHAR" property="senderMobile" />
+    <result column="receiver_mobile" jdbcType="VARCHAR" property="receiverMobile" />
+    <result column="receiver_name" jdbcType="VARCHAR" property="receiverName" />
+    <result column="receiver_company" jdbcType="VARCHAR" property="receiverCompany" />
+    <result column="driver_leave_time" jdbcType="TIMESTAMP" property="driverLeaveTime" />
+    <result column="send_time" jdbcType="TIMESTAMP" property="sendTime" />
+    <result column="start_addr" jdbcType="VARCHAR" property="startAddr" />
+    <result column="end_addr" jdbcType="VARCHAR" property="endAddr" />
+    <result column="distance" jdbcType="REAL" property="distance" />
+    <result column="est_arrival_time" jdbcType="TIMESTAMP" property="estArrivalTime" />
+    <result column="actual_arrival_time" jdbcType="TIMESTAMP" property="actualArrivalTime" />
+    <result column="load_status" jdbcType="INTEGER" property="loadStatus" />
+    <result column="location_certificate" jdbcType="INTEGER" property="locationCertificate" />
+    <result column="quality_certificate" jdbcType="INTEGER" property="qualityCertificate" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+    <result column="delivery_fee" jdbcType="DECIMAL" property="deliveryFee" />
+    <result column="qrcode_url" jdbcType="VARCHAR" property="qrcodeUrl" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+
+    <collection property="goods"  ofType="com.snxy.business.domain.Goods">
+      <result property="goodsId" column="goods_id"/>
+      <result property="goodsName" column="goods_name"/>
+      <result property="goodsWeight" column="goods_weight"/>
+      <result property="goodsPrice" column="goods_price"/>
+    </collection>
+    <collection property="gPSLocations"  ofType="com.snxy.business.domain.GPSLocation" javaType="java.util.ArrayList">
+      <result property="longitude" column="longitude"/>
+      <result property="latitude" column="latitude"/>
+      <result property="height" column="height"/>
+      <result property="collectionTime" column="collection_time"/>
+    </collection>
+    <collection property="valications"  ofType="com.snxy.business.domain.Valication" javaType="java.util.ArrayList">
+      <result property="url" column="url1"/>
+      <result property="certificateType" column="certificate_type"/>
+    </collection>
+    <collection property="images"  ofType="String" javaType="java.util.ArrayList" >
+      <result column="url2"/>
+    </collection>
+  </resultMap>
+  <sql id="delvery_order_info_Details">
+     a.id as id, order_no, sender_name, sender_mobile, receiver_mobile, receiver_name, receiver_company,
+    driver_leave_time, send_time, start_addr, end_addr, distance, est_arrival_time, actual_arrival_time,
+    load_status, location_certificate, quality_certificate, gmt_create, gmt_modified,
+    delivery_fee, qrcode_url, a.status as status,goods_id,goods_name,goods_weight,goods_price,longitude
+    ,latitude,height,collection_time,d.url as url1,certificate_type,e.url as url2
+  </sql>
+  <select id="selectBydDeliveryOrderId" parameterType="java.lang.Long" resultMap="DeliveryResultDetailMap">
     select
-    <include refid="Base_Column_List" />
-    from delivery_order
-    where order_no = #{deliveryOrderId}
+   <include refid="delvery_order_info_Details"/>
+    from delivery_order a
+					left join vegetable_delivery_relation b on  a.id=b.delivery_order_id
+					left join vehicle_gps_record c on  a.id=c.delivery_order_id
+					left join vegetable_certificate d on  a.id=d.delivery_order_id
+					left join	vegetable_image e on a.id=e.delivery_order_id
+					where
+                          a.order_no = #{deliveryOrderId}
   </select>
+
   <!-- 查询订单详情 end -->
 
   <!--司机查询订单-->
@@ -95,6 +167,12 @@
       #{id}
     </foreach>
   </select>
+
+<!-- 查看订单详情-->
+
+
+
+
 
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 

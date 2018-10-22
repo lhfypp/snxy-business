@@ -7,6 +7,7 @@ import com.snxy.business.service.DeliveryOrderService;
 import com.snxy.business.service.SystemUserService;
 import com.snxy.common.response.ResultData;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -77,6 +78,7 @@ public class DeliveryOrderController {
 
         deliveryOrderService.createDeliveryOrder(deliveryOrderVo);
 
+
         //发布订单对司机手机号进行判断是否注册
         SystemUser systemUser = systemUserService.selectByMobile(deliveryOrderVo.getDriverMobile());
         if (systemUser==null){
@@ -84,26 +86,61 @@ public class DeliveryOrderController {
 
         }else {
             //如果司机已经注册则app推送订单消息
-
         }
-
         return ResultData.success("订单发布成功");
     }
+
+    // 查看订单列表
+    @RequestMapping(value = "/seller/order/list")
+    public ResultData<List<BillInfo>> searchDeliveryOrder(HttpServletRequest request) {
+        String orderStatus = request.getParameter("orderStatus");//订单状态
+        String searchName = request.getParameter("searchName");//地点or联系人or单号
+
+
+        ResultData<List<BillInfo>> listResultData = new ResultData<List<BillInfo>>();
+        listResultData.setData(deliveryOrderService.searchDeliveryOrder(orderStatus, searchName));
+
+        return listResultData;
+    }
+
 
     //司机查看订单
     @RequestMapping(value = "/driver/order/list")
     public ResultData showDriverOrder(Long userId){
-
         List<BillInfo> driverOrders = deliveryOrderService.selectDriverOrder(userId);
 
         return ResultData.success(driverOrders);
     }
 
+    //查看订单详情
+    @RequestMapping(value = "/seller/order/detail")
+    public ResultData<BillInfoDetail > searchDeliveryOrderInfo(HttpServletRequest request) {
+        long deliveryOrderId= Long.parseLong(request.getParameter("deliveryOrderId"));
+        return ResultData.success (deliveryOrderService.searchDeliverOrderinfo(deliveryOrderId));
+
+    }
+
     //司机订单详情
     @RequestMapping(value = "/driver/bill/bill/detail")
     public ResultData selectOrderByOrderId(Long orderId){
+
         DriverOrderInfo driverOrderInfo = deliveryOrderService.selectOrderByOrderId(orderId);
         return ResultData.success(driverOrderInfo);
     }
+   //商户取消订单
+    @RequestMapping("/seller/bill/cancel")
+    public ResultData cancelOrder(HttpServletRequest request){
+        long logisticOrderId= Long.parseLong(request.getParameter("logisticOrderId"));
+        //从用户对象获取
+        String identityName="1";//商户
+        if("1".equals(identityName)){
+
+        deliveryOrderService.cancelOrder(logisticOrderId);
+        return ResultData.success("商户取消订单成功");
+        }else{
+            return ResultData.fail("该用户没有权限取消订单");
+        }
+    }
+
 
 }

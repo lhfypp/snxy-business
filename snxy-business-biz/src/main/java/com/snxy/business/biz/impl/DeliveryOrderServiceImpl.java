@@ -3,6 +3,7 @@ package com.snxy.business.biz.impl;
 import com.snxy.business.dao.mapper.*;
 import com.snxy.business.domain.*;
 import com.snxy.business.service.DeliveryOrderService;
+import com.snxy.common.util.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.data.redis.core.RedisTemplate;
@@ -16,7 +17,7 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class DeliveryOrderServiceImpl implements DeliveryOrderService {
+    public class DeliveryOrderServiceImpl implements DeliveryOrderService {
     @Resource
     private DeliveryOrderMapper deliveryOrderMapper;
 
@@ -124,6 +125,15 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
         List<BillInfo> driverOrders = deliveryOrderMapper.selectDriverOrder(list);
         return driverOrders;
     }
+    public BillInfoDetail searchDeliverOrderinfo(Long deliveryOrderId) {
+        return deliveryOrderMapper.selectBydDeliveryOrderId(deliveryOrderId);
+
+    }
+
+    @Override
+    public PageInfo<BillInfo> searchDeliveryOrderByPage(String orderStatus, String searchName) {
+        return null;
+    }
 
     @Override
     public DriverOrderInfo selectOrderByOrderId(Long orderId) {
@@ -131,6 +141,21 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
         DriverOrderInfo driverOrderInfo = deliveryOrderMapper.selectDriverOrderBydDeliveryOrderId(orderId);
         driverOrderInfo.setGoodsInfos(goodsInfos);
         return driverOrderInfo;
+    }
+
+    @Override
+    public void createDeliveryOrder(DeliveryOrder deliveryOrder, VegetableDeliveryRelation vegetableDeliveryRelation, VegetableCertificate vegetableCertificate, VegetableImage vegetableImage) {
+
+    }
+
+    @Override
+    public List<BillInfo> searchDeliveryOrder(String orderStatus, String searchName) {
+        return null;
+    }
+
+    @Override
+    public void cancelOrder(Long orderId) {
+        deliveryOrderMapper.cancelOrderByOrderId(orderId);
     }
 
 
