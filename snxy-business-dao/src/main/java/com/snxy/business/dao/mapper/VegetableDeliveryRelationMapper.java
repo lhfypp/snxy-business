@@ -1,6 +1,9 @@
 package com.snxy.business.dao.mapper;
 
+import com.snxy.business.domain.GoodsInfo;
 import com.snxy.business.domain.VegetableDeliveryRelation;
+
+import java.util.List;
 
 public interface VegetableDeliveryRelationMapper {
     int deleteByPrimaryKey(Long id);
@@ -14,4 +17,6 @@ public interface VegetableDeliveryRelationMapper {
     int updateByPrimaryKeySelective(VegetableDeliveryRelation record);
 
     int updateByPrimaryKey(VegetableDeliveryRelation record);
+
+    List<GoodsInfo> selectByOrderId(Long orderId);
 }

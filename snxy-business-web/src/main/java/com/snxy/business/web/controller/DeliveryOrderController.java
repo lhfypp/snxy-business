@@ -1,18 +1,17 @@
 package com.snxy.business.web.controller;
 
-import com.github.pagehelper.PageInfo;
 import com.snxy.business.domain.*;
 import com.snxy.business.service.CompanyUserRelationService;
 import com.snxy.business.service.CompanyVegetableService;
 import com.snxy.business.service.DeliveryOrderService;
-import com.snxy.business.service.OnlineUserService;
+import com.snxy.business.service.SystemUserService;
 import com.snxy.common.response.ResultData;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 
@@ -27,33 +26,20 @@ public class DeliveryOrderController {
     @Resource
     private DeliveryOrderService    deliveryOrderService;
 
-
-
     @Resource
     private CompanyVegetableService companyVegetableService;
-    @Resource
-    private OnlineUserService onlineUserService;
+
     @Resource
     private CompanyUserRelationService companyUserRelationService;
 
+    @Resource
+    private SystemUserService systemUserService;
 
-    //发货信息填写保存
-    @RequestMapping(value = "/seller/saveSendMessage")
-    public ResultData saveSendMessage (DeliveryOrderVo deliveryOrderVo){
-        return ResultData.success(deliveryOrderVo);
-    }
-
-    //收获信息填写保存
-    @RequestMapping(value = "/seller/saveGetMessage")
-    public ResultData saveGetMessage (DeliveryOrderVo deliveryOrderVo){
-        return ResultData.success(deliveryOrderVo);
-    }
 
     //货品信息添加页展示
     @RequestMapping(value = "/seller/showGoods")
     public ResultData showGoods (Long userCompanyId){
         List<CompanyVegetable> companyVegetableList =  companyVegetableService.showGoods(1L);
-        System.out.println(companyVegetableList);
         return ResultData.success(companyVegetableList);
     }
 
@@ -64,27 +50,24 @@ public class DeliveryOrderController {
         return ResultData.success(companyVegetable);
     }
 
-    //货品信息添加保存
-    @RequestMapping(value = "/seller/saveGoodsMesssage")
-    public ResultData saveGoodsMessage (){
-        return ResultData.success("");
-    }
-
-
-    //货品信息删除
-    @RequestMapping(value = "/seller/deleteGoodsMessage")
-    public ResultData deleteGoodsMessage (){
-        return ResultData.success("");
-    }
-
-
     //新建发货订单
     @RequestMapping(value = "/seller/bill/new")
-    public ResultData createDeliveryOrder (DeliveryOrderVo deliveryOrderVo){
-        //先进行权限判断
+    public ResultData createDeliveryOrder (Integer deviceType,DeliveryOrderVo deliveryOrderVo){
+        //先进行权限判断，是否为商户或者代办，公司信息是否完整，设置商户，代办身份标识为0，1
+        deviceType = 1;
+        if(deviceType!=0 && deviceType!=1){
+            return ResultData.fail("你还没有完成认证");
+        }
+        //查询是否完成公司信息填写
+        List<Long> list = companyUserRelationService.selectCompanyIsExist(1L);
+        if(list==null || list.size()==0){
+            return ResultData.fail("你还没有完成认证");
+        }
 
-        //如果已认证则新建一个订单,此处系统生成订单号暂时写死
-        String orderNo = "FH20181018104500000001";
+        //如果已认证则新建一个订单,此处系统生成订单号
+
+        String orderNo = deliveryOrderService.getOrderNo();
+
         deliveryOrderVo.setOrderNo(orderNo);
         return ResultData.success(deliveryOrderVo);
     }
@@ -92,23 +75,24 @@ public class DeliveryOrderController {
     //保存发布订单
     @RequestMapping(value = "/seller/bill/save")
     public ResultData saveDeliveryOrder (DeliveryOrderVo deliveryOrderVo){
-        //订单信息DeliveryOrder，假数据
-        DeliveryOrder deliveryOrder = new DeliveryOrder();
-        //货品信息VegetableDeliveryRelation，假数据
-        VegetableDeliveryRelation vegetableDeliveryRelation = new VegetableDeliveryRelation();
-        //产地证明，质检单VegetableCertificate,假数据
-        VegetableCertificate vegetableCertificate = new VegetableCertificate();
-        //货品照片VegetableImage,假数据
-        VegetableImage vegetableImage = new VegetableImage();
 
-        deliveryOrderService.createDeliveryOrder(deliveryOrder,vegetableDeliveryRelation,vegetableCertificate,vegetableImage);
+        deliveryOrderService.createDeliveryOrder(deliveryOrderVo);
 
+
+        //发布订单对司机手机号进行判断是否注册
+        SystemUser systemUser = systemUserService.selectByMobile(deliveryOrderVo.getDriverMobile());
+        if (systemUser==null){
+            //当查询不到司机的手机号注册信息时给司机手机号发送app下载了短信链接
+
+        }else {
+            //如果司机已经注册则app推送订单消息
+        }
         return ResultData.success("订单发布成功");
     }
+
     // 查看订单列表
     @RequestMapping(value = "/seller/order/list")
     public ResultData<List<BillInfo>> searchDeliveryOrder(HttpServletRequest request) {
-
         String orderStatus = request.getParameter("orderStatus");//订单状态
         String searchName = request.getParameter("searchName");//地点or联系人or单号
 
@@ -118,21 +102,30 @@ public class DeliveryOrderController {
 
         return listResultData;
     }
+
+
+    //司机查看订单
+    @RequestMapping(value = "/driver/order/list")
+    public ResultData showDriverOrder(Long userId){
+        List<BillInfo> driverOrders = deliveryOrderService.selectDriverOrder(userId);
+
+        return ResultData.success(driverOrders);
+    }
+
     //查看订单详情
     @RequestMapping(value = "/seller/order/detail")
-    public ResultData<BillInfoDetail >searchDeliveryOrderInfo(HttpServletRequest request) {
+    public ResultData<BillInfoDetail > searchDeliveryOrderInfo(HttpServletRequest request) {
         long deliveryOrderId= Long.parseLong(request.getParameter("deliveryOrderId"));
         return ResultData.success (deliveryOrderService.searchDeliverOrderinfo(deliveryOrderId));
 
     }
-    //实现分页查询
-    @RequestMapping(value = "/seller/order/list2")
-    public ResultData<PageInfo<BillInfo>>searchDeliveryOrderbypage(HttpServletRequest request){
-        PageInfo<BillInfo> pageInfo=null;
-        String orderStatus = request.getParameter("orderStatus");//订单状态
-        String searchName = request.getParameter("searchName");//地点or联系人or单号
-        pageInfo=deliveryOrderService.searchDeliveryOrderByPage(orderStatus, searchName);
-        return ResultData.success(pageInfo);
+
+    //司机订单详情
+    @RequestMapping(value = "/driver/bill/bill/detail")
+    public ResultData selectOrderByOrderId(Long orderId){
+
+        DriverOrderInfo driverOrderInfo = deliveryOrderService.selectOrderByOrderId(orderId);
+        return ResultData.success(driverOrderInfo);
     }
    //商户取消订单
     @RequestMapping("/seller/bill/cancel")

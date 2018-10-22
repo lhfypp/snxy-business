@@ -1,7 +1,6 @@
 package com.snxy.business.service;
 
 import com.snxy.business.domain.IdentityType;
-import com.snxy.business.domain.UserIdentity;
 import com.snxy.user.agent.service.vo.LoginUserVO;
 import com.snxy.user.agent.service.vo.SystemUserVO;
 

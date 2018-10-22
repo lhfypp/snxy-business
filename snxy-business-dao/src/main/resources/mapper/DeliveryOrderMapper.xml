@@ -154,7 +154,22 @@
 					where
                           a.order_no = #{deliveryOrderId}
   </select>
+
+  <!-- 查询订单详情 end -->
+
+  <!--司机查询订单-->
+  <select id="searchDeliveryOrder" parameterType="java.lang.List" resultMap="DeliveryResultMap">
+    select
+    <include refid="delvery_order_info"/>
+    from delivery_order
+    where id in
+    <foreach collection="list" index="index" item="id" open="(" separator="," close=")">
+      #{id}
+    </foreach>
+  </select>
+
 <!-- 查看订单详情-->
+
 
 
 
@@ -165,6 +180,33 @@
     from delivery_order
     where id = #{id,jdbcType=BIGINT}
   </select>
+
+  <!--司机查询订单详情-->
+  <resultMap id="DriverOrderInfo" type="com.snxy.business.domain.DriverOrderInfo">
+    <id column="id" jdbcType="BIGINT" property="deliveryOrderId" />
+    <result column="order_no" jdbcType="VARCHAR" property="deliveryOrderNo" />
+    <result column="send_Time" jdbcType="TIMESTAMP" property="sendTime" />
+    <result column="est_arrival_time" jdbcType="TIMESTAMP" property="estArrivalTime" />
+    <result column="start_addr" jdbcType="VARCHAR" property="startAddr" />
+    <result column="end_addr" jdbcType="VARCHAR" property="endAddr" />
+    <result column="sender_name" jdbcType="VARCHAR" property="sender" />
+    <result column="sender_mobile" jdbcType="VARCHAR" property="senderMobile" />
+    <result column="receiver_name" jdbcType="VARCHAR" property="receiverName" />
+    <result column="receiver_mobile" jdbcType="VARCHAR" property="receiverMobile" />
+    <result column="delivery_fee" jdbcType="DECIMAL" property="deliveryFee" />
+    <result column="distance" jdbcType="REAL" property="distance" />
+  </resultMap>
+  <sql id="Driver_Order_Info">
+    id, order_no, sender_name, sender_mobile, receiver_mobile, receiver_name,
+    send_time, start_addr, end_addr, distance, est_arrival_time,delivery_fee,
+  </sql>
+  <select id="selectDriverOrderBydDeliveryOrderId" parameterType="java.lang.Long" resultMap="DriverOrderInfo">
+    SELECT
+    <include refid="Driver_Order_Info"/>
+    from delivery_order
+    where order_no = #{id}
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from delivery_order
     where id = #{id,jdbcType=BIGINT}

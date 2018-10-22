@@ -8,8 +8,17 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
 
+
 @Service
 @Slf4j
 public class CompanyUserRelationServiceImpl implements CompanyUserRelationService {
 
+    @Resource
+    private CompanyUserRelationMapper companyUserRelationMapper;
+
+    @Override
+    public List selectCompanyIsExist(Long onlineUserId) {
+        List<Long> longs = companyUserRelationMapper.selectByOnlineId(onlineUserId);
+        return longs;
+    }
 }

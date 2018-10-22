@@ -18,6 +18,12 @@
     from curr_order_receiver
     where id = #{id,jdbcType=BIGINT}
   </select>
+  <select id="selectOrderIdByPrimaryKey" parameterType="java.lang.Long" resultMap="java.lang.Long">
+    select
+    delivery_order_id
+    from curr_order_receiver
+    where id = #{id,jdbcType=BIGINT}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from curr_order_receiver
     where id = #{id,jdbcType=BIGINT}
