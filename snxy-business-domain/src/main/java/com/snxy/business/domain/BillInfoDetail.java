@@ -55,7 +55,7 @@ public class BillInfoDetail {
     private String qrcodeUrl;
 
     private Integer status;
-
+    private DriverPartInfo driverPartInfo;
     public List<Goods> getGoods() {
         return goods;
     }
