@@ -6,11 +6,16 @@ import com.snxy.business.service.vo.DeliveryOrderVo;
 import com.snxy.common.response.ResultData;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
+import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 
 /*
@@ -165,4 +170,61 @@ public class DeliveryOrderController {
         return ResultData.success(gpsLocations);
     }
 
+    //卖家或者代办换司机
+    @RequestMapping("/seller/order/changeDriver")
+    public  ResultData<String> changeDriver(@RequestParam @NotBlank(message="订单号不能为空") String logisticOrderId, @RequestParam String driverMobile, @RequestParam String driverName){
+        deliveryOrderService.changeDriver(logisticOrderId,driverName,driverMobile);
+        return ResultData.success("卖家或者代办更换司机成功");
+
+    }
+    // 关闭订单 合格关闭和不合格关闭（是否与关闭订单合并?,还是三个按钮分别请求）
+    public ResultData<? extends Object> closeOrder(@NotBlank(message="订单id不能为空")@RequestParam String logisticOrderId ){
+
+        //从用户对象获取
+        String identityName="1";//商户
+        if("1".equals(identityName)){
+
+            deliveryOrderService.cancelOrder(logisticOrderId);
+            return ResultData.success("商户取消订单成功");
+        }else{
+            return ResultData.fail("该用户没有权限取消订单");
+        }
+    }
+    //修改订单
+    public ResultData<? extends Object> updateOrder(@Valid @RequestBody UpdateBillInfoDetail billInfoDetail){
+        deliveryOrderService.updateOrder(billInfoDetail);
+        return ResultData.success("修改订单成功");
+
+    }
+    //司机接受订单
+    @RequestMapping("/driver/bill/accept")
+    public ResultData<Map<?,?>> accectOrderByDriver(@RequestParam @NotBlank(message = "订单id不能为空")String orderId){
+
+        //返回司机的车辆信息，用在线用户id进行查询
+        return  ResultData.success(deliveryOrderService.getVehiclesForDriver(orderId));
+    }
+
+
+    //司机选择车辆 车牌号，和orderNO确定
+    @RequestMapping("/driver/vehicle/choose")
+    public ResultData ChooseVehicle(@RequestParam @NotBlank(message = "订单id不能为空")String OrderId,@RequestParam @NotBlank(message="车类型id")String vehicleId){
+
+        deliveryOrderService.acceptOrder(OrderId);//把状态改为2
+        //  deliveryOrderService.insertCurrOrderReceiver(OrderId,vehicleId);//把信息插入curr_order_receiver表
+        deliveryOrderService.updateCurrOrderReceiver(OrderId,vehicleId);//司机选择车辆信息
+        return ResultData.success("选择车辆成功");
+    }
+    //司机拒绝接单
+    @RequestMapping("/driver/bill/reject")
+    public ResultData RefusedOrder(@NotBlank(message="订单id不能为空")@RequestParam String deliveryOrderId){
+        deliveryOrderService.resufedOrder(deliveryOrderId);
+        return ResultData.success("司机拒绝订单成功");
+    }
+    //司机转让订单
+    @RequestMapping("/driver/order/reject")
+    public void transferOrder(@RequestParam @NotBlank(message="订单id不能为空")String deliveryOrderId
+            ,@RequestParam String driverMobile,@RequestParam String driverName)
+    {
+        deliveryOrderService.tranferOrder(deliveryOrderId,driverMobile,driverName);
+    }
 }
