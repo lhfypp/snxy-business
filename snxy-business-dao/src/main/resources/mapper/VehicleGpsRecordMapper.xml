@@ -21,6 +21,25 @@
     from vehicle_gps_record
     where id = #{id,jdbcType=BIGINT}
   </select>
+
+  <!--下载GPS-->
+  <resultMap id="GPSResultMap" type="com.snxy.business.domain.GPSLocation">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="longitude" jdbcType="REAL" property="longitude" />
+    <result column="latitude" jdbcType="REAL" property="latitude" />
+    <result column="height" jdbcType="REAL" property="height" />
+    <result column="collection_time" jdbcType="TIMESTAMP" property="collectionTime" />
+  </resultMap>
+  <sql id="GPS_Column_List">
+    longitude, latitude, height,collection_time,
+  </sql>
+  <select id="selectByDeviveryOrderId" parameterType="java.lang.Long" resultMap="GPSResultMap">
+    SELECT
+    <include refid="GPS_Column_List"/>
+    from vehicle_gps_record
+    where delivery_order_id = #{deliveryOrderId}
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from vehicle_gps_record
     where id = #{id,jdbcType=BIGINT}

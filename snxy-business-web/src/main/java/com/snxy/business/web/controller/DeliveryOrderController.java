@@ -1,10 +1,8 @@
 package com.snxy.business.web.controller;
 
 import com.snxy.business.domain.*;
-import com.snxy.business.service.CompanyUserRelationService;
-import com.snxy.business.service.CompanyVegetableService;
-import com.snxy.business.service.DeliveryOrderService;
-import com.snxy.business.service.SystemUserService;
+import com.snxy.business.service.*;
+import com.snxy.business.service.vo.DeliveryOrderVo;
 import com.snxy.common.response.ResultData;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
@@ -34,6 +32,9 @@ public class DeliveryOrderController {
 
     @Resource
     private SystemUserService systemUserService;
+
+    @Resource
+    private VehicleGpsRecordService vehicleGpsRecordService;
 
 
     //货品信息添加页展示
@@ -135,12 +136,33 @@ public class DeliveryOrderController {
         String identityName="1";//商户
         if("1".equals(identityName)){
 
-        deliveryOrderService.cancelOrder(logisticOrderId);
+        deliveryOrderService.cancelOrder(logisticOrderId,1);
         return ResultData.success("商户取消订单成功");
         }else{
             return ResultData.fail("该用户没有权限取消订单");
         }
     }
 
+    //司机提示装货完毕
+    @RequestMapping("/driver/endLoading")
+    public ResultData driverEndLoading(Long deliveryOrderId){
+        deliveryOrderService.updateEndLoading(deliveryOrderId);
+
+        return ResultData.success("");
+    }
+
+    //上传GPS
+    @RequestMapping("/driver/location/upload")
+    public ResultData uploadLocation(VehicleGpsRecord vehicleGpsRecord,Long userId){
+        vehicleGpsRecordService.insertLocationGPS(vehicleGpsRecord,userId);
+        return ResultData.success("");
+    }
+
+    //下载GPS
+    @RequestMapping("/location/download")
+    public ResultData downloadLocation(Long deliveryOrderId){
+        List<GPSLocation> gpsLocations = vehicleGpsRecordService.selectLocationGPS(deliveryOrderId);
+        return ResultData.success(gpsLocations);
+    }
 
 }

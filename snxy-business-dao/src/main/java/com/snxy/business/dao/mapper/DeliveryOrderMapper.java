@@ -21,16 +21,21 @@ public interface DeliveryOrderMapper {
     int updateByPrimaryKeySelective(DeliveryOrder record);
 
     int updateByPrimaryKey(DeliveryOrder record);
-    List<BillInfo> searchDeliveryOrder(@Param("sendPhones") List<String >sendPhones,@Param("orderStatus") String orderStatus,@Param("searchName") String searchName);
-<<<<<<< HEAD
-    DeliveryOrder selectBydDeliveryOrderId(@Param("deliveryOrderId") Long deliveryOrderId);
+
 
     List<BillInfo> selectDriverOrder(List list);
 
     DriverOrderInfo selectDriverOrderBydDeliveryOrderId(Long orderId);
-=======
-    BillInfoDetail selectBydDeliveryOrderId(@Param("deliveryOrderId") Long deliveryOrderId);
-    void  cancelOrderByOrderId(@Param("orderId")Long orderId);
 
->>>>>>> 402f675fd1dea61efc76802a190fe17c3f7d72b4
+    BillInfoDetail selectBydDeliveryOrderId(@Param("deliveryOrderId") Long deliveryOrderId);
+    void  cancelOrderByOrderId(@Param("orderId")Long orderId,@Param("status")Integer status);
+
+    void updateEndLoading(Long deliveryOrderId);
+
+
+    void updateLocationCertificate(@Param("productionCertificate") Long productionCertificate, @Param("qualitied") Integer qualitied);
+
+    void updateQualityCertificate(@Param("qualityCertificateId") Long qualityCertificateId, @Param("qualitied") Integer qualitied);
+
+    void updateLoadStatus(@Param("deliveryOrderId") Long deliveryOrderId, @Param("loadStatus") Integer loadStatus);
 }

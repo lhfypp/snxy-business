@@ -81,7 +81,7 @@
   <!-- 取消订单 start-->
   <update id="cancelOrderByOrderId">
   update delivery_order
-    set status = 1
+    set status = #{status}
     where
       order_no=#{orderId}
   </update>
@@ -158,7 +158,7 @@
   <!-- 查询订单详情 end -->
 
   <!--司机查询订单-->
-  <select id="searchDeliveryOrder" parameterType="java.lang.List" resultMap="DeliveryResultMap">
+  <select id="selectDriverOrder" resultMap="DeliveryResultMap">
     select
     <include refid="delvery_order_info"/>
     from delivery_order
@@ -374,6 +374,35 @@
       </if>
     </trim>
   </insert>
+
+  <!--修改装车状态-->
+  <update id="updateLoadStatus">
+    update delivery_order
+    set load_status = #{loadStatus}
+    where order_no = #{deliveryOrderId}
+  </update>
+
+  <!--修改订单状态为装货完成状态-->
+  <update id="updateEndLoading" parameterType="java.lang.Long">
+    update delivery_order
+    set status = 3
+    where order_no = #{id}
+  </update>
+
+  <!--管理员修改产地证明是否合格-->
+  <update id="updateLocationCertificate">
+    update delivery_order
+    set location_certificate = #{qualitied}
+    where order_no = (select delivery_order_id from vegetable_certificate where id = #{productionCertificate})
+  </update>
+
+  <!--管理员修改检测证明是否合格-->
+  <update id="updateQualityCertificate">
+    update delivery_order
+    set quality_certificate = #{qualitied}
+    where order_no = (select delivery_order_id from vegetable_certificate where id = #{qualityCertificateId})
+  </update>
+
   <update id="updateByPrimaryKeySelective" parameterType="com.snxy.business.domain.DeliveryOrder">
     update delivery_order
     <set>

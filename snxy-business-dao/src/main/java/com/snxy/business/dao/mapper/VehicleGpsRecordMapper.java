@@ -1,6 +1,9 @@
 package com.snxy.business.dao.mapper;
 
+import com.snxy.business.domain.GPSLocation;
 import com.snxy.business.domain.VehicleGpsRecord;
+
+import java.util.List;
 
 public interface VehicleGpsRecordMapper {
     int deleteByPrimaryKey(Long id);
@@ -14,4 +17,6 @@ public interface VehicleGpsRecordMapper {
     int updateByPrimaryKeySelective(VehicleGpsRecord record);
 
     int updateByPrimaryKey(VehicleGpsRecord record);
+
+    List<GPSLocation> selectByDeviveryOrderId(Long deliveryOrderId);
 }

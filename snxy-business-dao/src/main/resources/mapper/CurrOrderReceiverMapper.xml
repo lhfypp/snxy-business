@@ -18,7 +18,15 @@
     from curr_order_receiver
     where id = #{id,jdbcType=BIGINT}
   </select>
-  <select id="selectOrderIdByPrimaryKey" parameterType="java.lang.Long" resultMap="java.lang.Long">
+
+  <select id="selectDriverMessageByOrderId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from curr_order_receiver
+    where delivery_order_id = #{id,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectOrderIdByPrimaryKey" parameterType="java.lang.Long" resultType="java.lang.Long">
     select
     delivery_order_id
     from curr_order_receiver

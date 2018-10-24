@@ -14,4 +14,6 @@ public interface EntryFeeMapper {
     int updateByPrimaryKeySelective(EntryFee record);
 
     int updateByPrimaryKey(EntryFee record);
+
+    void updateByOrderNo(EntryFee entryFee);
 }

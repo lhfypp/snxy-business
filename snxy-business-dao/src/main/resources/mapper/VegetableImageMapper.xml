@@ -18,6 +18,14 @@
     from vegetable_image
     where id = #{id,jdbcType=BIGINT}
   </select>
+
+  <select id="selectByOderId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from vegetable_image
+    where delivery_order_id = #{id,jdbcType=BIGINT}
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from vegetable_image
     where id = #{id,jdbcType=BIGINT}
@@ -71,6 +79,22 @@
       </if>
     </trim>
   </insert>
+
+  <!--批量插入-->
+  <insert id ="insertVegetableImageList" >
+    insert into vegetable_image
+    (delivery_order_id, url, upload_time,type, is_delete)
+    values
+     <foreach collection ="vegetableImageList" item="vegetableImage" index= "index" separator =",">
+         (
+         #{vegetableImage.deliveryOrderId}, #{vegetableImage.url},
+         #{vegetableImage.uploadTime},
+         #{vegetableImage.type},
+         #{vegetableImage.isDelete}
+         )
+     </foreach >
+  </insert >
+
   <update id="updateByPrimaryKeySelective" parameterType="com.snxy.business.domain.VegetableImage">
     update vegetable_image
     <set>

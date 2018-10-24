@@ -19,6 +19,14 @@
     from vegetable_certificate
     where id = #{id,jdbcType=BIGINT}
   </select>
+
+  <select id="selectByOrderId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    url,certificate_type
+    from vegetable_certificate
+    where delivery_order_id = #{id,jdbcType=BIGINT}
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from vegetable_certificate
     where id = #{id,jdbcType=BIGINT}
@@ -34,6 +42,23 @@
       #{certificateType,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{isDelete,jdbcType=TINYINT}
       )
   </insert>
+
+  <insert id="insertImageList">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into vegetable_certificate (delivery_order_id, url, upload_time,
+    certificate_type, status, is_delete
+    )
+    values
+    <foreach collection="vegetableCertificateList" item="vegetableCertificate" index="index" separator=",">
+      (#{vegetableCertificate.deliveryOrderId,jdbcType=BIGINT}, #{vegetableCertificate.url,jdbcType=VARCHAR},
+      #{vegetableCertificate.uploadTime,jdbcType=TIMESTAMP},#{vegetableCertificate.certificateType,jdbcType=INTEGER},
+      #{vegetableCertificate.status,jdbcType=INTEGER}, #{vegetableCertificate.isDelete,jdbcType=TINYINT}
+      )
+    </foreach>
+  </insert>
+
   <insert id="insertSelective" parameterType="com.snxy.business.domain.VegetableCertificate">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()

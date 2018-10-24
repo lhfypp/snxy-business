@@ -18,4 +18,6 @@ public interface CurrOrderReceiverMapper {
     int updateByPrimaryKey(CurrOrderReceiver record);
 
     List selectOrderIdByPrimaryKey(Long userId);
+
+    CurrOrderReceiver selectDriverMessageByOrderId(Long deliveryOrderId);
 }
