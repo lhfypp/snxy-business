@@ -125,7 +125,7 @@ public class DeliveryOrderController {
     @RequestMapping(value = "/driver/bill/bill/detail")
     public ResultData selectOrderByOrderId(Long orderId){
 
-        DriverOrderInfo driverOrderInfo = deliveryOrderService.selectOrderByOrderId(orderId);
+        DeliveryOrder driverOrderInfo = deliveryOrderService.selectOrderByOrderId(orderId);
         return ResultData.success(driverOrderInfo);
     }
    //商户取消订单

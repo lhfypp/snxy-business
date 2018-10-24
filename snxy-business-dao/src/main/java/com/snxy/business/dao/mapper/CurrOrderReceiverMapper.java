@@ -22,6 +22,8 @@ public interface CurrOrderReceiverMapper {
     List selectOrderIdByPrimaryKey(Long userId);
 
     CurrOrderReceiver selectDriverMessageByOrderId(Long deliveryOrderId);
+
+
     void changeDriver(@Param("orderId") long orderId, @Param("driverName") String driverName,@Param("drivePhone") String drivePhone);
     void insertCurrentOrder(@Param("insertCurrentOrder") InsertCurrentOrder insertCurrentOrder);
     void updateCurrOrderReceiver(@Param("OrderId") String OrderId, @Param("vehicleId") String vehicleId) ;

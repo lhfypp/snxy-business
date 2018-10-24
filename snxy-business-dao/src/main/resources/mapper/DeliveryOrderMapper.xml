@@ -70,7 +70,7 @@
       and status =#{orderStatus}
   </if>
   <if test="searchName!=null and searchName!=''">
-    or start_addr=#{searchName} or order_no=#{searchName} or sender_name=#{searchName}
+    or start_addr like "%#{searchName}%" or order_no like "%#{searchName}%"or sender_name like "%#{searchName}%"
   </if>
     and is_delete=0
       order by gmt_create desc

@@ -41,4 +41,6 @@ public interface DeliveryOrderMapper {
     void updateLoadStatus(@Param("deliveryOrderId") Long deliveryOrderId, @Param("loadStatus") Integer loadStatus);
 
     List<BillInfo> selectDriverOrderByOderId(List orderIdList);
+
+
 }
