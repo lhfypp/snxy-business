@@ -78,17 +78,16 @@
 
   <!-- 查询订单列表 end -->
 
-  <!-- 取消订单 start-->
+  <!-- 取消,关闭订单 司机接受订单等 start-->
   <update id="cancelOrderByOrderId">
   update delivery_order
     set status = #{status}
     where
-      order_no=#{orderId}
+      id=#{orderNo}
   </update>
-  <!-- 取消订单 end -->
 
 
-
+  <!-- 取消，关闭订单 end -->
 
   <!--查看订单详情 start-->
 
@@ -115,7 +114,12 @@
     <result column="delivery_fee" jdbcType="DECIMAL" property="deliveryFee" />
     <result column="qrcode_url" jdbcType="VARCHAR" property="qrcodeUrl" />
     <result column="status" jdbcType="INTEGER" property="status" />
-
+    <association property="driverPartInfo"  javaType="com.snxy.business.domain.DriverPartInfo">
+        <result property="driverName" column="driver_name"/>
+        <result property="driverMobile" column="driver_mobile"/>
+        <result property="plateNumber" column="plate_number"/>
+        <result property="carTypeDesc" column="type_desc"/>
+    </association>
     <collection property="goods"  ofType="com.snxy.business.domain.Goods">
       <result property="goodsId" column="goods_id"/>
       <result property="goodsName" column="goods_name"/>
@@ -140,23 +144,33 @@
      a.id as id, order_no, sender_name, sender_mobile, receiver_mobile, receiver_name, receiver_company,
     driver_leave_time, send_time, start_addr, end_addr, distance, est_arrival_time, actual_arrival_time,
     load_status, location_certificate, quality_certificate, gmt_create, gmt_modified,
-    delivery_fee, qrcode_url, a.status as status,goods_id,goods_name,goods_weight,goods_price,longitude
-    ,latitude,height,collection_time,d.url as url1,certificate_type,e.url as url2
+    delivery_fee, qrcode_url, a.status as status,f.driver_mobile as driver_mobile,
+    f.driver_name as driver_name,
+     goods_id,goods_name,goods_weight,goods_price,longitude
+    ,latitude,height,collection_time,d.url as url1,certificate_type,e.url as url2,plate_number,type_desc
   </sql>
-  <select id="selectBydDeliveryOrderId" parameterType="java.lang.Long" resultMap="DeliveryResultDetailMap">
+  <select id="selectBydDeliveryOrderId" parameterType="String" resultMap="DeliveryResultDetailMap">
     select
    <include refid="delvery_order_info_Details"/>
     from delivery_order a
+                    left join
+                           ( select * from
+                                      curr_order_receiver a1 left join
+                                              (select b1.id as id1,b1.plate_number as
+                                                      plate_number,
+                                                      b2.type_desc as type_desc
+                                                      from vehicle b1,truck_type b2
+                                                          where b1.truck_type_id=b2.id )a2
+                                                                    on a1.vehicle_id=a2.id1 ) f
+                                                            on a.id=f.delivery_order_id
 					left join vegetable_delivery_relation b on  a.id=b.delivery_order_id
 					left join vehicle_gps_record c on  a.id=c.delivery_order_id
 					left join vegetable_certificate d on  a.id=d.delivery_order_id
 					left join	vegetable_image e on a.id=e.delivery_order_id
+
 					where
-                          a.order_no = #{deliveryOrderId}
-  </select>
 
-  <!-- 查询订单详情 end -->
-
+<<<<<<< HEAD
   <!--司机查询订单-->
   <select id="selectDriverOrder" resultMap="DeliveryResultMap">
     select
@@ -166,47 +180,30 @@
     <foreach collection="list" index="index" item="id" open="(" separator="," close=")">
       #{id}
     </foreach>
+=======
+                          a.id = #{deliveryOrderId}
+>>>>>>> ed292f6fe7171cb372977c43215ac1bb5f3ce5e2
   </select>
+<!-- 查看订单详情 end-->
 
-<!-- 查看订单详情-->
+    <!--修改订单 start -->
+     <update id="updateOrder" parameterType="com.snxy.business.domain.UpdateBillInfoDetail">
+      update delivery_order
+     <set>
 
-
-
+     </set>
+         where
+          order_no=#{}
+     </update>
+    <!-- 修改订单 end -->
 
 
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
-    from delivery_order
+    from del  ivery_order
     where id = #{id,jdbcType=BIGINT}
   </select>
-
-  <!--司机查询订单详情-->
-  <resultMap id="DriverOrderInfo" type="com.snxy.business.domain.DriverOrderInfo">
-    <id column="id" jdbcType="BIGINT" property="deliveryOrderId" />
-    <result column="order_no" jdbcType="VARCHAR" property="deliveryOrderNo" />
-    <result column="send_Time" jdbcType="TIMESTAMP" property="sendTime" />
-    <result column="est_arrival_time" jdbcType="TIMESTAMP" property="estArrivalTime" />
-    <result column="start_addr" jdbcType="VARCHAR" property="startAddr" />
-    <result column="end_addr" jdbcType="VARCHAR" property="endAddr" />
-    <result column="sender_name" jdbcType="VARCHAR" property="sender" />
-    <result column="sender_mobile" jdbcType="VARCHAR" property="senderMobile" />
-    <result column="receiver_name" jdbcType="VARCHAR" property="receiverName" />
-    <result column="receiver_mobile" jdbcType="VARCHAR" property="receiverMobile" />
-    <result column="delivery_fee" jdbcType="DECIMAL" property="deliveryFee" />
-    <result column="distance" jdbcType="REAL" property="distance" />
-  </resultMap>
-  <sql id="Driver_Order_Info">
-    id, order_no, sender_name, sender_mobile, receiver_mobile, receiver_name,
-    send_time, start_addr, end_addr, distance, est_arrival_time,delivery_fee,
-  </sql>
-  <select id="selectDriverOrderBydDeliveryOrderId" parameterType="java.lang.Long" resultMap="DriverOrderInfo">
-    SELECT
-    <include refid="Driver_Order_Info"/>
-    from delivery_order
-    where order_no = #{id}
-  </select>
-
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from delivery_order
     where id = #{id,jdbcType=BIGINT}

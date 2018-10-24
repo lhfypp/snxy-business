@@ -1,10 +1,8 @@
 package com.snxy.business.dao.mapper;
 
-import com.snxy.business.domain.BillInfo;
-import com.snxy.business.domain.BillInfoDetail;
-import com.snxy.business.domain.DeliveryOrder;
-import com.snxy.business.domain.DriverOrderInfo;
+import com.snxy.business.domain.*;
 import org.apache.ibatis.annotations.Param;
+
 
 
 import java.util.List;
@@ -21,10 +19,17 @@ public interface DeliveryOrderMapper {
     int updateByPrimaryKeySelective(DeliveryOrder record);
 
     int updateByPrimaryKey(DeliveryOrder record);
+<<<<<<< HEAD
 
+=======
+    List<BillInfo> searchDeliveryOrder(@Param("sendPhones") List<String >sendPhones,@Param("orderStatus") String orderStatus,@Param("searchName") String searchName);
+    BillInfoDetail selectBydDeliveryOrderId(@Param("deliveryOrderId") String deliveryOrderId);
+    void  cancelOrderByOrderId(@Param("orderNo")String orderId,@Param("status") int status);//通过订单Id
+>>>>>>> ed292f6fe7171cb372977c43215ac1bb5f3ce5e2
 
-    List<BillInfo> selectDriverOrder(List list);
+    void updateOrder(@Param("billInfoDetail")UpdateBillInfoDetail billInfoDetail );
 
+<<<<<<< HEAD
     DriverOrderInfo selectDriverOrderBydDeliveryOrderId(Long orderId);
 
     BillInfoDetail selectBydDeliveryOrderId(@Param("deliveryOrderId") Long deliveryOrderId);
@@ -38,4 +43,7 @@ public interface DeliveryOrderMapper {
     void updateQualityCertificate(@Param("qualityCertificateId") Long qualityCertificateId, @Param("qualitied") Integer qualitied);
 
     void updateLoadStatus(@Param("deliveryOrderId") Long deliveryOrderId, @Param("loadStatus") Integer loadStatus);
+=======
+
+>>>>>>> ed292f6fe7171cb372977c43215ac1bb5f3ce5e2
 }

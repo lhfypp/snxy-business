@@ -18,6 +18,7 @@
     from curr_order_receiver
     where id = #{id,jdbcType=BIGINT}
   </select>
+<<<<<<< HEAD
 
   <select id="selectDriverMessageByOrderId" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select
@@ -26,6 +27,8 @@
     where delivery_order_id = #{id,jdbcType=BIGINT}
   </select>
 
+=======
+>>>>>>> ed292f6fe7171cb372977c43215ac1bb5f3ce5e2
   <select id="selectOrderIdByPrimaryKey" parameterType="java.lang.Long" resultType="java.lang.Long">
     select
     delivery_order_id
@@ -115,4 +118,37 @@
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <update id="changeDriver">
+    update curr_order_receiver
+      set
+         <if test="drivePhone!=null and drivePhone!='' ">
+           driver_mobile=#{drivePhone}
+         </if>
+          <if test="driverName!=null and driverName!='' ">
+           driver_name=#{driverName}
+          </if>
+      where delivery_order_id=#{orderId}
+  </update>
+  <insert id="insertCurrentOrder" >
+  insert into curr_order_receiver
+     (delivery_order_id,driver_mobile,driver_name,vehicle_id)
+values(#{insertCurrentOrder.deliveryOrderId},#{insertCurrentOrder.driverMobile},#{insertCurrentOrder.driverName},#{insertCurrentOrder.vehicleId})
+  </insert>
+    <update id="updateCurrOrderReceiver">
+        update curr_order_receiver
+         set vehicle_id=#{vehicleId}
+         where delivery_order_id=#{OrderId}
+    </update>
+    <update id="tranferOrder">
+        update curr_order_receiver
+        set
+        <if test="driveMobile!=null and driveMobile!='' ">
+            driver_mobile=#{driveMobile}
+        </if>
+        <if test="driverName!=null and driverName!='' ">
+            driver_name=#{driverName}
+        </if>
+        where delivery_order_id=#{orderId}
+
+</update>
 </mapper>

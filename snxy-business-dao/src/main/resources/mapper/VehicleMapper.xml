@@ -186,4 +186,27 @@
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <!-- 司机查看自己的车辆信息 start -->
+  <resultMap id="VehiclePartInfo" type="com.snxy.business.domain.VehiclePartInfo">
+    <result column="plate_number" jdbcType="VARCHAR" property="plateNumber" />
+    <result column="type_desc" jdbcType="VARCHAR" property="carTypeDesc" />
+    <result column="vehicle_id" jdbcType="VARCHAR" property="vehicleId" />
+
+  </resultMap>
+  <sql id="selectVehiclePartInfo">
+    b.plate_number as plate_number,c.type_desc as type_desc,b.id as vehicle_id
+  </sql>
+  <select id="searchVehiclePartInfo" parameterType="java.lang.Long" resultMap="VehiclePartInfo">
+select
+<include refid="selectVehiclePartInfo"/>
+    from
+      dirver_info a ,
+
+      vehicle     b left join truck_type c on b.truck_type_id=c.id
+
+    where   a.id=b.driver_info_id
+      and  a.online_user_id=#{onlineUserId}
+
+  </select>
+  <!-- 司机查看自己的车辆信息 end -->
 </mapper>
