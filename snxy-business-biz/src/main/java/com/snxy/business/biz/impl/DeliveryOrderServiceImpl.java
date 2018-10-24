@@ -182,12 +182,12 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
 
     @Override
     public List<BillInfo> selectDriverOrder(Long userId) {
-        return null;
+        return null; //司机查看订单
     }
 
     @Override
-    public DriverOrderInfo selectOrderByOrderId(Long orderId) {
-        return null;
+    public DeliveryOrder selectOrderByOrderId(Long orderId) {
+        return deliveryOrderMapper.selectByPrimaryKey(orderId);
     }
 
     public List<BillInfo> searchDeliveryOrder(String orderStatus, String searchName) {
@@ -210,7 +210,8 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
 
     @Override
     public BillInfoDetail searchDeliverOrderinfo(Long deliveryOrderId) {
-        return null;
+
+        return deliveryOrderMapper.selectBydDeliveryOrderId(deliveryOrderId);
     }
 
     @Override

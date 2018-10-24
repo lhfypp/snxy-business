@@ -11,10 +11,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+
+
 import java.util.Date;
-import java.util.UUID;
+
 
 @Service
 @Slf4j
@@ -59,19 +59,5 @@ public class ManagementServiceImpl implements ManagementService {
 
         return 1;
     }
-    public static void  get(){
-        Date date=new Date();
-        DateFormat format = new SimpleDateFormat("yyyyMMdd");
-        String time = format.format(date);
-        int hashCodeV = UUID.randomUUID().toString().hashCode();
-        if (hashCodeV < 0) {//有可能是负数
-            hashCodeV = -hashCodeV;
-        }
-        System.out.println(time + String.format("%011d", hashCodeV));
-    }
 
-    public static void main(String[] args) {
-        get();
-
-    }
 }

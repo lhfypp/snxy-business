@@ -65,7 +65,7 @@ public class ManagementController {
     }
 
     //管理员设置订单的检测证明是否合格
-    @RequestMapping("/order/productionCertificate")
+    @RequestMapping("/order/qualityCertificate")
     public ResultData checkQualityCertificate(Long qualityCertificateId,Integer qualitied,Long orderNo){
         //合格qualitied参数传1，不合格参数传0
         vegetableCategoryService.checkQualityCertificate(qualityCertificateId,qualitied,orderNo);

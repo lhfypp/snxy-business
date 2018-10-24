@@ -17,7 +17,7 @@ public interface DeliveryOrderService {
 
     List<BillInfo> selectDriverOrder(Long userId);
 
-    DriverOrderInfo selectOrderByOrderId(Long orderId);
+    DeliveryOrder selectOrderByOrderId(Long orderId);
 
     void createDeliveryOrder(DeliveryOrder deliveryOrder, VegetableDeliveryRelation vegetableDeliveryRelation, VegetableCertificate vegetableCertificate, VegetableImage vegetableImage);
     List<BillInfo>  searchDeliveryOrder(String orderStatus, String searchName);
