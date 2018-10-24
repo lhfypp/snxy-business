@@ -18,6 +18,17 @@
     from curr_order_receiver
     where id = #{id,jdbcType=BIGINT}
   </select>
+<<<<<<< HEAD
+
+  <select id="selectDriverMessageByOrderId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from curr_order_receiver
+    where delivery_order_id = #{id,jdbcType=BIGINT}
+  </select>
+
+=======
+>>>>>>> ed292f6fe7171cb372977c43215ac1bb5f3ce5e2
   <select id="selectOrderIdByPrimaryKey" parameterType="java.lang.Long" resultType="java.lang.Long">
     select
     delivery_order_id

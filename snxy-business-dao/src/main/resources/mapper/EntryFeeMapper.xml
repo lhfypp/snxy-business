@@ -150,4 +150,36 @@
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <!--管理员修改进门费用-->
+  <update id="updateByOrderNo" parameterType="com.snxy.business.domain.EntryFee">
+    update entry_fee
+    <set>
+      <if test="estFee != null">
+        est_fee = #{estFee,jdbcType=DECIMAL},
+      </if>
+      <if test="actualFee != null">
+        actual_fee = #{actualFee,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="payTime != null">
+        pay_time = #{payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="refundTime != null">
+        refund_time = #{refundTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payMethod != null">
+        pay_method = #{payMethod,jdbcType=TINYINT},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=TINYINT},
+      </if>
+    </set>
+    where delivery_order_id = #{deliveryOrderId,jdbcType=BIGINT}
+  </update>
 </mapper>

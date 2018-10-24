@@ -1,5 +1,6 @@
 package com.snxy.business.dao.mapper;
 
+import com.snxy.business.domain.Goods;
 import com.snxy.business.domain.GoodsInfo;
 import com.snxy.business.domain.VegetableDeliveryRelation;
 
@@ -19,4 +20,8 @@ public interface VegetableDeliveryRelationMapper {
     int updateByPrimaryKey(VegetableDeliveryRelation record);
 
     List<GoodsInfo> selectByOrderId(Long orderId);
+
+    void insertGoodList(List<VegetableDeliveryRelation> vegetableDeliveryRelationList);
+
+    List<Goods> selectAllByOrderId(Long deliveryOrderId);
 }
