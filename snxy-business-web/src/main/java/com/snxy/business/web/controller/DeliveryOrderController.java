@@ -107,8 +107,8 @@ public class DeliveryOrderController {
 
     //司机查看订单
     @RequestMapping(value = "/driver/order/list")
-    public ResultData showDriverOrder(Long userId){
-        List<BillInfo> driverOrders = deliveryOrderService.selectDriverOrder(userId);
+    public ResultData showDriverOrder(Long driverMobile){
+        List<BillInfo> driverOrders = deliveryOrderService.selectDriverOrder(driverMobile);
 
         return ResultData.success(driverOrders);
     }

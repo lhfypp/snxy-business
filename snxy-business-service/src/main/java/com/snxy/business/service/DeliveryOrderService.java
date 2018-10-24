@@ -15,7 +15,7 @@ public interface DeliveryOrderService {
 
     String getOrderNo();
 
-    List<BillInfo> selectDriverOrder(Long userId);
+    List<BillInfo> selectDriverOrder(Long driverMobile);
 
     DriverOrderInfo selectOrderByOrderId(Long orderId);
 

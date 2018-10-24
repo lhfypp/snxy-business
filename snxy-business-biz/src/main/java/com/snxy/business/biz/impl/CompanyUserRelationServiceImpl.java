@@ -21,4 +21,10 @@ public class CompanyUserRelationServiceImpl implements CompanyUserRelationServic
         List<Long> longs = companyUserRelationMapper.selectByOnlineId(onlineUserId);
         return longs;
     }
+
+    @Override
+    public List selectByOnlineId(Long id) {
+        List<Long> list = companyUserRelationMapper.selectByOnlineId(id);
+        return list;
+    }
 }

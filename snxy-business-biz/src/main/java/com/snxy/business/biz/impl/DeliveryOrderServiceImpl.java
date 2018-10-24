@@ -181,8 +181,11 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
     }
 
     @Override
-    public List<BillInfo> selectDriverOrder(Long userId) {
-        return null;
+    public List<BillInfo> selectDriverOrder(Long driverMobile) {
+        List orderIdList = currOrderReceiverMapper.selectOrderIdByDriverMobile(driverMobile);
+        List<BillInfo> billInfoList = deliveryOrderMapper.selectDriverOrderByOderId(orderIdList);
+
+        return billInfoList;
     }
 
     @Override
