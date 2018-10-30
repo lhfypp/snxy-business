@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 
 import com.snxy.business.service.DeliveryOrderService;
-import com.snxy.business.service.VegetableCategoryService;
 import com.snxy.business.service.vo.AdminChangeOrderVo;
 
 import com.snxy.business.service.vo.OrderVo;
@@ -28,31 +27,23 @@ import javax.annotation.Resource;
 public class ManagementController {
     @Resource
     private ManagementService managementService;
+
+    @Resource
+    private DeliveryOrderService deliveryOrderService;
+
     //创建我的检测单
     @RequestMapping("/driver/checkBill/create")
     public ResultData createcCheckBill(CreateCheckBillVO createcCheckBillVO){
         //整合数据，存入quality_sheet表中
         managementService.save(createcCheckBillVO);
-
         return ResultData.success("创建检测单提交成功");
-
-
     }
-
-
-
-    @Resource
-    private VegetableCategoryService vegetableCategoryService;
-
-    @Resource
-    private DeliveryOrderService deliveryOrderService;
-
 
     //管理员设置订单的产地证明是否合格
     @RequestMapping("/order/productionCertificate")
     public ResultData checkProductionCertificate(Long productionCertificate,Integer qualitied,Long orderNo){
         //合格qualitied参数传1，不合格参数传0
-        vegetableCategoryService.checkProductionCertificate(productionCertificate,qualitied,orderNo);
+        deliveryOrderService.checkProductionCertificate(productionCertificate,qualitied,orderNo);
 
         return ResultData.success("");
     }
@@ -68,7 +59,7 @@ public class ManagementController {
     @RequestMapping("/order/qualityCertificate")
     public ResultData checkQualityCertificate(Long qualityCertificateId,Integer qualitied,Long orderNo){
         //合格qualitied参数传1，不合格参数传0
-        vegetableCategoryService.checkQualityCertificate(qualityCertificateId,qualitied,orderNo);
+        deliveryOrderService.checkQualityCertificate(qualityCertificateId,qualitied,orderNo);
 
         return ResultData.success("");
     }
