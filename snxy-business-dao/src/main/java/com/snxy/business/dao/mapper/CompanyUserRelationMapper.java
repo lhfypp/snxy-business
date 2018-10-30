@@ -4,7 +4,7 @@ import com.snxy.business.domain.CompanyUserRelation;
 
 import java.util.List;
 
-public interface CompanyUserRelationMapper {
+public interface    CompanyUserRelationMapper {
     int deleteByPrimaryKey(Long id);
 
     int insert(CompanyUserRelation record);
@@ -17,5 +17,7 @@ public interface CompanyUserRelationMapper {
 
     int updateByPrimaryKey(CompanyUserRelation record);
 
-    List<Long> selectByOnlineId(Long id);
+    long selectCompanyId(Long onlineUserId);
+    List<Long> selectOnlinUserId(Long companyId);
+	List<Long> selectCompanyByOnlineId(Long id);
 }

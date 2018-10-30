@@ -1,7 +1,7 @@
 package com.snxy.business.dao.mapper;
 
 import com.snxy.business.domain.CurrOrderReceiver;
-import com.snxy.business.domain.InsertCurrentOrder;
+import com.snxy.business.domain.DriverPartInfo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -19,15 +19,14 @@ public interface CurrOrderReceiverMapper {
 
     int updateByPrimaryKey(CurrOrderReceiver record);
 
-    List selectOrderIdByPrimaryKey(Long userId);
-
     CurrOrderReceiver selectDriverMessageByOrderId(Long deliveryOrderId);
 
-
     void changeDriver(@Param("orderId") long orderId, @Param("driverName") String driverName,@Param("drivePhone") String drivePhone);
-    void insertCurrentOrder(@Param("insertCurrentOrder") InsertCurrentOrder insertCurrentOrder);
     void updateCurrOrderReceiver(@Param("OrderId") String OrderId, @Param("vehicleId") String vehicleId) ;
     void tranferOrder(@Param("orderId") long orderId,@Param("driveMobile") String driveMobile ,@Param("driverName") String driverName);
 
     List selectOrderIdByDriverMobile(Long driverMobile);
+
+    void updateByAgent(@Param("driverPartInfo") DriverPartInfo driverPartInfo);
+
 }

@@ -26,21 +26,19 @@ public interface DeliveryOrderMapper {
 
     void updateOrder(@Param("billInfoDetail")UpdateBillInfoDetail billInfoDetail );
 
-    DriverOrderInfo selectDriverOrderBydDeliveryOrderId(Long orderId);
 
-    BillInfoDetail selectBydDeliveryOrderId(@Param("deliveryOrderId") Long deliveryOrderId);
+    DeliveryOrder selectBydDeliveryOrderId(@Param("deliveryOrderId") Long deliveryOrderId);
     void  cancelOrderByOrderId(@Param("orderId")Long orderId,@Param("status")Integer status);
 
-    void updateEndLoading(Long deliveryOrderId);
+    void updateEndLoading(@Param("deliveryOrderId") Long deliveryOrderId, @Param("loadStatus") Integer loadStatus);
 
 
     void updateLocationCertificate(@Param("productionCertificate") Long productionCertificate, @Param("qualitied") Integer qualitied);
 
     void updateQualityCertificate(@Param("qualityCertificateId") Long qualityCertificateId, @Param("qualitied") Integer qualitied);
 
-    void updateLoadStatus(@Param("deliveryOrderId") Long deliveryOrderId, @Param("loadStatus") Integer loadStatus);
+    void updateLoadStatus(@Param("deliveryOrderId") Long deliveryOrderId, @Param("status") Integer status);
 
     List<BillInfo> selectDriverOrderByOderId(List orderIdList);
-
 
 }

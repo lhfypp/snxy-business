@@ -1,6 +1,7 @@
 package com.snxy.business.dao.mapper;
 
 import com.snxy.business.domain.CompanyVegetable;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -13,9 +14,9 @@ public interface CompanyVegetableMapper {
 
     CompanyVegetable selectByPrimaryKey(Long id);
 
-    List<CompanyVegetable> selectByCompanyId(Long userCompanyId);
+    List<Long> selectVegetablePriceIdByCompanyId(Long userCompanyId);
 
-    CompanyVegetable selectByGoodsName(String goodsName);
+    CompanyVegetable selectCompanyGoodsByGoodsNameAndCompanyId(@Param("goodsName") String goodsName, @Param("companyId") Long companyId);
 
     int updateByPrimaryKeySelective(CompanyVegetable record);
 

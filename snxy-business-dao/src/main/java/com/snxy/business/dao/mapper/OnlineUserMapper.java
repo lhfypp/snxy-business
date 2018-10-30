@@ -1,6 +1,9 @@
 package com.snxy.business.dao.mapper;
 
 import com.snxy.business.domain.OnlineUser;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface OnlineUserMapper {
     int deleteByPrimaryKey(Long id);
@@ -14,4 +17,5 @@ public interface OnlineUserMapper {
     int updateByPrimaryKeySelective(OnlineUser record);
 
     int updateByPrimaryKey(OnlineUser record);
+    List<String> searchphones(@Param("onlineUserIds") List<Long> onlineUserIds);
 }

@@ -20,4 +20,6 @@ public interface VehicleMapper {
     int updateByPrimaryKey(Vehicle record);
     //司机查看车辆信息
     List<VehiclePartInfo> searchVehiclePartInfo(@Param("onlineUserId") long onlineUserId);
+
+    List<Vehicle>searchVehicleList(@Param("driverInfoId") long driverInfoId);
 }

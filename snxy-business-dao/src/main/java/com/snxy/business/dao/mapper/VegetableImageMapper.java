@@ -20,4 +20,5 @@ public interface VegetableImageMapper {
     void insertVegetableImageList(List<VegetableImage> vegetableImageList);
 
     List<VegetableImage> selectByOderId(Long deliveryOrderId);
+    List<String>SelectListByOderId(Long deliveryOrderId);
 }

@@ -1,6 +1,9 @@
 package com.snxy.business.dao.mapper;
 
 import com.snxy.business.domain.VegetablePrice;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface VegetablePriceMapper {
     int deleteByPrimaryKey(Long id);
@@ -14,4 +17,7 @@ public interface VegetablePriceMapper {
     int updateByPrimaryKeySelective(VegetablePrice record);
 
     int updateByPrimaryKey(VegetablePrice record);
+
+    List<VegetablePrice> selectByPrimaryKeyList(List<Long> vegetablePriceIdList);
+    List<VegetablePrice>selectByVegetableCategoryid(@Param("vegetablePriceCategoryIdList") List<Long> vegetablePriceCategoryIdList);
 }
