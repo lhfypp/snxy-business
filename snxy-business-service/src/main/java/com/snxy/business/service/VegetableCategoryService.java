@@ -1,7 +1,8 @@
 package com.snxy.business.service;
 
-public interface VegetableCategoryService {
-    void checkProductionCertificate(Long productionCertificate, Integer qualitied,Long orderNo);
+import java.util.List;
 
-    void checkQualityCertificate(Long qualityCertificateId, Integer qualitied,Long orderNo);
+public interface VegetableCategoryService {
+    //long selectIdByGoodName(String goodName);
+    List<Long> selectIdsById(long id);
 }

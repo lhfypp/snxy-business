@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface TruckTypeService {
     List<TruckType> selectTruckType();
+    TruckType selectTruckTypeByTruckId(long id);
 }
