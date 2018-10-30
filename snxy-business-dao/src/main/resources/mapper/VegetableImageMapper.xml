@@ -125,4 +125,12 @@
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <resultMap id="SelectListByOderIdMap" type="String">
+    <result column="url" property="url"></result>
+  </resultMap>
+  <select id="SelectListByOderId" resultMap="SelectListByOderIdMap">
+    select url
+       from vegetable_image
+         where delivery_order_id=#{deliveryOrderId}
+  </select>
 </mapper>

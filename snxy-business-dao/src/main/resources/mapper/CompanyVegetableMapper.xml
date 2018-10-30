@@ -24,18 +24,23 @@
     from company_vegetable
     where id = #{id,jdbcType=BIGINT}
   </select>
-  <select id="selectByCompanyId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+
+  <!--查询货品大类ID的集合，通过公司ID88888888888888-->
+  <select id="selectVegetablePriceIdByCompanyId" parameterType="java.lang.Long">
     select
-    <include refid="Base_Column_List" />
+    vegetable_price_id
     from company_vegetable
     where company_id = #{userCompanyId,jdbcType=BIGINT}
     AND is_delete = 0
   </select>
-  <select id="selectByGoodsName" parameterType="java.lang.String" resultMap="BaseResultMap">
+
+  <!--搜索公司货品，通过公司ID和货品名称的模糊查询88888888888888-->
+  <select id="selectCompanyGoodsByGoodsNameAndCompanyId" parameterType="java.lang.String" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from company_vegetable
-    where vegetable_name LIKE #{goodsName}
+    where vegetable_name LIKE #{goodsName},
+    company_id = #{companyId}
     AND is_delete = 0
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">

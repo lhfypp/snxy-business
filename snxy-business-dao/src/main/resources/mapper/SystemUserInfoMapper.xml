@@ -17,51 +17,7 @@
     <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
     <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
   </resultMap>
-  <!--查询订单信息 查询手机号start-->
-  <resultMap id="searchPhoneMap" type="String">
-    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
-  </resultMap>
-  <select id="searchPhones" resultMap="searchPhoneMap">
-   select mobile from system_user_info
-   where
-    system_user_id in (
-      select system_user_id from online_user
-      where id in(
-     select onlline_user_id from company_user_relation
-       where company_id=
-             ( select e.company_id
-              from system_user_info a,
-              online_user b,
-              User_identity c,
-              identity_type d,
-              company_user_relation e
-               where a.system_user_id=b
-               .system_user_id
-                   and b.id=c.online_user_id
-                   and c.identity_id=d.id
-                   and d.identy_name ="经销商"
-                   and e.onlline_user_id=c.online_user_id
-                   and a.system_user_id=#{userID}
-              )
-              )
-    or system_user_id=(select  a.system_user_id from
-                            system_user_info a,
-                            online_user b,
-                            User_identity c,
-                            identity_type d
-                           where
-                                a.system_user_id=b.system_user_id
-                                and b.id=c.online_user_id
-                                and c.identity_id=d.id
-                                and d.identy_name ="代办"
-                                and a.system_user_id=#{userID}
-                      )
 
-
-        )
-
-
-  </select>
   <!--查询订单信息 end-->
   <sql id="Base_Column_List">
     id, system_user_id, identity_card_number, department_id, mobile, nation, mz, jg, 

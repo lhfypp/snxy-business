@@ -32,7 +32,7 @@
     where delivery_order_id = #{id,jdbcType=BIGINT}
   </select>
 
-  <!--查询放入Goods-->
+  <!--查询放入Goods888888888888888888888888-->
   <resultMap id="Goods" type="com.snxy.business.domain.Goods">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="goods_name" jdbcType="VARCHAR" property="goodsName" />

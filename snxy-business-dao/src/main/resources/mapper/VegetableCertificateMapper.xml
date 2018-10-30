@@ -139,4 +139,14 @@
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <resultMap id="selectListByOrderId" type="com.snxy.business.domain.Valication">
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="certificate_type" jdbcType="INTEGER" property="certificateType" />
+  </resultMap>
+  <select id="selectListByOrderId" parameterType="java.lang.Long">
+    select
+    url,certificate_type
+    from vegetable_certificate
+    where delivery_order_id = #{deliveryOrderId}
+  </select>
 </mapper>

@@ -90,4 +90,12 @@
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <select id="searchphones" resultType="String">
+    select phone
+       from online_user
+        where id in
+    <foreach collection="onlineUserIds" index="index" item="onlineUserId" open="(" separator="," close=")">
+          #{onlineUserId}
+        </foreach>
+  </select>
 </mapper>
