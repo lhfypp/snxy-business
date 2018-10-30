@@ -18,13 +18,23 @@ public class CompanyUserRelationServiceImpl implements CompanyUserRelationServic
 
     @Override
     public List selectCompanyIsExist(Long onlineUserId) {
-        List<Long> longs = companyUserRelationMapper.selectByOnlineId(onlineUserId);
+        List<Long> longs = companyUserRelationMapper.selectCompanyByOnlineId(onlineUserId);
         return longs;
     }
 
     @Override
     public List selectByOnlineId(Long id) {
-        List<Long> list = companyUserRelationMapper.selectByOnlineId(id);
+        List<Long> list = companyUserRelationMapper.selectCompanyByOnlineId(id);
         return list;
+    }
+
+    @Override
+    public long selectCompanyId(Long onlineUserId) {
+        return companyUserRelationMapper.selectCompanyId(onlineUserId);
+    }
+
+    @Override
+    public List<Long> selectOnlinUserId(Long companyId) {
+        return companyUserRelationMapper.selectOnlinUserId(companyId);
     }
 }

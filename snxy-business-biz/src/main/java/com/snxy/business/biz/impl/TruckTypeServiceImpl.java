@@ -21,4 +21,9 @@ public class TruckTypeServiceImpl implements TruckTypeService {
         List<TruckType> truckTypes = truckTypeMapper.selectAll();
         return truckTypes;
     }
+
+    @Override
+    public TruckType selectTruckTypeByTruckId(long id) {
+        return truckTypeMapper.selectByPrimaryKey(id);
+    }
 }

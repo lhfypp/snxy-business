@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -29,5 +30,10 @@ public class OnlineUserServiceImpl implements OnlineUserService {
     public OnlineUser selectById(Long onlineUserId) {
         OnlineUser onlineUser = this.onlineUserMapper.selectByPrimaryKey(onlineUserId);
         return onlineUser;
+    }
+
+    @Override
+    public List<String> searchphones(List<Long> onlineUserIds) {
+        return onlineUserMapper.searchphones(onlineUserIds);
     }
 }
