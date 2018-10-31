@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class OrderListVo {
+public class    OrderListVo {
 
     private String orderStatus;
     private  String searchName;

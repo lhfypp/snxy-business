@@ -5,18 +5,15 @@ import com.snxy.business.service.*;
 import com.snxy.business.service.vo.*;
 import com.snxy.common.response.ResultData;
 import com.snxy.common.util.PageInfo;
+
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.constraints.NotBlank;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.WebDataBinder;
+
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
 import java.util.List;
 import java.util.Map;
 
@@ -157,8 +154,8 @@ public class DeliveryOrderController {
     }
     // 关闭订单 合格关闭和不合格关闭（是否与关闭订单合并?,还是三个按钮分别请求）
     @RequestMapping("/seller/order/closeOrder")
-    public ResultData<? extends Object> closeOrder(@NotBlank(message="订单id不能为空")@RequestParam String logisticOrderId ){
-
+    public ResultData<? extends Object> closeOrder(@NotBlank(message="订单id不能为空")@RequestParam String logisticOrderId ,@RequestAttribute(value = "systemUser",required = false) SystemUserVo systemUserVO){
+        log.error("获取用户信息:{}",systemUserVO);
         //从用户对象获取
         String identityName="1";//商户
         if("1".equals(identityName)){
@@ -171,7 +168,7 @@ public class DeliveryOrderController {
     }
     //修改订单
     @RequestMapping("/seller/order/updateOrder")
-    public ResultData<? extends Object> updateOrder(@Valid @RequestBody UpdateBillInfoDetailVo billInfoDetail){
+    public ResultData<? extends Object> updateOrder(@Valid UpdateBillInfoDetailVo billInfoDetail){
         deliveryOrderService.updateOrder(billInfoDetail);
         return ResultData.success("修改订单成功");
 
