@@ -31,7 +31,7 @@
     <result column="collection_time" jdbcType="TIMESTAMP" property="collectionTime" />
   </resultMap>
   <sql id="GPS_Column_List">
-    longitude, latitude, height,collection_time,
+    longitude, latitude, height,collection_time
   </sql>
   <select id="selectByDeviveryOrderId" parameterType="java.lang.Long" resultMap="GPSResultMap">
     SELECT
