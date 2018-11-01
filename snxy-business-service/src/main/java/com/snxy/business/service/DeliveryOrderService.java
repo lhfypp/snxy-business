@@ -1,9 +1,7 @@
 package com.snxy.business.service;
 
 import com.snxy.business.domain.*;
-import com.snxy.business.service.vo.AdminChangeOrderVo;
-import com.snxy.business.service.vo.DeliveryOrderVo;
-import com.snxy.business.service.vo.OrderVo;
+import com.snxy.business.service.vo.*;
 import com.snxy.common.util.PageInfo;
 
 import java.util.List;
@@ -11,21 +9,18 @@ import java.util.Map;
 
 public interface DeliveryOrderService {
 
-    void createDeliveryOrder(DeliveryOrderVo deliveryOrderVo);
+    String saveDeliveryOrder(DeliveryOrderVo deliveryOrderVo);
 
     String getOrderNo();
 
-    List<BillInfo> selectDriverOrder(Long driverMobile);
+    List<DriverOrderVo> selectDriverOrder(String driverMobile);
 
     DeliveryOrder selectOrderByOrderId(Long orderId);
 
-    void createDeliveryOrder(DeliveryOrder deliveryOrder, VegetableDeliveryRelation vegetableDeliveryRelation, VegetableCertificate vegetableCertificate, VegetableImage vegetableImage);
-    List<BillInfo>  searchDeliveryOrder(String orderStatus, String searchName);
     BillInfoDetail searchDeliverOrderinfo(Long deliveryOrderId);
-    PageInfo<BillInfo> searchDeliveryOrderByPage(String orderStatus, String searchName);
     void cancelOrder(Long orderId,Integer status);
 
-    void updateEndLoading(Long deliveryOrderId);
+    void updateEndLoading(Long deliveryOrderId,Integer status);
 
     void adminModifyOrder(AdminChangeOrderVo adminChangeOrderVo);
 
@@ -36,8 +31,13 @@ public interface DeliveryOrderService {
     void acceptOrder(String orderId);//司机接受订单有Id
 
     Map<String ,Object> getVehiclesForDriver(String OrderId);
-    void insertCurrOrderReceiver(String OrderId,String vehicleId);
     void updateCurrOrderReceiver(String OrderId,String vehicleId);
     void resufedOrder(String orderId);
     void tranferOrder(String orderId,String driveMobile ,String driverName);
+	void checkProductionCertificate(Integer qualitied,Long orderNo);
+
+    void checkQualityCertificate(Integer qualitied,Long orderNo);
+    PageInfo<BillInfo> searchDeliveryOrderByPage(String orderStatus, String searchName);
+
+    OrderNoVo createDeliveryOrder(Long onlineUserId);
 }

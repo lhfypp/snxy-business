@@ -21,9 +21,12 @@
     from company_user_relation
     where id = #{id,jdbcType=BIGINT}
   </select>
-  <select id="selectByOnlineId" parameterType="java.lang.Long" resultType="java.lang.Long">
+
+  <!--查询公司信息，通过onlineUserId88888888888888-->
+  <select id="selectCompanyByOnlineId" parameterType="java.lang.Long" resultType="java.lang.Long">
     select company_id from company_user_relation where onlline_user_id = #{id,jdbcType=BIGINT} AND is_delete = 0
   </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from company_user_relation
     where id = #{id,jdbcType=BIGINT}
@@ -91,6 +94,16 @@
       </if>
     </trim>
   </insert>
+
+  <!--更改公司负责人-->
+  <update id="changePrinciple">
+    update company_user_relation
+    set is_responsible = #{isResponsible}
+    where company_id = #{companyId}
+    AND is_delete = 0
+    and onlline_user_id = #{onlineUserId}
+  </update>
+
   <update id="updateByPrimaryKeySelective" parameterType="com.snxy.business.domain.CompanyUserRelation">
     update company_user_relation
     <set>
@@ -128,5 +141,53 @@
       gmt_modifed = #{gmtModifed,jdbcType=TIMESTAMP},
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectCompanyId" resultType="java.lang.Long">
+    select company_id
+     from
+      company_user_relation
+      where
+        onlline_user_id=#{onlineUserId}
+  </select>
+  <select id="selectOnlinUserId" resultType="java.lang.Long">
+    select  onlline_user_id
+     from
+      company_user_relation
+      where
+         company_id=#{companyId}
+  </select>
+
+  <update id="updateByOnlineUserId">
+    update company_user_relation
+    <set>
+      <if test="companyId != null">
+        company_id = #{companyId,jdbcType=BIGINT},
+      </if>
+      <if test="companyType != null">
+        company_type = #{companyType,jdbcType=TINYINT},
+      </if>
+      <if test="onllineUserId != null">
+        onlline_user_id = #{onllineUserId,jdbcType=BIGINT},
+      </if>
+      <if test="isResponsible != null">
+        is_responsible = #{isResponsible,jdbcType=INTEGER},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModifed != null">
+        gmt_modifed = #{gmtModifed,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=TINYINT},
+      </if>
+    </set>
+    where onlline_user_id = #{onllineUserId,jdbcType=BIGINT}
+  </update>
+
+  <update id="deleteByOnlineUserId">
+    UPDATE company_user_relation
+    set is_delete = #{isDelete}
+    where online_user_id = #{onlineUserId}
   </update>
 </mapper>

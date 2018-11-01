@@ -26,4 +26,10 @@ public class IdentityTypeServiceImpl implements IdentityTypeService {
         List<IdentityType> identityTypes =  identityTypeMapper.listAll(isDelete);
         return identityTypes;
     }
+
+    @Override
+    public List<IdentityType> selectAllType() {
+        List<IdentityType> identityTypeList = identityTypeMapper.selectAllType();
+        return identityTypeList;
+    }
 }

@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface IdentityTypeService {
     List<IdentityType> listAll(boolean excludeDeleted);
+
+    List<IdentityType> selectAllType();
 }

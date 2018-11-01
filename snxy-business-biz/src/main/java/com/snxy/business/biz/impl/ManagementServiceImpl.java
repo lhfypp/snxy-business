@@ -1,12 +1,11 @@
 package com.snxy.business.biz.impl;
 
 import com.snxy.business.dao.mapper.DeliveryOrderMapper;
-import com.snxy.business.dao.mapper.QualitySheetMapper;
-import com.snxy.business.dao.mapper.VegetableDeliveryRelationMapper;
 import com.snxy.business.domain.BillInfoDetail;
 import com.snxy.business.domain.CreateCheckBillVO;
 import com.snxy.business.domain.QualitySheet;
 import com.snxy.business.service.ManagementService;
+import com.snxy.business.service.QualitySheetService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -20,11 +19,9 @@ import java.util.Date;
 @Slf4j
 public class ManagementServiceImpl implements ManagementService {
     @Resource
-    private QualitySheetMapper qualitySheetMapper;
+    private QualitySheetService qualitySheetService;
     @Resource
     DeliveryOrderMapper deliveryOrderMapper;
-    @Resource
-    VegetableDeliveryRelationMapper  vegetableDeliveryRelationMapper;
     @Override
     public void save(CreateCheckBillVO createcCheckBillVO) {
 
@@ -44,19 +41,17 @@ public class ManagementServiceImpl implements ManagementService {
         qualitySheet.setProductionLocation(createcCheckBillVO.getOrigin());//产地
         qualitySheet.setCheckTime(now);//检测时间 当前时间
         qualitySheet.setUrl("");//检测图片url,暂时为空
-        qualitySheet.setQrcodeUrl(billInfoDetail.getQrcodeUrl());//检测二维码
+        qualitySheet.setQrcodeUrl(billInfoDetail.getDeliveryOrder().getQrcodeUrl());//检测二维码
         qualitySheet.setQualified(1);//检测结果1.合格，2.不合格
         qualitySheet.setRemark(createcCheckBillVO.getDesc());//备注
         qualitySheet.setWeight(Float.parseFloat(createcCheckBillVO.getTheNumber()));//重量
         //qualitySheet.setVegetableCategoryId();//货品id,暂时不处理
         qualitySheet.setIsDelete((byte)0);//未删除
-        qualitySheetMapper.insert(qualitySheet);
+        qualitySheetService.insert(qualitySheet);
     }
     //平台校验司机传过来的检测单是否正确
     public int CheckBill(CreateCheckBillVO createcCheckBillVO){
         BillInfoDetail billInfoDetail= deliveryOrderMapper.selectBydDeliveryOrderId(createcCheckBillVO.getOrderId());//根据订单号与司机姓名进行校验，如果都正确，合格，价格校验 一个产品20
-
-
         return 1;
     }
 

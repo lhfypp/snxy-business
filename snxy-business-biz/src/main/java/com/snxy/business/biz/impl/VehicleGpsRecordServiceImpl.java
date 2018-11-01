@@ -4,7 +4,9 @@ import com.snxy.business.dao.mapper.VehicleGpsRecordMapper;
 import com.snxy.business.domain.GPSLocation;
 import com.snxy.business.domain.VehicleGpsRecord;
 import com.snxy.business.service.VehicleGpsRecordService;
+import com.snxy.business.service.vo.VehicleGpsVo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +22,9 @@ public class VehicleGpsRecordServiceImpl implements VehicleGpsRecordService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void insertLocationGPS(VehicleGpsRecord vehicleGpsRecord, Long userId) {
+    public void insertLocationGPS(VehicleGpsVo vehicleGpsVo) {
+        VehicleGpsRecord vehicleGpsRecord = new VehicleGpsRecord();
+        BeanUtils.copyProperties(vehicleGpsVo,vehicleGpsRecord);
         vehicleGpsRecordMapper.insert(vehicleGpsRecord);
     }
 

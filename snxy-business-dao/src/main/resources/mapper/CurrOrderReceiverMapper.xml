@@ -19,6 +19,7 @@
     where id = #{id,jdbcType=BIGINT}
   </select>
 
+  <!--查询司机信息，通过deliveryOrderId8888888888888888888888888-->
   <select id="selectDriverMessageByOrderId" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
@@ -26,6 +27,7 @@
     where delivery_order_id = #{id,jdbcType=BIGINT}
   </select>
 
+  <!--查询OrderId集合，通过司机的手机号88888888888888888888-->
   <select id="selectOrderIdByDriverMobile" resultType="java.lang.Long">
     select
     delivery_order_id

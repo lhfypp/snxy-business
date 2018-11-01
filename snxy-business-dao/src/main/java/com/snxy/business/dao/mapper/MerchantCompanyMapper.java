@@ -1,6 +1,7 @@
 package com.snxy.business.dao.mapper;
 
 import com.snxy.business.domain.MerchantCompany;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -13,7 +14,7 @@ public interface MerchantCompanyMapper {
 
     int insertSelective(MerchantCompany record);
 
-    List<MerchantCompany> selectByPrimaryKey(List list);
+    MerchantCompany selectByPrimaryKey(Long companyId);
 
     int updateByPrimaryKeySelective(MerchantCompany record);
 

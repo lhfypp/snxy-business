@@ -83,11 +83,12 @@
   <!--批量插入-->
   <insert id ="insertVegetableImageList" >
     insert into vegetable_image
-    (delivery_order_id, url, upload_time,type, is_delete)
+    (delivery_order_id, url, upload_time, type, is_delete)
     values
-     <foreach collection ="vegetableImageList" item="vegetableImage" index= "index" separator =",">
+     <foreach collection ="vegetableImageList" item="vegetableImage" separator =",">
          (
-         #{vegetableImage.deliveryOrderId}, #{vegetableImage.url},
+         #{vegetableImage.deliveryOrderId},
+         #{vegetableImage.url},
          #{vegetableImage.uploadTime},
          #{vegetableImage.type},
          #{vegetableImage.isDelete}
@@ -125,4 +126,12 @@
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <resultMap id="SelectListByOderIdMap" type="String">
+    <result column="url" property="url"></result>
+  </resultMap>
+  <select id="SelectListByOderId" resultMap="SelectListByOderIdMap">
+    select url
+       from vegetable_image
+         where delivery_order_id=#{deliveryOrderId}
+  </select>
 </mapper>

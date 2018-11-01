@@ -19,4 +19,6 @@ public interface IdentityTypeMapper {
     int updateByPrimaryKey(IdentityType record);
 
     List<IdentityType> listAll(@Param("isDelete") byte isDelete);
+
+    List<IdentityType> selectAllType();
 }

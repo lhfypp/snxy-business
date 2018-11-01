@@ -25,7 +25,8 @@ import java.util.Set;
 @Slf4j
 @RestControllerAdvice
 @RequestMapping( value = "/error")
-public class GlobalExceptionHandler {
+
+public class GlobalExceptionHandler  {
 
   /*  @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResultData httpRequestMethodNotSupportedException(HttpServletResponse response) {

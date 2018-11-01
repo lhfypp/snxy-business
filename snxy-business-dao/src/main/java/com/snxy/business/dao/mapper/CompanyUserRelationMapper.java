@@ -1,6 +1,7 @@
 package com.snxy.business.dao.mapper;
 
 import com.snxy.business.domain.CompanyUserRelation;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -17,5 +18,13 @@ public interface CompanyUserRelationMapper {
 
     int updateByPrimaryKey(CompanyUserRelation record);
 
-    List<Long> selectByOnlineId(Long id);
+    long selectCompanyId(Long onlineUserId);
+    List<Long> selectOnlinUserId(Long companyId);
+	Long selectCompanyByOnlineId(Long id);
+
+    void changePrinciple(@Param("companyId") Integer companyId, @Param("onlineUserId") Long onlineUserId, @Param("isResponsible") Integer isResponsible);
+
+    void updateByOnlineUserId(CompanyUserRelation companyUserRelation);
+
+    void deleteByOnlineUserId(@Param("onlineUserId") Long onlineUserId, @Param("isDelete") byte isDelete);
 }

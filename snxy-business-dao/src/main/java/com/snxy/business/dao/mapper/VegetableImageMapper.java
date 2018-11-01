@@ -1,6 +1,7 @@
 package com.snxy.business.dao.mapper;
 
 import com.snxy.business.domain.VegetableImage;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -17,7 +18,8 @@ public interface VegetableImageMapper {
 
     int updateByPrimaryKey(VegetableImage record);
 
-    void insertVegetableImageList(List<VegetableImage> vegetableImageList);
+    void insertVegetableImageList(@Param("vegetableImageList") List<VegetableImage> vegetableImageList);
 
     List<VegetableImage> selectByOderId(Long deliveryOrderId);
+    List<String>SelectListByOderId(Long deliveryOrderId);
 }
