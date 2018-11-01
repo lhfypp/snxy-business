@@ -36,4 +36,9 @@ public class OnlineUserServiceImpl implements OnlineUserService {
     public List<String> searchphones(List<Long> onlineUserIds) {
         return onlineUserMapper.searchphones(onlineUserIds);
     }
+
+    @Override
+    public OnlineUser selectBySystemUserId(long systemUserId) {
+        return onlineUserMapper.selectBySystemUserId(systemUserId);
+    }
 }
