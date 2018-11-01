@@ -1,5 +1,6 @@
 package com.snxy.business.dao.mapper;
 
+import com.snxy.business.domain.Vegetable;
 import com.snxy.business.domain.VegetablePrice;
 import org.apache.ibatis.annotations.Param;
 
@@ -19,5 +20,9 @@ public interface VegetablePriceMapper {
     int updateByPrimaryKey(VegetablePrice record);
 
     List<VegetablePrice> selectByPrimaryKeyList(List<Long> vegetablePriceIdList);
+
     List<VegetablePrice>selectByVegetableCategoryid(@Param("vegetablePriceCategoryIdList") List<Long> vegetablePriceCategoryIdList);
+
+    List<Vegetable> selectvegetableByName(@Param("vegeatableName") String vegeatableName, @Param("date") String date);
+
 }

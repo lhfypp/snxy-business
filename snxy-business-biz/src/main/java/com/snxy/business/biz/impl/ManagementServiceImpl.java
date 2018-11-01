@@ -1,7 +1,10 @@
 package com.snxy.business.biz.impl;
 
+import com.snxy.business.dao.mapper.CurrOrderReceiverMapper;
 import com.snxy.business.dao.mapper.DeliveryOrderMapper;
+import com.snxy.business.dao.mapper.QualitySheetMapper;
 import com.snxy.business.domain.BillInfoDetail;
+import com.snxy.business.domain.CheckBillInfo;
 import com.snxy.business.domain.CreateCheckBillVO;
 import com.snxy.business.domain.QualitySheet;
 import com.snxy.business.service.ManagementService;
@@ -13,6 +16,7 @@ import javax.annotation.Resource;
 
 
 import java.util.Date;
+import java.util.List;
 
 
 @Service
@@ -22,6 +26,11 @@ public class ManagementServiceImpl implements ManagementService {
     private QualitySheetService qualitySheetService;
     @Resource
     DeliveryOrderMapper deliveryOrderMapper;
+    @Resource
+    private QualitySheetMapper qualitySheetMapper;
+    @Resource
+    private CurrOrderReceiverMapper currOrderReceiverMapper;
+
     @Override
     public void save(CreateCheckBillVO createcCheckBillVO) {
 
@@ -58,4 +67,26 @@ public class ManagementServiceImpl implements ManagementService {
         return 1;
     }
 
+    //根据手机号查询检测单列表
+    @Override
+    public List<CheckBillInfo> selectCheckBillList(String driverMobile) {
+        List<Long> list = currOrderReceiverMapper.selectDriverMobile(driverMobile);
+        List<Long> currList = currOrderReceiverMapper.selectCurrList(list);
+        List<CheckBillInfo> listCheckBillInfo = qualitySheetMapper.selectCheckBillList(currList);
+        return listCheckBillInfo;
+    }
+
+    //检测单详情
+    @Override
+    public CheckBillInfo selectCheckBillByUserId(String deliveryOrderId) {
+        CheckBillInfo checkBillInfo = qualitySheetMapper.selectCheckBillById(deliveryOrderId);
+        return checkBillInfo;
+    }
+
+    //模糊查询
+    @Override
+    public List selectVague(String vegetableCategoryName) {
+        List<CheckBillInfo> listByName = qualitySheetMapper.selectCheckBillByName(vegetableCategoryName);
+        return listByName;
+    }
 }

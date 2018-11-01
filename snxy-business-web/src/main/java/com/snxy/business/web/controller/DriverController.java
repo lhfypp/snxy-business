@@ -1,5 +1,7 @@
 package com.snxy.business.web.controller;
 
+import com.snxy.business.domain.CompanyInfo;
+import com.snxy.business.domain.NewDriverVehicle;
 import com.snxy.business.service.DirverInfoService;
 import com.snxy.business.service.vo.DriverBasicInfoVo;
 import com.snxy.common.response.ResultData;
@@ -39,5 +41,31 @@ public class DriverController {
         return ResultData.success(dirverInfoService.searchVhicles());
     }
 
+    //司机车辆信息新建
+    @RequestMapping("/vehicle/new")
+    public ResultData saveDirverVehicle(NewDriverVehicle newDriverVehicle){
+        dirverInfoService.saveDirverVehicle(newDriverVehicle);
+        return ResultData.success("新建成功");
+    }
 
+    //司机车辆信息修改
+    @RequestMapping("/carInfo/modify")
+    public ResultData updateDirverVehicle(Long id){
+        dirverInfoService.updateDirverVehicle(id);
+        return ResultData.success("修改成功");
+    }
+
+    //司机车辆信息删除
+    @RequestMapping("/vehicele/delete")
+    public ResultData deleteDirverVehicle(Long id){
+        dirverInfoService.deleteDirverVehicle(id);
+        return ResultData.success("删除成功");
+    }
+
+    //司机查看公司详情
+    @RequestMapping("/myCompany/detail")
+    public ResultData selectCompanyInfo(long id){
+        CompanyInfo companyInfo = dirverInfoService.selectCompanyInfo(id);
+        return ResultData.success(companyInfo);
+    }
 }

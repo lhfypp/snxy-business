@@ -1,6 +1,7 @@
 package com.snxy.business.web.controller;
 
 
+import com.snxy.business.domain.CheckBillInfo;
 import com.snxy.business.domain.CreateCheckBillVO;
 import com.snxy.business.service.ManagementService;
 import com.snxy.common.response.ResultData;
@@ -18,10 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @RestController
 @Slf4j
-
 @Validated
 @RequestMapping("/management")
 public class ManagementController {
@@ -79,6 +80,22 @@ public class ManagementController {
         return ResultData.success(orderVo);
     }
 
-
-
+    //司机查看检测单列表
+    @RequestMapping(value="/driver/checkBill/list")
+    public ResultData CheckBillList(String driverMobile){
+        List<CheckBillInfo> list = managementService.selectCheckBillList(driverMobile);
+        return ResultData.success(list);
+    }
+    //司机检测单证明详情
+    @RequestMapping(value="/driver/checkBill/detail")
+    public ResultData CheckBillByUserId(String deliveryOrderId){
+        CheckBillInfo checkBillInfo = managementService.selectCheckBillByUserId(deliveryOrderId);
+        return ResultData.success(checkBillInfo);
+    }
+    //检测证明的模糊查询
+    @RequestMapping(value="/driver/checkBill/vague")
+    public ResultData selectVague(String vegetableCategoryName){
+        List list = managementService.selectVague(vegetableCategoryName);
+        return ResultData.success(list);
+    }
 }

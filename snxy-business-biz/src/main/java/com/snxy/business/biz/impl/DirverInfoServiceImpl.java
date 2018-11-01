@@ -1,8 +1,9 @@
 package com.snxy.business.biz.impl;
 
 import com.snxy.business.dao.mapper.DirverInfoMapper;
-import com.snxy.business.domain.DirverInfo;
-import com.snxy.business.domain.Vehicle;
+import com.snxy.business.dao.mapper.MerchantCompanyMapper;
+import com.snxy.business.dao.mapper.VehicleMapper;
+import com.snxy.business.domain.*;
 import com.snxy.business.service.DirverInfoService;
 import com.snxy.business.service.VehicleService;
 import com.snxy.business.service.vo.DriverBasicInfoVo;
@@ -20,6 +21,11 @@ public class DirverInfoServiceImpl implements DirverInfoService {
     private DirverInfoMapper dirverInfoMapper;
     @Resource
     private VehicleService vehicleService;
+    @Resource
+    private VehicleMapper vehicleMapper;
+    @Resource
+    private MerchantCompanyMapper merchantCompanyMapper;
+
     @Override
    public String saveDriverInfo(DriverBasicInfoVo DriverBasicInfo){
         String msg="";
@@ -58,4 +64,37 @@ public class DirverInfoServiceImpl implements DirverInfoService {
         //用driver_info_id查询出所有的车辆信息
        return   vehicleService.searchVehicleList(id);
    }
+
+    //司机车俩信息新建
+    @Override
+    public void saveDirverVehicle(NewDriverVehicle newDriverVehicle) {
+        dirverInfoMapper.insertNewDriverVehicle(newDriverVehicle);
+    }
+
+    //车辆信息修改
+    @Override
+    public void updateDirverVehicle(Long id) {
+        vehicleMapper.updateDriverVehicleById(id);
+    }
+
+    //司机车辆信息删除
+    @Override
+    public void deleteDirverVehicle(Long id) {
+        vehicleMapper.deleteDirverVehicle(id);
+    }
+
+    //司机查看公司信息
+    @Override
+    public CompanyInfo selectCompanyInfo(long id) {
+        MerchantCompany merchantCompany = merchantCompanyMapper.selectCompanyInfoById(id);
+        CompanyInfo companyInfo = CompanyInfo.builder()
+                .merchantType(merchantCompany.getMerchantType())//公司类别  1.公司  2.个体
+                .merchantName(merchantCompany.getMerchantName())//公司名称
+                .operationScale(merchantCompany.getOperationScale())//公司规模
+                .operationSope(merchantCompany.getOperationSope())//公司经营范围
+                .socialInfoCode(merchantCompany.getSocialInfoCode())//公司信用代码
+                .corporateCertificationUrl(merchantCompany.getCorporateCertificationUrl())//公司认证图片
+                .build();
+        return companyInfo;
+    }
 }

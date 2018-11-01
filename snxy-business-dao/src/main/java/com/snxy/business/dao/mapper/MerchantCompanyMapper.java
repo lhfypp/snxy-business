@@ -19,4 +19,6 @@ public interface MerchantCompanyMapper {
 
     int updateByPrimaryKey(MerchantCompany record);
 
+    MerchantCompany selectCompanyInfoById(long id);
+
 }

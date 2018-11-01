@@ -215,4 +215,23 @@ select
         FROM vehicle
          WHERE driver_info_id=#{driverInfoId}
   </select>
+
+  <!-- 修改车辆信息-->
+  <update id="updateDriverVehicleById">
+    update vehicle
+    set plate_number = #{plateNumber},
+    truck_type_id = #{carTypeDesc},
+    vehicle_driving_license_number = #{drivingLicenseNumber},
+    operation_certificate = #{operationCertificate},
+    tonnage = #{tonnage},
+    vehicle_driving_license_url = #{vehicleDrivingLicenseUrl},
+    vehicle_url = #{vehicleUrl}
+    where id = #{id}
+  </update>
+  <!--删除车辆-->
+  <update id="deleteDirverVehicle">
+    update vehicle
+    set is_delete = '1'
+    where id = #{id}
+  </update>
 </mapper>

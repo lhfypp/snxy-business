@@ -196,4 +196,39 @@
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <resultMap id="selectCheckBillByNameMap" type="com.snxy.business.domain.CheckBillInfo">
+    <result property="deliveryOrderId" column="deliveryOrderId"></result>
+  </resultMap>
+  <!--司机查看检测单列表-->
+  <sql id="checkBillList">
+    a.delivery_order_id,a.id,a.production_location,a.check_time,a.qrcode_url,a.qualified,a.weight,a.is_delete,c.vegetable_category_name
+  </sql>
+  <select id="selectCheckBillList" resultType="com.snxy.business.domain.QualitySheet">
+    select
+    <include refid="checkBillList"/>
+    from quality_sheet a ,vegetable_category c
+    where  a.vegetable_category_id = c.id
+    and  a.delivery_order_id in
+    <foreach collection="currList" item="id" open="(" separator="," close=")">
+      #{id}
+    </foreach>
+  </select>
+  <!--检测单详情-->
+  <select id="selectCheckBillById" resultType="com.snxy.business.domain.CheckBillInfo">
+    select
+    <include refid="checkBillList"/>
+    from  quality_sheet a ,vegetable_category c
+    where a.vegetable_category_id = c.id
+    and a.delivery_order_id = #{delivery_order_id}
+  </select>
+  <!--检测单模糊查询-->
+  <select id="selectCheckBillByName" resultMap="selectCheckBillByNameMap">
+    select
+    <include refid="checkBillList"/>
+    from quality_sheet a ,vegetable_category c
+    where a.vegetable_category_id = c.id
+    and c.vegetable_category_name like '%${vegetableCategoryName}%'
+    or a.delivery_order_id like '%${vegetableCategoryName}%'
+  </select>
 </mapper>

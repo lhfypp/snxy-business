@@ -22,11 +22,17 @@ public interface CurrOrderReceiverMapper {
     CurrOrderReceiver selectDriverMessageByOrderId(Long deliveryOrderId);
 
     void changeDriver(@Param("orderId") long orderId, @Param("driverName") String driverName,@Param("drivePhone") String drivePhone);
+
     void updateCurrOrderReceiver(@Param("OrderId") String OrderId, @Param("vehicleId") String vehicleId) ;
+
     void tranferOrder(@Param("orderId") long orderId,@Param("driveMobile") String driveMobile ,@Param("driverName") String driverName);
 
     List selectOrderIdByDriverMobile(Long driverMobile);
 
     void updateByAgent(@Param("driverPartInfo") DriverPartInfo driverPartInfo);
+
+    List<Long> selectDriverMobile(String driverMobile);
+
+    List<Long> selectCurrList(List<Long> list);
 
 }

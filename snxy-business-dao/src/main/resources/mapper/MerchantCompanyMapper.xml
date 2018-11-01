@@ -165,4 +165,12 @@
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <!--司机查看公司信息-->
+  <select id="selectCompanyInfoById" resultMap="BaseResultMap">
+    select
+    a.merchant_name,a.merchant_type,a.operation_scale,a.operation_sope,a.social_info_code,a.corporate_certification_url
+    from merchant_company a,company_user_relation b
+    where a.id = b.company_id and b.onlline_user_id = #{id}
+  </select>
 </mapper>

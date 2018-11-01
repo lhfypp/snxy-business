@@ -139,4 +139,13 @@
          from dirver_info
           where online_user_id=#{onlineUserId}
     </select>
+
+  <insert id="insertNewDriverVehicle" >
+    insert into vehicle(plate_number,truck_type_id,
+    vehicle_driving_license_number,operation_certificate,
+    tonnage,vehicle_driving_license_url,
+    vehicle_url)
+    value (#{plateNumber},#{carTypeDesc},#{drivingLicenseNumber},
+    #{operationCertificate},#{tonnage},#{vehicleDrivingLicenseUrl},#{vehicleUrl})
+  </insert>
 </mapper>

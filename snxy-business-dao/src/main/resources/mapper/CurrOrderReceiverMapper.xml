@@ -171,4 +171,18 @@ values(#{insertCurrentOrder.deliveryOrderId},#{insertCurrentOrder.driverMobile},
       vehicle_id=#{vehicle_id}
     </if>
   </update>
+
+  <select id="selectDriverMobile" resultType="java.lang.Long">
+    select delivery_order_id
+    from curr_order_receiver
+    where driver_mobile = #{driverMobile}
+  </select>
+  <select id="selectCurrList" resultType="java.lang.Long">
+    select delivery_order_id
+    from curr_order_receiver
+    where delivery_order_id in
+    <foreach collection="list" item="id" open="(" separator="," close=")">
+      #{id}
+    </foreach>
+  </select>
 </mapper>

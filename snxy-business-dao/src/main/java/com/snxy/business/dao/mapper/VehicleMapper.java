@@ -22,4 +22,8 @@ public interface VehicleMapper {
     List<VehiclePartInfo> searchVehiclePartInfo(@Param("onlineUserId") long onlineUserId);
 
     List<Vehicle>searchVehicleList(@Param("driverInfoId") long driverInfoId);
+
+    void updateDriverVehicleById(Long id);
+
+    void deleteDirverVehicle(Long id);
 }

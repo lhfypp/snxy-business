@@ -1,6 +1,7 @@
 package com.snxy.business.dao.mapper;
 
 import com.snxy.business.domain.DirverInfo;
+import com.snxy.business.domain.NewDriverVehicle;
 import org.apache.ibatis.annotations.Param;
 
 public interface DirverInfoMapper {
@@ -15,6 +16,10 @@ public interface DirverInfoMapper {
     int updateByPrimaryKeySelective(DirverInfo record);
 
     int updateByPrimaryKey(DirverInfo record);
+
     DirverInfo selectByOnlineUserId(@Param("onlineUserId") Long onlineUserId);
+
     long selectIdByOnlineUserId(@Param("OnlineUseId")long onlineUserId);
+
+    void insertNewDriverVehicle(NewDriverVehicle newDriverVehicle);
 }

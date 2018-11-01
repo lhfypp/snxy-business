@@ -158,4 +158,18 @@
       #{vegetablePriceCategoryId}
     </foreach>
   </select>
+
+  <!--搜索菜价-->
+  <resultMap id="VegetableByNameMap" type="com.snxy.business.domain.VegetablePrice">
+    <result column="vegetable_category_id" property="vegetableCategoryId"/>
+    <result column="vegetable_name" property="vegetableName"/>
+    <result column="price" property="price"/>
+    <result column="effective_starting_time" property="effectiveStartingTime"/>
+  </resultMap>
+  <select id="selectvegetableByName" resultMap="VegetableByNameMap">
+    select vegetable_category_id,vegetable_name,price,effective_starting_time
+    from vegetable_price
+    where vegetable_name like concat('%',#{vegeatableName},'%')
+    and effective_starting_time &lt; #{date}
+  </select>
 </mapper>
