@@ -1,10 +1,7 @@
 package com.snxy.business.service;
 
 import com.snxy.business.domain.*;
-import com.snxy.business.service.vo.AdminChangeOrderVo;
-import com.snxy.business.service.vo.DeliveryOrderVo;
-import com.snxy.business.service.vo.OrderVo;
-import com.snxy.business.service.vo.UpdateBillInfoDetailVo;
+import com.snxy.business.service.vo.*;
 import com.snxy.common.util.PageInfo;
 
 import java.util.List;
@@ -40,5 +37,5 @@ public interface DeliveryOrderService {
 	void checkProductionCertificate(Long productionCertificate, Integer qualitied,Long orderNo);
 
     void checkQualityCertificate(Long qualityCertificateId, Integer qualitied,Long orderNo);
-    PageInfo<BillInfo> searchDeliveryOrderByPage(String orderStatus, String searchName);
+    PageInfo<BillInfo> searchDeliveryOrderByPage(String orderStatus, String searchName, SystemUserVo systemUserVO);
 }
