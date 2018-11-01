@@ -35,4 +35,8 @@ public class VegetableDeliveryRelationServiceImpl implements VegetableDeliveryRe
         vegetableDeliveryRelationMapper.selectByOrderId(orderId);
         return null;
     }
+    @Override
+   public  void updatebyAgent(List<Goods> goods){
+
+    }
 }

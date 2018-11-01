@@ -114,4 +114,14 @@
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <!--<select id="selectIdByGoodName" resultType="java.lang.Long">
+    select id
+       from vegetable_category
+       where vegetable_category_name=#{goodName}
+  </select>-->
+  <select id="selectIdsById" resultType="java.lang.Long">
+    select id from
+       vegetable_category
+       where parent_id=#{id}
+  </select>
 </mapper>

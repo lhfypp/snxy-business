@@ -1,7 +1,9 @@
 package com.snxy.business.domain;
 
-import java.util.Date;
+import lombok.Builder;
 
+import java.util.Date;
+@Builder
 public class QualitySheet {
     private Long id;
 

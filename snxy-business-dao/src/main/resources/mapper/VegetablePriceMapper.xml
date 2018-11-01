@@ -33,6 +33,16 @@
       #{vegetablePriceId}
     </foreach>
   </select>
+<!--查询菜品价格列表，通过priceId的集合88888888888888-->
+  <select id="selectByPrimaryKeyList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from vegetable_price
+    where id IN
+    <foreach collection="vegetablePriceIdList" item="vegetablePriceId" index="index" separator=",">
+      #{vegetablePriceId}
+    </foreach>
+  </select>
 
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from vegetable_price
@@ -149,4 +159,14 @@
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="selectByVegetableCategoryid" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from vegetable_price
+    where vegetable_category_id IN
+    <foreach collection="vegetablePriceCategoryIdList" item="vegetablePriceCategoryId" index="index"  open="(" separator="," close=")">
+      #{vegetablePriceCategoryId}
+    </foreach>
+  </select>
 </mapper>

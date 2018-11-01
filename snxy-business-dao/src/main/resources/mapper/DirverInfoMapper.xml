@@ -128,4 +128,15 @@
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <select id="selectByOnlineUserId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from dirver_info
+    where online_user_id = #{onlineUserId}
+  </select>
+    <select id="selectIdByOnlineUserId" resultType="java.lang.Long">
+        select id
+         from dirver_info
+          where online_user_id=#{onlineUserId}
+    </select>
 </mapper>

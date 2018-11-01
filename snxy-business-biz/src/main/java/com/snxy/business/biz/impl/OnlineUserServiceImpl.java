@@ -1,7 +1,6 @@
 package com.snxy.business.biz.impl;
 
 import com.snxy.business.dao.mapper.OnlineUserMapper;
-import com.snxy.business.domain.CompanyUserRelation;
 import com.snxy.business.domain.OnlineUser;
 import com.snxy.business.service.CompanyUserRelationService;
 import com.snxy.business.service.MerchantCompanyService;

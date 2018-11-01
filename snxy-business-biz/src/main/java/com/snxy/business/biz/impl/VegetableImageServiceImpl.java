@@ -30,4 +30,7 @@ public class VegetableImageServiceImpl implements VegetableImageService {
         List<VegetableImage> vegetableImageList = vegetableImageMapper.selectByOderId(deliveryOrderId);
         return vegetableImageList;
     }
+   public  void updateByAgent(VegetableImage vegetableImage){
+
+   }
 }

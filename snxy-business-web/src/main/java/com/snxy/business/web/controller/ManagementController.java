@@ -45,7 +45,6 @@ public class ManagementController {
     public ResultData checkProductionCertificate(@RequestBody CertificateVo certificateVo){
         //合格qualitied参数传1，不合格参数传0
         deliveryOrderService.checkProductionCertificate(certificateVo.getQualitied(),certificateVo.getOrderNo());
-
         return ResultData.success("");
     }
 
@@ -61,7 +60,6 @@ public class ManagementController {
     public ResultData checkQualityCertificate(@RequestBody CertificateVo certificateVo){
         //合格qualitied参数传1，不合格参数传0
         deliveryOrderService.checkQualityCertificate(certificateVo.getQualitied(),certificateVo.getOrderNo());
-
         return ResultData.success("");
     }
 

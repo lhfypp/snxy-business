@@ -37,7 +37,7 @@
   <!--查询公司货品类别-->
   <select id="showGoodsList" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select
-    <include refid="Base_Column_List" />
+    vegetable_price_id
     from company_vegetable
     where company_id = #{userCompanyId,jdbcType=BIGINT}
     AND is_delete = 0

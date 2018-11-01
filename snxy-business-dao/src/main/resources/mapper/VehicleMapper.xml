@@ -209,4 +209,10 @@ select
 
   </select>
   <!-- 司机查看自己的车辆信息 end -->
+  
+  <select id="searchVehicleList" resultMap="BaseResultMap">
+    SELECT *
+        FROM vehicle
+         WHERE driver_info_id=#{driverInfoId}
+  </select>
 </mapper>

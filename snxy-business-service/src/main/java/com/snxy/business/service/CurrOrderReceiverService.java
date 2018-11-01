@@ -15,4 +15,5 @@ public interface CurrOrderReceiverService {
     List selectOrderIdByDriverMobile(String driverMobile);
     void changeDriver( long orderId,  String driverName, String drivePhone);
     CurrOrderReceiver selectDriverMessageByOrderId(Long deliveryOrderId);
+    void updateByAgent(DriverPartInfo driverPartInfo);
 }

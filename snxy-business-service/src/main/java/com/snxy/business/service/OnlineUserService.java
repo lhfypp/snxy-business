@@ -6,6 +6,7 @@ import com.snxy.business.service.vo.ReceiveMessageVo;
 import java.util.List;
 
 
+
 public interface OnlineUserService {
     boolean newOnlineUser(OnlineUser onlineUser);
     OnlineUser selectById(Long onlineUserId);

@@ -4,7 +4,6 @@ import com.snxy.business.dao.mapper.CompanyVegetableMapper;
 import com.snxy.business.domain.CompanyVegetable;
 import com.snxy.business.domain.VegetablePrice;
 import com.snxy.business.service.CompanyVegetableService;
-import com.snxy.business.service.VegetableCategoryService;
 import com.snxy.business.service.VegetablePriceService;
 import com.snxy.business.service.vo.AddCompanyGoodsVo;
 import com.snxy.business.service.vo.CompanyGoodsVo;

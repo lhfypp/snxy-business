@@ -1,16 +1,22 @@
 package com.snxy.business.web.aspect;
 
+import com.snxy.common.response.ResultData;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -56,5 +62,27 @@ public class ControllerLoggerAspect {
           log.info(sb.toString());
        }
     }
-
+    @Around(value = "executeMethod()")
+    public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
+        //log.info("zzzz");
+        BindingResult bindingResult = null;
+        for(Object arg:joinPoint.getArgs()){
+            if(arg instanceof BindingResult){
+                bindingResult = (BindingResult) arg;
+            }
+        }
+        if(bindingResult != null){
+           // log.info("bbbbb");
+            List<ObjectError> errors = bindingResult.getAllErrors();
+            if(errors.size()>0){
+                StringBuilder msg = new StringBuilder();
+                for(ObjectError error :errors){
+                    msg.append(error.getDefaultMessage());
+                    msg.append(",");
+                }
+                return  ResultData.success(msg.toString());
+            }
+        }
+        return joinPoint.proceed();
+    }
 }

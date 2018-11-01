@@ -8,4 +8,5 @@ public interface VegetableCertificateService {
     void insertImageList(List<VegetableCertificate> vegetableCertificateList);
     List<Valication> getValications(long orderId);
 	List<VegetableCertificate> selectByOrderId(Long deliveryOrderId);
+	void updatebyAgent(Long deliveryOrderId,List<String>url);
 }

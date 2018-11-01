@@ -1,8 +1,9 @@
 package com.snxy.business.biz.feign;
 
+import com.snxy.business.service.vo.LoginUserVO;
+import com.snxy.business.service.vo.SystemUserVo;
 import com.snxy.common.response.ResultData;
-import com.snxy.user.agent.service.vo.LoginUserVO;
-import com.snxy.user.agent.service.vo.SystemUserVO;
+
 import org.springframework.stereotype.Component;
 
 /**
@@ -15,7 +16,7 @@ public class UserAgentServiceFallBackFactory implements UserAgentService {
     private static final String msg = "user-agent服务降级";
 
     @Override
-    public ResultData<SystemUserVO> login(LoginUserVO loginUserVO) {
+    public ResultData<SystemUserVo> login(LoginUserVO loginUserVO) {
         return ResultData.fail("登陆失败 ："+msg);
     }
 }

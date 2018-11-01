@@ -132,10 +132,17 @@
      <update id="updateOrder" parameterType="com.snxy.business.domain.UpdateBillInfoDetail">
       update delivery_order
      <set>
+         send_time=#{billInfoDetail.sendTime},
+         est_arrival_time=#{billInfoDetail.estArrivalTime},
+         sender_name=#{billInfoDetail.sender},
+         sender_mobile=#{billInfoDetail.senderMobile},
+         start_addr=#{billInfoDetail.sendLocation},
+         receiver_name=#{billInfoDetail.receiver},
+         receiver_mobile=#{billInfoDetail.receiverMobile},
 
      </set>
          where
-          order_no=#{}
+         id=#{billInfoDetail.deliveryOrderId}
      </update>
     <!-- 修改订单 end -->
 

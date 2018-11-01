@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
-public interface CompanyUserRelationMapper {
+public interface    CompanyUserRelationMapper {
     int deleteByPrimaryKey(Long id);
 
     int insert(CompanyUserRelation record);

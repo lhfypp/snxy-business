@@ -33,20 +33,23 @@ public class ManagementServiceImpl implements ManagementService {
        // SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMdd hh:mm:ss");
         //sdf.parse(sdf.format(now));
         Long userid=null;
-        QualitySheet qualitySheet=new QualitySheet();
-        qualitySheet.setDeliveryOrderId(orderId);//货运单  id
-        qualitySheet.setProposer(userid);//提检人Id 货车司机id
-        qualitySheet.setCheckerId(userid);//检验员 暂时在平台校验
-        qualitySheet.setVehiclePlateNumber(createcCheckBillVO.getPlatNumber());//车牌号
-        qualitySheet.setProductionLocation(createcCheckBillVO.getOrigin());//产地
-        qualitySheet.setCheckTime(now);//检测时间 当前时间
-        qualitySheet.setUrl("");//检测图片url,暂时为空
-        qualitySheet.setQrcodeUrl(billInfoDetail.getDeliveryOrder().getQrcodeUrl());//检测二维码
-        qualitySheet.setQualified(1);//检测结果1.合格，2.不合格
-        qualitySheet.setRemark(createcCheckBillVO.getDesc());//备注
-        qualitySheet.setWeight(Float.parseFloat(createcCheckBillVO.getTheNumber()));//重量
-        //qualitySheet.setVegetableCategoryId();//货品id,暂时不处理
-        qualitySheet.setIsDelete((byte)0);//未删除
+        QualitySheet qualitySheet=
+                     QualitySheet.builder()
+                                 .deliveryOrderId(orderId)
+                                 .proposer(userid)//提检人Id 货车司机id
+                                 .checkerId(userid)//检验员 暂时在平台校验
+                                 .vehiclePlateNumber(createcCheckBillVO.getPlatNumber())//车牌号
+                                 .productionLocation(createcCheckBillVO.getOrigin())//产地
+                                 .checkTime(now)//检测时间 当前时间
+                                 .url("")//检测图片url,暂时为空
+                                 .qrcodeUrl(billInfoDetail.getDeliveryOrder().getQrcodeUrl())//二维码
+                                 .qualified(1)//检测结果1.合格，2.不合格
+                                 .remark(createcCheckBillVO.getDesc())//备注
+                                 .weight(Float.parseFloat(createcCheckBillVO.getTheNumber()))//重量
+                                 //.vegetableCategoryId()//货品id，暂时不处理
+                                 .isDelete((byte)0)//未删除
+                                 .build();
+
         qualitySheetService.insert(qualitySheet);
     }
     //平台校验司机传过来的检测单是否正确

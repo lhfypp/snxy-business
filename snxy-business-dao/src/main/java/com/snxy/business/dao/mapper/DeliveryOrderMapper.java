@@ -37,7 +37,7 @@ public interface DeliveryOrderMapper {
 
     void updateQualityCertificate(@Param("orderNo") Long orderNo,@Param("qualitied") Integer qualitied);
 
-    void updateLoadStatus(@Param("deliveryOrderId") Long deliveryOrderId, @Param("loadStatus") Integer loadStatus);
+    void updateLoadStatus(@Param("deliveryOrderId") Long deliveryOrderId, @Param("status") Integer status);
 
     List<DeliveryOrder> selectDriverOrderByOderId(@Param("orderIdList") List orderIdList);
 

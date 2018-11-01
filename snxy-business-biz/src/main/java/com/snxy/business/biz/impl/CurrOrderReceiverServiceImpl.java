@@ -60,4 +60,7 @@ public class CurrOrderReceiverServiceImpl implements CurrOrderReceiverService {
         CurrOrderReceiver currOrderReceiver = currOrderReceiverMapper.selectDriverMessageByOrderId(deliveryOrderId);
         return currOrderReceiver;
     }
+    public void updateByAgent(DriverPartInfo driverPartInfo){
+        currOrderReceiverMapper.updateByAgent(driverPartInfo);
+    }
 }

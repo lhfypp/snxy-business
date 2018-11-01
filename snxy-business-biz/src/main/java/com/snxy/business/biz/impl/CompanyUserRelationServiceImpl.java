@@ -1,6 +1,5 @@
 package com.snxy.business.biz.impl;
 
-import com.alibaba.druid.sql.dialect.mysql.ast.MysqlForeignKey;
 import com.snxy.business.dao.mapper.CompanyUserRelationMapper;
 import com.snxy.business.domain.*;
 import com.snxy.business.service.CompanyUserRelationService;
@@ -40,16 +39,6 @@ public class CompanyUserRelationServiceImpl implements CompanyUserRelationServic
     public Long selectByOnlineId(Long id) {
         Long companyId = companyUserRelationMapper.selectCompanyByOnlineId(id);
         return companyId;
-    }
-
-    @Override
-    public long selectCompanyId(Long onlineUserId) {
-        return companyUserRelationMapper.selectCompanyId(onlineUserId);
-    }
-
-    @Override
-    public List<Long> selectOnlinUserId(Long companyId) {
-        return companyUserRelationMapper.selectOnlinUserId(companyId);
     }
 
     @Override
@@ -178,9 +167,13 @@ public class CompanyUserRelationServiceImpl implements CompanyUserRelationServic
         userIdentityService.insertUserIdentyList(userIdentityList);
     }
 
+    @Override
+    public long selectCompanyId(Long onlineUserId) {
+        return companyUserRelationMapper.selectCompanyId(onlineUserId);
+    }
 
-
-
-
-
+    @Override
+    public List<Long> selectOnlinUserId(Long companyId) {
+        return companyUserRelationMapper.selectOnlinUserId(companyId);
+    }
 }

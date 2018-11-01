@@ -65,20 +65,9 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public String saveDeliveryOrder(DeliveryOrderVo deliveryOrderVo) {
-
         //订单信息DeliveryOrder
         DeliveryOrder deliveryOrder = new DeliveryOrder();
         BeanUtils.copyProperties(deliveryOrderVo,deliveryOrder);
-        deliveryOrder.setGmtCreate(new Date());
-        deliveryOrder.setIsDelete((byte)0);
-        deliveryOrder.setStatus(0);
-
-        //当收货人没有绑定公司时，不可以进行发布
-        String receiverCompany = deliveryOrderVo.getReceiverCompany();
-        if(receiverCompany==null||receiverCompany.equals("")){
-            return "收货人未绑定公司，无法发布订单";
-        }
-
         deliveryOrderMapper.insertSelective(deliveryOrder);
         Long id = deliveryOrder.getId();
 
@@ -91,7 +80,6 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
             BeanUtils.copyProperties(goodsList.get(i),vegetableDeliveryRelation);
             vegetableDeliveryRelationList.add(vegetableDeliveryRelation);
         }
-
         vegetableDeliveryRelationService.insertGoodList(vegetableDeliveryRelationList);
 
         //货物照片上传
@@ -237,8 +225,8 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
         //从用户对象获取
         //从用户对象获取
         String userPhone="15101267019";
-        String onlineUserID="";
-        String identityName="2";
+        String onlineUserID="1";
+        String identityName="1";
         //用于存放商户或者代办所有的手机信息
         List<String> sendPhones=new ArrayList<String>();
         if("2".equals(identityName)) {
@@ -255,6 +243,7 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
         PageInfo<BillInfo> pageInfo = new PageInfo<BillInfo>(listBillInfo);
         return pageInfo;
     }
+
 
     @Override
     public OrderNoVo createDeliveryOrder(Long onlineUserId) {
@@ -291,15 +280,30 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
     }
 
     @Override
-    public void updateOrder(UpdateBillInfoDetail billInfoDetail){
-        deliveryOrderMapper.updateOrder(billInfoDetail);
+    public void updateOrder(UpdateBillInfoDetailVo billInfoDetail){
+        UpdateBillInfoDetail updateBillInfoDetail=new UpdateBillInfoDetail();
+        //更新订单表
+        deliveryOrderMapper.updateOrder(updateBillInfoDetail);
+        //更新当前接单对象表 实体类 DriverPartInfo
+        DriverPartInfo driverPartInfo=new DriverPartInfo();
+        currOrderReceiverService.updateByAgent(driverPartInfo);//待改进
+        //更新vegetable_certificate表
+        List<String>url=new ArrayList<String>();
+        long orderId=1;
+        vegetableCertificateService.updatebyAgent(orderId,url);//待改进
+        //更新vegetable_delivery_relation表
+        List<Goods>goods=new ArrayList<>();
+        vegetableDeliveryRelationService.updatebyAgent(goods);//待改进
+        //更新vegetable_image表
+        VegetableImage vegetableImage=null;
+        vegetableImageService.updateByAgent(vegetableImage);//待改进
+
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateEndLoading(Long deliveryOrderId,Integer status) {
         //调用APP消息推送接口，向商户推送消息司机已装货完毕
-
         deliveryOrderMapper.updateEndLoading(deliveryOrderId,status);
     }
 
@@ -349,7 +353,6 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
         entryFee.setRemark(adminChangeOrderVo.getRemark());
         entryFee.setDeliveryOrderId(adminChangeOrderVo.getDeliveryOrderId());
         entryFeeService.updateByOrderNo(entryFee);
-
     }
 
     @Override

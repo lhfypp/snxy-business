@@ -33,4 +33,8 @@ public class VegetableCertificateServiceImpl implements VegetableCertificateServ
         List<VegetableCertificate> vegetableCertificateList = vegetableCertificateMapper.selectByOrderId(deliveryOrderId);
         return vegetableCertificateList;
     }
+    @Override
+    public void updatebyAgent(Long deliveryOrderId,List<String>url){
+
+    }
 }

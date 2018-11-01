@@ -63,7 +63,7 @@ public class GlobalExceptionHandler  {
     }*/
 
   //  @ExceptionHandler({BizException.class, ValidateException.class})
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler({Exception.class})
     public ResultData  exceptionHandler(Exception e){
         log.error("全局异常处理 ：[{}]",e);
         if(e instanceof BizException){
@@ -84,8 +84,7 @@ public class GlobalExceptionHandler  {
             };
 
             return ResultData.fail(errMsg);
-        }
-        else if (e instanceof ConstraintViolationException){
+        } else if (e instanceof ConstraintViolationException){
             Set<ConstraintViolation<?>> constraintViolations =((ConstraintViolationException) e).getConstraintViolations();
             Iterator<ConstraintViolation<?>> iterator = constraintViolations.iterator();
             StringBuffer errMsg=new StringBuffer();
@@ -97,7 +96,8 @@ public class GlobalExceptionHandler  {
                 }
             }
             return ResultData.fail(errMsg.toString());
-        }else{
+        }
+       else{
 
         }
 

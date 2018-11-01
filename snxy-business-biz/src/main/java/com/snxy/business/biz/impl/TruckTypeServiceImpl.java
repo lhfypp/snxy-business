@@ -35,4 +35,9 @@ public class TruckTypeServiceImpl implements TruckTypeService {
     public TruckType selectTruckTypeByTruckId(long id) {
         return truckTypeMapper.selectByPrimaryKey(id);
     }
+
+    @Override
+    public TruckType selectTruckTypeByTruckId(long id) {
+        return truckTypeMapper.selectByPrimaryKey(id);
+    }
 }

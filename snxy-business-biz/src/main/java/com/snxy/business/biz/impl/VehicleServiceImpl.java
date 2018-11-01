@@ -36,4 +36,7 @@ public class VehicleServiceImpl implements VehicleService {
     public List<VehiclePartInfo> searchVehiclePartInfo(long onlineUserId) {
         return vehicleMapper.searchVehiclePartInfo(onlineUserId);
     }
+    public List<Vehicle>searchVehicleList(long driver_info_id){
+            return vehicleMapper.searchVehicleList(driver_info_id);
+    }
 }

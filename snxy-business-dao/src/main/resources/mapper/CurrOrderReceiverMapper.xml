@@ -157,4 +157,18 @@ values(#{insertCurrentOrder.deliveryOrderId},#{insertCurrentOrder.driverMobile},
         where delivery_order_id=#{orderId}
 
 </update>
+
+  <update id="updateByAgent">
+    update curr_order_receiver
+       set
+    <if test="driveMobile!=null and driveMobile!='' ">
+      driver_mobile=#{driverPartInfo.driveMobile}
+    </if>
+    <if test="driverName!=null and driverName!='' ">
+      driver_name=#{driverPartInfo.driverName}
+    </if>
+    <if test="driveMobile!=null and driveMobile!='' ">
+      vehicle_id=#{vehicle_id}
+    </if>
+  </update>
 </mapper>

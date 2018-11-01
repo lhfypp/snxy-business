@@ -7,13 +7,12 @@ import com.snxy.common.response.ResultData;
 import com.snxy.common.util.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.constraints.NotBlank;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+
 import java.util.List;
 import java.util.Map;
 
@@ -39,6 +38,7 @@ public class DeliveryOrderController {
     private OnlineUserService onlineUserService;
 
 
+
     //货品信息添加页展示
     @RequestMapping(value = "/seller/showGoods")
     public ResultData showGoods (Long userCompanyId){
@@ -56,9 +56,7 @@ public class DeliveryOrderController {
     //新建发货订单的订单号
     @RequestMapping(value = "/seller/bill/new")
     public ResultData createDeliveryOrder (Long onlineUserId){
-
         OrderNoVo orderNoVo = deliveryOrderService.createDeliveryOrder(onlineUserId);
-
         return ResultData.success(orderNoVo);
     }
 
@@ -90,7 +88,7 @@ public class DeliveryOrderController {
 
     //查看订单详情
     @RequestMapping(value = "/seller/order/detail")
-    public ResultData<BillInfoDetail > searchDeliveryOrderInfo(String deliveryOrderId) {
+    public ResultData<BillInfoDetail > searchDeliveryOrderInfo(@NotBlank(message="订单id不能为空") String deliveryOrderId) {
         long orderId= Long.parseLong(deliveryOrderId);
         return ResultData.success (deliveryOrderService.searchDeliverOrderinfo(orderId));
 
@@ -148,8 +146,8 @@ public class DeliveryOrderController {
     }
     // 关闭订单 合格关闭和不合格关闭（是否与关闭订单合并?,还是三个按钮分别请求）
     @RequestMapping("/seller/order/closeOrder")
-    public ResultData<? extends Object> closeOrder(@NotBlank(message="订单id不能为空")@RequestParam String logisticOrderId ){
-
+    public ResultData<? extends Object> closeOrder(@NotBlank(message="订单id不能为空")@RequestParam String logisticOrderId ,@RequestAttribute(value = "systemUser",required = false) SystemUserVo systemUserVO){
+        log.error("获取用户信息:{}",systemUserVO);
         //从用户对象获取
         String identityName="1";//商户
         if("1".equals(identityName)){
@@ -162,7 +160,7 @@ public class DeliveryOrderController {
     }
     //修改订单
     @RequestMapping("/seller/order/updateOrder")
-    public ResultData<? extends Object> updateOrder(@Valid @RequestBody UpdateBillInfoDetail billInfoDetail){
+    public ResultData<? extends Object> updateOrder(@Valid UpdateBillInfoDetailVo billInfoDetail){
         deliveryOrderService.updateOrder(billInfoDetail);
         return ResultData.success("修改订单成功");
 
@@ -200,12 +198,12 @@ public class DeliveryOrderController {
 
     //查看订单列表,实现分页查询
     @RequestMapping(value = "/seller/order/list")
-    public ResultData<PageInfo<BillInfo>>searchDeliveryOrderbypage(OrderListVo orderListVo){
-        PageInfo<BillInfo> pageInfo=null;
+    public ResultData<PageInfo<BillInfo>>searchDeliveryOrderbypage(@Valid OrderListVo orderListVo){
+
+        PageInfo<BillInfo> pageInfo;
         String orderStatus = orderListVo.getOrderStatus();//订单状态
         String searchName = orderListVo.getSearchName();//地点or联系人or单号
         pageInfo=deliveryOrderService.searchDeliveryOrderByPage(orderStatus, searchName);
         return ResultData.success(pageInfo);
     }
-
 }
