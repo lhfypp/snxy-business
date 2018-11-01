@@ -9,5 +9,5 @@ public interface OnlineUserService {
     boolean newOnlineUser(OnlineUser onlineUser);
     OnlineUser selectById(Long onlineUserId);
     List<String> searchphones(List<Long> onlineUserIds);
-
+    OnlineUser selectBySystemUserId(long systemUserId);
 }
