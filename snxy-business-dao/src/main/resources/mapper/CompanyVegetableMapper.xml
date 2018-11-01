@@ -26,7 +26,16 @@
   </select>
 
   <!--查询货品大类ID的集合，通过公司ID88888888888888-->
-  <select id="selectVegetablePriceIdByCompanyId" parameterType="java.lang.Long">
+  <select id="selectVegetablePriceIdByCompanyId" parameterType="java.lang.Long" resultType="java.lang.Long">
+    select
+    vegetable_price_id
+    from company_vegetable
+    where company_id = #{userCompanyId,jdbcType=BIGINT}
+    AND is_delete = 0
+  </select>
+
+  <!--查询公司货品类别-->
+  <select id="showGoodsList" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select
     vegetable_price_id
     from company_vegetable
@@ -35,12 +44,12 @@
   </select>
 
   <!--搜索公司货品，通过公司ID和货品名称的模糊查询88888888888888-->
-  <select id="selectCompanyGoodsByGoodsNameAndCompanyId" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectCompanyGoodsByGoodsNameAndCompanyId" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
     from company_vegetable
-    where vegetable_name LIKE #{goodsName},
-    company_id = #{companyId}
+    where vegetable_name LIKE concat('%',#{goodsName},'%')
+    AND company_id = #{companyId}
     AND is_delete = 0
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
@@ -180,4 +189,13 @@
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <!--删除商户的已添加商品-->
+  <update id="deleteCompanyGoods">
+    update company_vegetable
+    set is_delete = 1
+    where vegetable_price_id = #{vegetablePriceId}
+    AND company_id = #{companyId}
+  </update>
+
 </mapper>

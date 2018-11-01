@@ -3,6 +3,7 @@ package com.snxy.business.web.config;
 import com.alibaba.fastjson.JSONObject;
 import com.snxy.business.service.vo.SystemUserVo;
 import com.snxy.common.response.ResultData;
+
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -74,9 +75,9 @@ public class SystemUserInterceptor implements HandlerInterceptor {
     }
    private void setDebugSystemUser(HttpServletRequest request){
         String debugUserJson="{\"token\":\"F62ECF21F6E66FB1BAE4C0BFEAA5C9ADB7C1B460DF33A4AF72024AA4DF981700D28A27C878D25ABB00F363A0EABBDA02\",\"name\":\"thomas\",\"systemUserId\":1,\"identityTypes\":[{\"systemUserId\":1,\"identityId\":1,\"isActive\":true,\"identityName\":\"代办\"},{\"systemUserId\":1,\"identityId\":2,\"isActive\":false,\"identityName\":\"商户公司\"},{\"systemUserId\":1,\"identityId\":3,\"isActive\":false,\"identityName\":\"司机\"}],\"expireTime\":1540951624593,\"account\":\"10000001\"}";
-       SystemUserVo systemUserVo = JSONObject.parseObject(debugUserJson, SystemUserVo.class);// mapper.readValue(newJson, SystemUserVO.class);
+       SystemUserVo systemUserVO = JSONObject.parseObject(debugUserJson, SystemUserVo.class);// mapper.readValue(newJson, SystemUserVO.class);
 
-       request.setAttribute("systemUser", systemUserVo);
+       request.setAttribute("systemUser", systemUserVO);
    }
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {

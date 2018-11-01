@@ -17,6 +17,31 @@
     from online_user
     where id = #{id,jdbcType=BIGINT}
   </select>
+
+  <select id="selectByName" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    from online_user
+    where name = #{name}
+  </select>
+
+  <select id="selectByOnlineUserIdList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from online_user
+    where id IN
+    <foreach collection="onlineUserIdList" item="onlineUserId" open="(" close=")" index="index" separator=",">
+      #{onlineUserId}
+    </foreach>
+  </select>
+
+  <select id="selectByPhone" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from online_user
+    where phone = #{phone,jdbcType=BIGINT}
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from online_user
     where id = #{id,jdbcType=BIGINT}
@@ -97,5 +122,11 @@
     <foreach collection="onlineUserIds" index="index" item="onlineUserId" open="(" separator="," close=")">
           #{onlineUserId}
         </foreach>
+  </select>
+  <select id="selectBySystemUserId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from online_user
+    where system_user_id = #{systemUserId}
   </select>
 </mapper>

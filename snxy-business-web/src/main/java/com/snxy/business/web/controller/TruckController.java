@@ -1,7 +1,7 @@
 package com.snxy.business.web.controller;
 
-import com.snxy.business.domain.TruckType;
 import com.snxy.business.service.TruckTypeService;
+import com.snxy.business.service.vo.TruckVo;
 import com.snxy.common.response.ResultData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +19,7 @@ public class TruckController {
 
     @RequestMapping(value = "/list")
     public ResultData selectTruckType(){
-        List<TruckType> truckTypes = truckTypeService.selectTruckType();
+        List<TruckVo> truckTypes = truckTypeService.selectTruckType();
         return ResultData.success(truckTypes);
     }
 }

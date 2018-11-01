@@ -19,8 +19,9 @@ public interface VegetablePriceMapper {
 
     int updateByPrimaryKey(VegetablePrice record);
 
-    List<VegetablePrice> selectByPrimaryKeyList(List<Long> vegetablePriceIdList);
 
+
+    List<VegetablePrice> selectByPrimaryKeyList(@Param("vegetablePriceIdList") List<Long> vegetablePriceIdList);
     List<VegetablePrice>selectByVegetableCategoryid(@Param("vegetablePriceCategoryIdList") List<Long> vegetablePriceCategoryIdList);
 
     List<Vegetable> selectvegetableByName(@Param("vegeatableName") String vegeatableName, @Param("date") String date);

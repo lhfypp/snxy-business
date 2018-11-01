@@ -25,6 +25,11 @@ public class VegetablePriceServiceImpl implements VegetablePriceService {
         return vegetablePrices;
     }
 
+    @Override
+    public VegetablePrice selectGoodsPrice(Long vegetablePriceId) {
+        VegetablePrice vegetablePrice = vegetablePriceMapper.selectByPrimaryKey(vegetablePriceId);
+        return vegetablePrice;
+    }
     // 查询菜品价格列表
     public List<VegetablePrice>selectVegetablePrices(VegetablePriceListVo vegetablePriceListVo){
         //查询出大类id

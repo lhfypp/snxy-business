@@ -12,7 +12,7 @@ public interface CurrOrderReceiverService {
     DriverPartInfo selectDriverPartInfo(long orderId);
     void tranferOrder( long orderId, String driveMobile ,  String driverName);
     void updateCurrOrderReceiver(String OrderId,  String vehicleId) ;
-    List selectOrderIdByDriverMobile(Long driverMobile);
+    List selectOrderIdByDriverMobile(String driverMobile);
     void changeDriver( long orderId,  String driverName, String drivePhone);
     CurrOrderReceiver selectDriverMessageByOrderId(Long deliveryOrderId);
     void updateByAgent(DriverPartInfo driverPartInfo);

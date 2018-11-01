@@ -11,10 +11,11 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MerchantCompanyVo {
-    private Integer merchantCompanyType;
-    private String merchantCompanyName;
-    private Integer merchantCompanyScale;
-    private String merchantCompanyScope;
+    private Long onlineUserId;
+    private Byte merchantType;
+    private String merchantName;
+    private Integer operationScale;
+    private String operationSope;
     private String socialInfoCode;
     private MultipartFile file;
 }

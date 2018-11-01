@@ -1,8 +1,17 @@
 package com.snxy.business.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class CompanyVegetable {
     private Long id;
 
@@ -25,92 +34,4 @@ public class CompanyVegetable {
     private Date gmtModified;
 
     private Byte isDelete;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getVegetableName() {
-        return vegetableName;
-    }
-
-    public void setVegetableName(String vegetableName) {
-        this.vegetableName = vegetableName;
-    }
-
-    public Long getVegetableCategoryId() {
-        return vegetableCategoryId;
-    }
-
-    public void setVegetableCategoryId(Long vegetableCategoryId) {
-        this.vegetableCategoryId = vegetableCategoryId;
-    }
-
-    public Long getVegetablePriceId() {
-        return vegetablePriceId;
-    }
-
-    public void setVegetablePriceId(Long vegetablePriceId) {
-        this.vegetablePriceId = vegetablePriceId;
-    }
-
-    public Long getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(Long companyId) {
-        this.companyId = companyId;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public Date getEffectiveStartTime() {
-        return effectiveStartTime;
-    }
-
-    public void setEffectiveStartTime(Date effectiveStartTime) {
-        this.effectiveStartTime = effectiveStartTime;
-    }
-
-    public Date getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(Date gmtCreate) {
-        this.gmtCreate = gmtCreate;
-    }
-
-    public Date getGmtModified() {
-        return gmtModified;
-    }
-
-    public void setGmtModified(Date gmtModified) {
-        this.gmtModified = gmtModified;
-    }
-
-    public Byte getIsDelete() {
-        return isDelete;
-    }
-
-    public void setIsDelete(Byte isDelete) {
-        this.isDelete = isDelete;
-    }
 }

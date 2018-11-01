@@ -1,8 +1,9 @@
 package com.snxy.business.biz.feign;
 
+
+import com.snxy.business.service.vo.LoginUserVO;
+import com.snxy.business.service.vo.SystemUserVo;
 import com.snxy.common.response.ResultData;
-import com.snxy.user.agent.service.vo.LoginUserVO;
-import com.snxy.user.agent.service.vo.SystemUserVO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public interface UserAgentService  {
 
      @RequestMapping("/user/login")
-    ResultData<SystemUserVO> login(@RequestBody LoginUserVO loginUserVO);
+     ResultData<SystemUserVo> login(@RequestBody LoginUserVO loginUserVO);
 
 }

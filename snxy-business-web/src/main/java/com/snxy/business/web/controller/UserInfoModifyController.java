@@ -2,9 +2,17 @@ package com.snxy.business.web.controller;
 
 import com.snxy.business.service.SystemUserService;
 import com.snxy.business.service.UserImageService;
+
+import com.snxy.business.service.vo.SystemUserVo;
 import com.snxy.common.response.ResultData;
-import com.snxy.user.agent.service.vo.SystemUserVO;
+
+
+
+
+
 import lombok.extern.slf4j.Slf4j;
+
+
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -56,8 +64,8 @@ public class UserInfoModifyController {
     * 前端输入验证码，正确则修改成新手机号
     * */
     @RequestMapping("/modifyPhone")
-    public ResultData modifyPhone(@RequestAttribute(value = "systemUser",required = false) SystemUserVO systemUserVO, Long userId, String smsCode){
-        log.error("获取用户信息:{}",systemUserVO);
+    public ResultData modifyPhone(@RequestAttribute(value = "systemUser",required = false) SystemUserVo systemUserVO, Long userId, String smsCode){
+        log.debug("获取用户信息:{}",systemUserVO);
         systemUserService.modifyPhone(userId,smsCode);
         return ResultData.success("");
     }

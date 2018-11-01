@@ -1,8 +1,9 @@
 package com.snxy.business.service;
 
 import com.snxy.business.domain.IdentityType;
-import com.snxy.user.agent.service.vo.LoginUserVO;
-import com.snxy.user.agent.service.vo.SystemUserVO;
+import com.snxy.business.service.vo.LoginUserVO;
+import com.snxy.business.service.vo.SystemUserVo;
+
 
 import java.util.List;
 
@@ -21,5 +22,5 @@ public interface RegistryService {
     List<IdentityType> listIdentity();
 
 
-    SystemUserVO getToken(LoginUserVO loginUserVO);
+    SystemUserVo getToken(LoginUserVO loginUserVO);
 }

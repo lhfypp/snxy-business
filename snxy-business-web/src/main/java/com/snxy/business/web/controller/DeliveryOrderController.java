@@ -1,22 +1,22 @@
 package com.snxy.business.web.controller;
 
+import com.snxy.business.biz.util.JudgIdentityUtil;
 import com.snxy.business.domain.*;
 import com.snxy.business.service.*;
 import com.snxy.business.service.vo.*;
 import com.snxy.common.response.ResultData;
 import com.snxy.common.util.PageInfo;
 import lombok.extern.slf4j.Slf4j;
+
+
 import org.hibernate.validator.constraints.NotBlank;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.WebDataBinder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
+
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +27,7 @@ import java.util.Map;
 @RestController
 @Slf4j
 @RequestMapping("/delivery")
+@Validated
 public class DeliveryOrderController {
 
     @Resource
@@ -36,10 +37,11 @@ public class DeliveryOrderController {
     private CompanyVegetableService companyVegetableService;
 
     @Resource
-    private CompanyUserRelationService companyUserRelationService;
+    private VehicleGpsRecordService vehicleGpsRecordService;
 
     @Resource
-    private VehicleGpsRecordService vehicleGpsRecordService;
+    private OnlineUserService onlineUserService;
+
 
 
     //货品信息添加页展示
@@ -56,43 +58,35 @@ public class DeliveryOrderController {
         return ResultData.success(companyVegetable);
     }
 
-    //新建发货订单的权限判断
+    //新建发货订单的订单号
     @RequestMapping(value = "/seller/bill/new")
-    public ResultData createDeliveryOrder (OnlineUserVo onlineUserVo){
-        //先进行权限判断，是否为商户或者代办，公司信息是否完整，设置商户，代办身份标识为0，1
-        if(onlineUserVo.getIdentyType()!=0 && onlineUserVo.getIdentyType()!=1){
-            return ResultData.fail("您不是商户或代办，没有新建发货订单权限");
-        }
-        //查询是否完成公司信息填写
-        List<Long> list = companyUserRelationService.selectCompanyIsExist(onlineUserVo.getOnlineUserId());
-        if(list==null || list.size()==0){
-            return ResultData.fail("你还没有完成认证");
-        }
-
-        //如果已认证则新建一个订单,此处系统生成订单号
-
-        DeliveryOrderVo deliveryOrderVo = new DeliveryOrderVo();
-        String orderNo = deliveryOrderService.getOrderNo();
-
-
-        deliveryOrderVo.setOrderNo(orderNo);
-        return ResultData.success(deliveryOrderVo);
+    public ResultData createDeliveryOrder (Long onlineUserId){
+        OrderNoVo orderNoVo = deliveryOrderService.createDeliveryOrder(onlineUserId);
+        return ResultData.success(orderNoVo);
     }
 
-    //保存发布订单
+    //关联显示接口
+    @RequestMapping(value = "/seller/receive/message")
+    public ResultData showReceiveMessage(String name){
+        ReceiveMessageVo receiveMessageVo = onlineUserService.selectByName(name);
+
+        return ResultData.success(receiveMessageVo);
+    }
+
+    //发布订单
     @RequestMapping(value = "/seller/bill/save")
-    public ResultData saveDeliveryOrder (DeliveryOrderVo deliveryOrderVo){
-        deliveryOrderService.saveDeliveryOrder(deliveryOrderVo);
-        return ResultData.success("");
+    public ResultData saveDeliveryOrder (@RequestBody DeliveryOrderVo deliveryOrderVo){
+        String result = deliveryOrderService.saveDeliveryOrder(deliveryOrderVo);
+        return ResultData.success(result);
     }
 
 
     //司机查看订单
     @RequestMapping(value = "/driver/order/list")
-    public ResultData showDriverOrder(Long driverMobile){
-        List<BillInfo> driverOrders = deliveryOrderService.selectDriverOrder(driverMobile);
+    public ResultData showDriverOrder(String driverMobile){
+        List<DriverOrderVo> driverOrderVoList = deliveryOrderService.selectDriverOrder(driverMobile);
 
-        return ResultData.success(driverOrders);
+        return ResultData.success(driverOrderVoList);
     }
 
 
@@ -114,12 +108,11 @@ public class DeliveryOrderController {
     }
    //商户取消订单
     @RequestMapping("/seller/bill/cancel")
-    public ResultData cancelOrder(String logisticOrderId){
+    public ResultData cancelOrder(@NotBlank(message="订单id不能为空")String logisticOrderId,@RequestAttribute(value = "systemUser",required = false) SystemUserVo systemUserVo){
         long orderId= Long.parseLong(logisticOrderId);
         //从用户对象获取
-        String identityName="1";//商户
-        if("1".equals(identityName)){
-
+        String identityName= JudgIdentityUtil.judgIdentity(systemUserVo);//商户
+        if(identityName.contains("1")){
         deliveryOrderService.cancelOrder(orderId,1);
         return ResultData.success("商户取消订单成功");
         }else{
@@ -136,7 +129,7 @@ public class DeliveryOrderController {
 
     //上传GPS
     @RequestMapping("/driver/location/upload")
-    public ResultData uploadLocation(VehicleGpsVo vehicleGpsVo){
+    public ResultData uploadLocation(@RequestBody VehicleGpsVo vehicleGpsVo){
         vehicleGpsRecordService.insertLocationGPS(vehicleGpsVo);
         return ResultData.success("");
     }
@@ -157,8 +150,8 @@ public class DeliveryOrderController {
     }
     // 关闭订单 合格关闭和不合格关闭（是否与关闭订单合并?,还是三个按钮分别请求）
     @RequestMapping("/seller/order/closeOrder")
-    public ResultData<? extends Object> closeOrder(@NotBlank(message="订单id不能为空")@RequestParam String logisticOrderId ){
-
+    public ResultData<? extends Object> closeOrder(@NotBlank(message="订单id不能为空")@RequestParam String logisticOrderId ,@RequestAttribute(value = "systemUser",required = false) SystemUserVo systemUserVO){
+        log.error("获取用户信息:{}",systemUserVO);
         //从用户对象获取
         String identityName="1";//商户
         if("1".equals(identityName)){
@@ -171,7 +164,7 @@ public class DeliveryOrderController {
     }
     //修改订单
     @RequestMapping("/seller/order/updateOrder")
-    public ResultData<? extends Object> updateOrder(@Valid @RequestBody UpdateBillInfoDetailVo billInfoDetail){
+    public ResultData<? extends Object> updateOrder(@Valid UpdateBillInfoDetailVo billInfoDetail){
         deliveryOrderService.updateOrder(billInfoDetail);
         return ResultData.success("修改订单成功");
 
@@ -209,14 +202,12 @@ public class DeliveryOrderController {
 
     //查看订单列表,实现分页查询
     @RequestMapping(value = "/seller/order/list")
-    public ResultData<PageInfo<BillInfo>>searchDeliveryOrderbypage(@Valid OrderListVo orderListVo){
+    public ResultData<PageInfo<BillInfo>>searchDeliveryOrderbypage(@Valid OrderListVo orderListVo,@RequestAttribute(value = "systemUser",required = false) SystemUserVo systemUserVO){
 
         PageInfo<BillInfo> pageInfo;
         String orderStatus = orderListVo.getOrderStatus();//订单状态
         String searchName = orderListVo.getSearchName();//地点or联系人or单号
-        pageInfo=deliveryOrderService.searchDeliveryOrderByPage(orderStatus, searchName);
+        pageInfo=deliveryOrderService.searchDeliveryOrderByPage(orderStatus, searchName,systemUserVO);
         return ResultData.success(pageInfo);
     }
-
-
 }

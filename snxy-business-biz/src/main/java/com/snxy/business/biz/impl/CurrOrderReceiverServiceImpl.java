@@ -47,7 +47,7 @@ public class CurrOrderReceiverServiceImpl implements CurrOrderReceiverService {
     }
 
     @Override
-    public List selectOrderIdByDriverMobile(Long driverMobile) {
+    public List selectOrderIdByDriverMobile(String driverMobile) {
         return currOrderReceiverMapper.selectOrderIdByDriverMobile(driverMobile);
     }
 

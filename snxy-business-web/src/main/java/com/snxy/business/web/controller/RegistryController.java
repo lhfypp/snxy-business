@@ -2,12 +2,13 @@ package com.snxy.business.web.controller;
 
 import com.snxy.business.domain.IdentityType;
 import com.snxy.business.service.RegistryService;
+import com.snxy.business.service.vo.LoginUserVO;
+import com.snxy.business.service.vo.SystemUserVo;
 import com.snxy.common.exception.BizException;
 import com.snxy.common.response.ResultData;
 import com.snxy.common.util.CheckUtil;
 import com.snxy.common.util.StringUtil;
-import com.snxy.user.agent.service.vo.LoginUserVO;
-import com.snxy.user.agent.service.vo.SystemUserVO;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -60,10 +61,10 @@ public class RegistryController {
 
 
     @RequestMapping("/user/registry/getToken")
-    public ResultData<SystemUserVO> getToken(@RequestBody LoginUserVO loginUserVO){
+    public ResultData<SystemUserVo> getToken(@RequestBody LoginUserVO loginUserVO){
         CheckUtil.isTrue(loginUserVO.getDeviceType() != null, "登陆用户设备参数不能为空");
         loginUserVO.checkParam();
-        SystemUserVO systemUserVO = this.registryService.getToken(loginUserVO);
+        SystemUserVo systemUserVO = this.registryService.getToken(loginUserVO);
         return ResultData.success(systemUserVO);
     }
 

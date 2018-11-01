@@ -1,5 +1,6 @@
 package com.snxy.business.dao.mapper;
 
+import com.snxy.business.domain.Identy;
 import com.snxy.business.domain.UserIdentity;
 import org.apache.ibatis.annotations.Param;
 
@@ -22,4 +23,9 @@ public interface UserIdentityMapper {
 
     void insertBatch(@Param("list") List<UserIdentity> userIdentities);
 
+    List<Identy> selectUserIdentyByOnlineUserIdList(@Param("onlineUserIdList") List<Long> onlineUserIdList);
+
+    void updateByOnlineUserIdList(@Param("list") List<UserIdentity> userIdentityList);
+
+    void updateByOnlineUserId(@Param("onlineUserId") Long onlineUserId, @Param("isDelete") byte isDelete);
 }

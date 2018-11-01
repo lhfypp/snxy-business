@@ -4,15 +4,17 @@ import com.snxy.business.biz.feign.UserAgentService;
 import com.snxy.business.domain.IdentityType;
 import com.snxy.business.domain.OnlineUser;
 import com.snxy.business.domain.SystemUser;
-import com.snxy.business.domain.UserIdentity;
+
 import com.snxy.business.service.*;
+import com.snxy.business.service.vo.LoginUserVO;
+import com.snxy.business.service.vo.SystemUserVo;
 import com.snxy.common.exception.BizException;
+
+
 import com.snxy.common.response.ResultData;
-import com.snxy.common.util.CheckUtil;
 import com.snxy.common.util.MD5Util;
-import com.snxy.common.util.StringUtil;
-import com.snxy.user.agent.service.vo.LoginUserVO;
-import com.snxy.user.agent.service.vo.SystemUserVO;
+
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -23,8 +25,7 @@ import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+
 
 
 /**
@@ -190,14 +191,14 @@ public class RegistryServiceImpl implements RegistryService{
 
     }
 
-    public SystemUserVO getToken(LoginUserVO loginUserVO){
+    public SystemUserVo getToken(LoginUserVO loginUserVO){
         loginUserVO.setPassword(ROW_PASSWORD);
-        ResultData<SystemUserVO> resultData = this.userAgentService.login(loginUserVO);
+        ResultData<SystemUserVo> resultData = this.userAgentService.login(loginUserVO);
         if( !resultData.isResult()){
             log.error("获取token失败 ： [{}]",resultData.getMsg());
             throw new BizException(resultData.getMsg());
         }
-        SystemUserVO systemUserVO = resultData.getData();
+        SystemUserVo systemUserVO = resultData.getData();
         return systemUserVO;
     }
 

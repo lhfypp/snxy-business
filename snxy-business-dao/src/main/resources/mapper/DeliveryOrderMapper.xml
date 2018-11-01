@@ -83,7 +83,7 @@
   update delivery_order
     set status = #{status}
     where
-      id=#{orderNo}
+      id=#{orderId}
   </update>
 
 
@@ -91,26 +91,29 @@
 
   <!--查看订单详情 start-->
 
-  <select id="selectBydDeliveryOrderId" parameterType="String" resultMap="BaseResultMap">
+  <select id="selectBydDeliveryOrderId" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select
          *
     from delivery_order
 
 					where  id = #{deliveryOrderId}
   </select>
+  <!-- 查看订单详情 end-->
+
+
+  <!--查询司机订单列表-->
   <sql id="selectDriverOrderByOderId">
     order_no,sender_name,receiver_name,start_addr,end_addr,gmt_create,status
   </sql>
-
-  <!--查询司机订单立标-->
-  <select id="selectDriverOrderByOderId" resultMap="DeliveryResultMap">
+  <select id="selectDriverOrderByOderId" resultMap="BaseResultMap">
     select
     <include refid="selectDriverOrderByOderId"/>
     from delivery_order
     where id in
-    <foreach collection="list" index="index" item="id" open="(" separator="," close=")">
+    <foreach collection="orderIdList" index="index" item="id" open="(" separator="," close=")">
       #{id}
     </foreach>
+    ORDER BY
   </select>
 
   <!--司机查询订单-->
@@ -124,7 +127,6 @@
     </foreach>
 
   </select>
-<!-- 查看订单详情 end-->
 
     <!--修改订单 start -->
      <update id="updateOrder" parameterType="com.snxy.business.domain.UpdateBillInfoDetail">
@@ -148,7 +150,7 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
-    from del  ivery_order
+    from delivery_order
     where id = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
@@ -323,28 +325,28 @@
   <update id="updateLoadStatus">
     update delivery_order
     set load_status = #{loadStatus}
-    where delivery_order_id = #{deliveryOrderId}
+    where id = #{deliveryOrderId}
   </update>
 
   <!--修改订单状态88888888888888888888888-->
-  <update id="updateEndLoading" parameterType="java.lang.Long">
+  <update id="updateEndLoading">
     update delivery_order
     set status = #{status}
-    where delivery_order_id = #{deliveryOrderId}
+    where id = #{deliveryOrderId}
   </update>
 
   <!--管理员修改产地证明是否合格-->
   <update id="updateLocationCertificate">
     update delivery_order
     set location_certificate = #{qualitied}
-    where delivery_order_id = (select delivery_order_id from vegetable_certificate where id = #{productionCertificate})
+    where id = #{orderNo}
   </update>
 
   <!--管理员修改检测证明是否合格-->
   <update id="updateQualityCertificate">
     update delivery_order
     set quality_certificate = #{qualitied}
-    where delivery_order_id = (select delivery_order_id from vegetable_certificate where id = #{qualityCertificateId})
+    where id = #{orderNo}
   </update>
 
   <update id="updateByPrimaryKeySelective" parameterType="com.snxy.business.domain.DeliveryOrder">

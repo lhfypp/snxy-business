@@ -47,14 +47,16 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into vegetable_certificate (delivery_order_id, url, upload_time,
-    certificate_type, status, is_delete
-    )
+    insert into vegetable_certificate (delivery_order_id, url, upload_time,certificate_type, status, is_delete)
     values
-    <foreach collection="vegetableCertificateList" item="vegetableCertificate" index="index" separator=",">
-      (#{vegetableCertificate.deliveryOrderId,jdbcType=BIGINT}, #{vegetableCertificate.url,jdbcType=VARCHAR},
-      #{vegetableCertificate.uploadTime,jdbcType=TIMESTAMP},#{vegetableCertificate.certificateType,jdbcType=INTEGER},
-      #{vegetableCertificate.status,jdbcType=INTEGER}, #{vegetableCertificate.isDelete,jdbcType=TINYINT}
+    <foreach collection="vegetableCertificateList" item="vegetableCertificate" separator=",">
+      (
+      #{vegetableCertificate.deliveryOrderId},
+      #{vegetableCertificate.url},
+      #{vegetableCertificate.uploadTime},
+      #{vegetableCertificate.certificateType},
+      #{vegetableCertificate.status},
+      #{vegetableCertificate.isDelete}
       )
     </foreach>
   </insert>
@@ -143,7 +145,7 @@
     <result column="url" jdbcType="VARCHAR" property="url" />
     <result column="certificate_type" jdbcType="INTEGER" property="certificateType" />
   </resultMap>
-  <select id="selectListByOrderId" parameterType="java.lang.Long">
+  <select id="selectListByOrderId" parameterType="java.lang.Long" resultMap="selectListByOrderId">
     select
     url,certificate_type
     from vegetable_certificate

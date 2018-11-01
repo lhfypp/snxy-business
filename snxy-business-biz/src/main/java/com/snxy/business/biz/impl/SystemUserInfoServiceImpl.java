@@ -1,5 +1,7 @@
 package com.snxy.business.biz.impl;
 
+import com.snxy.business.dao.mapper.SystemUserInfoMapper;
+import com.snxy.business.domain.SystemUserInfo;
 import com.snxy.business.service.CompanyUserRelationService;
 import com.snxy.business.service.OnlineUserService;
 import com.snxy.business.service.SystemUserInfoService;
@@ -12,6 +14,8 @@ import java.util.List;
 @Service
 @Slf4j
 public class SystemUserInfoServiceImpl implements SystemUserInfoService {
+    @Resource
+    private SystemUserInfoMapper systemUserInfoMapper;
     @Resource
     private CompanyUserRelationService companyUserRelationService;
     @Resource
@@ -27,4 +31,6 @@ public class SystemUserInfoServiceImpl implements SystemUserInfoService {
        List<String>phones= onlineUserService.searchphones(onlineUserIds);
         return phones;
     }
+
+
 }

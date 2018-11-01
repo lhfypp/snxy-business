@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GoodsVo {
-    private String vegetableName;
+    private String vegetablePriceName;
     private Long vegetablePriceId;
 }

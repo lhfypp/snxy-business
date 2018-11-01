@@ -4,9 +4,10 @@ import com.snxy.business.domain.Goods;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.NotBlank;
+
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -37,9 +38,9 @@ public class UpdateBillInfoDetailVo {
     private String receiverLocation;
     private String driverName;
     private String driveMobile;
-    @NotBlank(message = "车类型不能为空")
+    @NotNull(message = "车类型不能为空")
     private long truckTypeId;
-    @NotBlank(message="运费不能为空")
+    @NotNull(message="运费不能为空")
     private BigDecimal deliveryFee;
     private List<ValicatePicture> pictures;
     private List<Goods>goods;

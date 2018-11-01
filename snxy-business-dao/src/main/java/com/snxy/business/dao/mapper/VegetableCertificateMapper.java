@@ -2,6 +2,7 @@ package com.snxy.business.dao.mapper;
 
 import com.snxy.business.domain.Valication;
 import com.snxy.business.domain.VegetableCertificate;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public interface VegetableCertificateMapper {
 
     int updateByPrimaryKey(VegetableCertificate record);
 
-    void insertImageList(List<VegetableCertificate> vegetableCertificateList);
+    void insertImageList(@Param("vegetableCertificateList") List<VegetableCertificate> vegetableCertificateList);
 
     List<VegetableCertificate> selectByOrderId(Long deliveryOrderId);
     List<Valication> selectListByOrderId(Long deliveryOrderId);
