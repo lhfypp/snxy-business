@@ -24,7 +24,7 @@
   <resultMap id="GoodsInfo" type="com.snxy.business.domain.GoodsInfo">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="goods_name" jdbcType="VARCHAR" property="goodsName" />
-    <result column="goods_weight" jdbcType="INTEGER" property="goodsWeight" />
+    <result column="goods_weight" jdbcType="INTEGER" property="weight" />
   </resultMap>
   <select id="selectByOrderId" parameterType="java.lang.Long" resultMap="GoodsInfo">
     select goods_name,goods_weight
