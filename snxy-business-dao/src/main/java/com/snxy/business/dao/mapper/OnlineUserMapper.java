@@ -18,4 +18,5 @@ public interface OnlineUserMapper {
 
     int updateByPrimaryKey(OnlineUser record);
     List<String> searchphones(@Param("onlineUserIds") List<Long> onlineUserIds);
+    OnlineUser selectBySystemUserId(@Param("systemUserId")long systemUserId);
 }
