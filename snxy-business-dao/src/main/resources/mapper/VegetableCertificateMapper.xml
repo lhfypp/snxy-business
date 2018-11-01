@@ -143,7 +143,7 @@
     <result column="url" jdbcType="VARCHAR" property="url" />
     <result column="certificate_type" jdbcType="INTEGER" property="certificateType" />
   </resultMap>
-  <select id="selectListByOrderId" parameterType="java.lang.Long">
+  <select id="selectListByOrderId" parameterType="java.lang.Long" resultMap="selectListByOrderId">
     select
     url,certificate_type
     from vegetable_certificate
