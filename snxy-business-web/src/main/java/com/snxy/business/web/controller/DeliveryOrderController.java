@@ -1,5 +1,6 @@
 package com.snxy.business.web.controller;
 
+import com.snxy.business.biz.util.JudgIdentityUtil;
 import com.snxy.business.domain.*;
 import com.snxy.business.service.*;
 import com.snxy.business.service.vo.*;
@@ -7,12 +8,15 @@ import com.snxy.common.response.ResultData;
 import com.snxy.common.util.PageInfo;
 
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.validator.constraints.NotBlank;
 
+
+import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+
 
 import java.util.List;
 import java.util.Map;
@@ -24,6 +28,7 @@ import java.util.Map;
 @RestController
 @Slf4j
 @RequestMapping("/delivery")
+@Validated
 public class DeliveryOrderController {
 
     @Resource
@@ -111,12 +116,11 @@ public class DeliveryOrderController {
     }
    //商户取消订单
     @RequestMapping("/seller/bill/cancel")
-    public ResultData cancelOrder(String logisticOrderId){
+    public ResultData cancelOrder(@NotBlank(message="订单id不能为空")String logisticOrderId,@RequestAttribute(value = "systemUser",required = false) SystemUserVo systemUserVo){
         long orderId= Long.parseLong(logisticOrderId);
         //从用户对象获取
-        String identityName="1";//商户
-        if("1".equals(identityName)){
-
+        String identityName= JudgIdentityUtil.judgIdentity(systemUserVo);//商户
+        if(identityName.contains("1")){
         deliveryOrderService.cancelOrder(orderId,1);
         return ResultData.success("商户取消订单成功");
         }else{
@@ -206,12 +210,12 @@ public class DeliveryOrderController {
 
     //查看订单列表,实现分页查询
     @RequestMapping(value = "/seller/order/list")
-    public ResultData<PageInfo<BillInfo>>searchDeliveryOrderbypage(@Valid OrderListVo orderListVo){
+    public ResultData<PageInfo<BillInfo>>searchDeliveryOrderbypage(@Valid OrderListVo orderListVo,@RequestAttribute(value = "systemUser",required = false) SystemUserVo systemUserVO){
 
         PageInfo<BillInfo> pageInfo;
         String orderStatus = orderListVo.getOrderStatus();//订单状态
         String searchName = orderListVo.getSearchName();//地点or联系人or单号
-        pageInfo=deliveryOrderService.searchDeliveryOrderByPage(orderStatus, searchName);
+        pageInfo=deliveryOrderService.searchDeliveryOrderByPage(orderStatus, searchName,systemUserVO);
         return ResultData.success(pageInfo);
     }
 
