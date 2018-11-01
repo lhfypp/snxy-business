@@ -1,6 +1,7 @@
 package com.snxy.business.biz.impl;
 
 import com.snxy.business.biz.feign.FileService;
+import com.snxy.business.biz.util.JudgIdentityUtil;
 import com.snxy.business.dao.mapper.*;
 import com.snxy.business.domain.*;
 import com.snxy.business.service.*;
@@ -55,7 +56,8 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
     private SystemUserService systemUserService;
 	@Resource
     private EntryFeeService entryFeeService;
-
+    @Resource
+    private OnlineUserService onlineUserService;
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void saveDeliveryOrder(DeliveryOrderVo deliveryOrderVo) {
@@ -169,7 +171,7 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
     @Override
     public BillInfoDetail searchDeliverOrderinfo(Long deliveryOrderId) {
         //查询出货物信息的货物id，重量 名称，价格
-        List<Goods>goods=vegetableDeliveryRelationService.searchbyOrderId(deliveryOrderId);
+        List<Goods>goods=vegetableDeliveryRelationService.selectAllByOrderId(deliveryOrderId);
         // 查询出valications下的url，certificateType
         List<Valication> valications=vegetableCertificateService.getValications(deliveryOrderId);
         //查询出GPSLocation的信息
@@ -192,22 +194,24 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
     }
 
     @Override
-    public PageInfo<BillInfo> searchDeliveryOrderByPage(String orderStatus, String searchName) {
-        //从用户对象获取
-        //从用户对象获取
-        String userPhone="15101267019";
-        String onlineUserID="1";
-        String identityName="1";
-        //用于存放商户或者代办所有的手机信息
+    public PageInfo<BillInfo> searchDeliveryOrderByPage(String orderStatus, String searchName,SystemUserVo systemUserVO) {
         List<String> sendPhones=new ArrayList<String>();
-        if("2".equals(identityName)) {
-            sendPhones.add(userPhone);
-        }else if ("1".equals(identityName)){
+        OnlineUser  onlineUser=onlineUserService.selectBySystemUserId(systemUserVO.getSystemUserId());
+        String userPhone="";
+        String onlineUserID="";
+       if(onlineUser!=null) {
+            userPhone = onlineUser.getPhone();
+            onlineUserID = onlineUser.getId().toString();
+       }
+       String JudgIdentity= JudgIdentityUtil.judgIdentity(systemUserVO);
+       if(JudgIdentity.contains("2")&&!JudgIdentity.contains("1")) {
+           sendPhones.add(userPhone);
+       }
+       if(JudgIdentity.contains("1")) {
+           sendPhones = SystemUserInfoService.searchPhones(onlineUserID);
+       }
 
-            sendPhones = SystemUserInfoService.searchPhones(onlineUserID);
-        }else{
-            return null;
-        }
+
         PageHelper.startPage(1,10);
 
         List<BillInfo> listBillInfo=deliveryOrderMapper.searchDeliveryOrder(sendPhones, orderStatus, searchName);
