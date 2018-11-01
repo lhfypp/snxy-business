@@ -83,7 +83,7 @@
   update delivery_order
     set status = #{status}
     where
-      id=#{orderNo}
+      id=#{orderId}
   </update>
 
 
@@ -91,7 +91,7 @@
 
   <!--查看订单详情 start-->
 
-  <select id="selectBydDeliveryOrderId" parameterType="String" resultMap="BaseResultMap">
+  <select id="selectBydDeliveryOrderId" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select
          *
     from delivery_order
