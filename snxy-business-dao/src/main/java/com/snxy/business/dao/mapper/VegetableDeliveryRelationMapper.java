@@ -3,6 +3,7 @@ package com.snxy.business.dao.mapper;
 import com.snxy.business.domain.Goods;
 import com.snxy.business.domain.GoodsInfo;
 import com.snxy.business.domain.VegetableDeliveryRelation;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ public interface VegetableDeliveryRelationMapper {
 
     List<GoodsInfo> selectByOrderId(Long orderId);
 
-    void insertGoodList(List<VegetableDeliveryRelation> vegetableDeliveryRelationList);
+    void insertGoodList(@Param("vegetableDeliveryRelationList")List<VegetableDeliveryRelation> vegetableDeliveryRelationList);
 
     List<Goods> selectAllByOrderId(Long deliveryOrderId);
 }

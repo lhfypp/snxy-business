@@ -64,16 +64,17 @@
 
   <insert id="insertGoodList" >
     insert into vegetable_delivery_relation (delivery_order_id, goods_id, goods_name,
-    goods_weight, goods_price, is_delete
-    )
+    goods_weight, goods_price)
     values
-      <foreach collection ="vegetableDeliveryRelationList" item="vegetableDeliveryRelation" index= "index" separator =",">
-           (
-        #{vegetableDeliveryRelation.deliveryOrderId,jdbcType=BIGINT}, #{vegetableDeliveryRelation.goodsId,jdbcType=BIGINT},
-        #{vegetableDeliveryRelation.goodsName,jdbcType=VARCHAR},#{vegetableDeliveryRelation.goodsWeight,jdbcType=INTEGER},
-        #{vegetableDeliveryRelation.goodsPrice,jdbcType=DECIMAL}, #{vegetableDeliveryRelation.isDelete,jdbcType=TINYINT}
-           )
-      </foreach >
+      <foreach collection ="vegetableDeliveryRelationList" item="vegetableDeliveryRelation" separator =",">
+        (
+          #{vegetableDeliveryRelation.deliveryOrderId},
+          #{vegetableDeliveryRelation.goodsId},
+          #{vegetableDeliveryRelation.goodsName},
+          #{vegetableDeliveryRelation.goodsWeight},
+          #{vegetableDeliveryRelation.goodsPrice}
+        )
+      </foreach >
   </insert>
 
   <insert id="insertSelective" parameterType="com.snxy.business.domain.VegetableDeliveryRelation">

@@ -1,9 +1,11 @@
 package com.snxy.business.biz.impl;
 
 import com.snxy.business.dao.mapper.UserIdentityMapper;
+import com.snxy.business.domain.Identy;
 import com.snxy.business.domain.UserIdentity;
 import com.snxy.business.service.UserIdentityService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +39,24 @@ public class UserIdentityServiceImpl implements UserIdentityService {
            this.userIdentityMapper.insertBatch(userIdentities);
         }
 
+    }
+
+    @Override
+    public List<Identy> selectUserIdentyByOnlineUserIdList(List<Long> onlineUserIdList) {
+        List<Identy> identyList = userIdentityMapper.selectUserIdentyByOnlineUserIdList(onlineUserIdList);
+        return identyList;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void insertUserIdentyList(List<UserIdentity> userIdentityList) {
+        userIdentityMapper.insertBatch(userIdentityList);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void updateByOnlineUserId(Long onlineUserId, byte isDelete) {
+        userIdentityMapper.updateByOnlineUserId(onlineUserId,isDelete);
     }
 
 

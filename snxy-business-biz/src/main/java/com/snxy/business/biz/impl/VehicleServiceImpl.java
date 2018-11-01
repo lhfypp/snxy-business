@@ -38,5 +38,5 @@ public class VehicleServiceImpl implements VehicleService {
     }
     public List<Vehicle>searchVehicleList(long driver_info_id){
             return vehicleMapper.searchVehicleList(driver_info_id);
-    };
+    }
 }

@@ -20,7 +20,18 @@
     select 
     <include refid="Base_Column_List" />
     from vegetable_price
-    where id = #{id,jdbcType=BIGINT}
+    where id = #{vegetablePriceId,jdbcType=BIGINT}
+    AND is_delete = 0
+  </select>
+<!--查询菜品价格列表，通过priceId的集合88888888888888-->
+  <select id="selectByPrimaryKeyList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from vegetable_price
+    where id IN
+    <foreach collection="vegetablePriceIdList" open="(" close=")" item="vegetablePriceId" index="index" separator=",">
+      #{vegetablePriceId}
+    </foreach>
   </select>
 <!--查询菜品价格列表，通过priceId的集合88888888888888-->
   <select id="selectByPrimaryKeyList" resultMap="BaseResultMap">

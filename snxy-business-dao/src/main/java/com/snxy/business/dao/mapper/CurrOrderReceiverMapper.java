@@ -25,7 +25,7 @@ public interface CurrOrderReceiverMapper {
     void updateCurrOrderReceiver(@Param("OrderId") String OrderId, @Param("vehicleId") String vehicleId) ;
     void tranferOrder(@Param("orderId") long orderId,@Param("driveMobile") String driveMobile ,@Param("driverName") String driverName);
 
-    List selectOrderIdByDriverMobile(Long driverMobile);
+    List selectOrderIdByDriverMobile(String driverMobile);
 
     void updateByAgent(@Param("driverPartInfo") DriverPartInfo driverPartInfo);
 

@@ -30,15 +30,15 @@ public interface DeliveryOrderMapper {
     DeliveryOrder selectBydDeliveryOrderId(@Param("deliveryOrderId") Long deliveryOrderId);
     void  cancelOrderByOrderId(@Param("orderId")Long orderId,@Param("status")Integer status);
 
-    void updateEndLoading(@Param("deliveryOrderId") Long deliveryOrderId, @Param("loadStatus") Integer loadStatus);
+    void updateEndLoading(@Param("deliveryOrderId") Long deliveryOrderId, @Param("status") Integer status);
 
 
-    void updateLocationCertificate(@Param("productionCertificate") Long productionCertificate, @Param("qualitied") Integer qualitied);
+    void updateLocationCertificate(@Param("orderNo") Long orderNo,@Param("qualitied") Integer qualitied);
 
-    void updateQualityCertificate(@Param("qualityCertificateId") Long qualityCertificateId, @Param("qualitied") Integer qualitied);
+    void updateQualityCertificate(@Param("orderNo") Long orderNo,@Param("qualitied") Integer qualitied);
 
     void updateLoadStatus(@Param("deliveryOrderId") Long deliveryOrderId, @Param("status") Integer status);
 
-    List<BillInfo> selectDriverOrderByOderId(List orderIdList);
+    List<DeliveryOrder> selectDriverOrderByOderId(@Param("orderIdList") List orderIdList);
 
 }

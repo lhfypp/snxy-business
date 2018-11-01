@@ -6,7 +6,6 @@ import com.snxy.business.service.*;
 import com.snxy.business.service.vo.*;
 import com.snxy.common.response.ResultData;
 import com.snxy.common.util.PageInfo;
-
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -38,10 +37,11 @@ public class DeliveryOrderController {
     private CompanyVegetableService companyVegetableService;
 
     @Resource
-    private CompanyUserRelationService companyUserRelationService;
+    private VehicleGpsRecordService vehicleGpsRecordService;
 
     @Resource
-    private VehicleGpsRecordService vehicleGpsRecordService;
+    private OnlineUserService onlineUserService;
+
 
 
     //货品信息添加页展示
@@ -58,43 +58,35 @@ public class DeliveryOrderController {
         return ResultData.success(companyVegetable);
     }
 
-    //新建发货订单的权限判断
+    //新建发货订单的订单号
     @RequestMapping(value = "/seller/bill/new")
-    public ResultData createDeliveryOrder (OnlineUserVo onlineUserVo){
-        //先进行权限判断，是否为商户或者代办，公司信息是否完整，设置商户，代办身份标识为0，1
-        if(onlineUserVo.getIdentyType()!=0 && onlineUserVo.getIdentyType()!=1){
-            return ResultData.fail("您不是商户或代办，没有新建发货订单权限");
-        }
-        //查询是否完成公司信息填写
-        List<Long> list = companyUserRelationService.selectCompanyIsExist(onlineUserVo.getOnlineUserId());
-        if(list==null || list.size()==0){
-            return ResultData.fail("你还没有完成认证");
-        }
-
-        //如果已认证则新建一个订单,此处系统生成订单号
-
-        DeliveryOrderVo deliveryOrderVo = new DeliveryOrderVo();
-        String orderNo = deliveryOrderService.getOrderNo();
-
-
-        deliveryOrderVo.setOrderNo(orderNo);
-        return ResultData.success(deliveryOrderVo);
+    public ResultData createDeliveryOrder (Long onlineUserId){
+        OrderNoVo orderNoVo = deliveryOrderService.createDeliveryOrder(onlineUserId);
+        return ResultData.success(orderNoVo);
     }
 
-    //保存发布订单
+    //关联显示接口
+    @RequestMapping(value = "/seller/receive/message")
+    public ResultData showReceiveMessage(String name){
+        ReceiveMessageVo receiveMessageVo = onlineUserService.selectByName(name);
+
+        return ResultData.success(receiveMessageVo);
+    }
+
+    //发布订单
     @RequestMapping(value = "/seller/bill/save")
-    public ResultData saveDeliveryOrder (DeliveryOrderVo deliveryOrderVo){
-        deliveryOrderService.saveDeliveryOrder(deliveryOrderVo);
-        return ResultData.success("");
+    public ResultData saveDeliveryOrder (@RequestBody DeliveryOrderVo deliveryOrderVo){
+        String result = deliveryOrderService.saveDeliveryOrder(deliveryOrderVo);
+        return ResultData.success(result);
     }
 
 
     //司机查看订单
     @RequestMapping(value = "/driver/order/list")
-    public ResultData showDriverOrder(Long driverMobile){
-        List<BillInfo> driverOrders = deliveryOrderService.selectDriverOrder(driverMobile);
+    public ResultData showDriverOrder(String driverMobile){
+        List<DriverOrderVo> driverOrderVoList = deliveryOrderService.selectDriverOrder(driverMobile);
 
-        return ResultData.success(driverOrders);
+        return ResultData.success(driverOrderVoList);
     }
 
 
@@ -137,7 +129,7 @@ public class DeliveryOrderController {
 
     //上传GPS
     @RequestMapping("/driver/location/upload")
-    public ResultData uploadLocation(VehicleGpsVo vehicleGpsVo){
+    public ResultData uploadLocation(@RequestBody VehicleGpsVo vehicleGpsVo){
         vehicleGpsRecordService.insertLocationGPS(vehicleGpsVo);
         return ResultData.success("");
     }
@@ -218,6 +210,4 @@ public class DeliveryOrderController {
         pageInfo=deliveryOrderService.searchDeliveryOrderByPage(orderStatus, searchName,systemUserVO);
         return ResultData.success(pageInfo);
     }
-
-
 }

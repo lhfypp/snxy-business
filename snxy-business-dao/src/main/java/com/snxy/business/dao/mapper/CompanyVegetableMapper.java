@@ -21,4 +21,8 @@ public interface CompanyVegetableMapper {
     int updateByPrimaryKeySelective(CompanyVegetable record);
 
     int updateByPrimaryKey(CompanyVegetable record);
+
+    List<CompanyVegetable> showGoodsList(Long companyId);
+
+    void deleteCompanyGoods(@Param("vegetablePriceId") Long vegetablePriceId, @Param("companyId") Long companyId);
 }
