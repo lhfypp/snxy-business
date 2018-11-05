@@ -1,7 +1,5 @@
 package com.snxy.business.dao.mapper;
 
-import com.snxy.business.domain.SysResource;
-
 public interface SysResourceMapper {
     int deleteByPrimaryKey(Long resourceId);
 

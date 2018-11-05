@@ -1,7 +1,5 @@
 package com.snxy.business.dao.mapper;
 
-import com.snxy.business.domain.IdentityType;
-
 public interface IdentityTypeMapper {
     int deleteByPrimaryKey(Integer id);
 

@@ -1,7 +1,5 @@
 package com.snxy.business.dao.mapper;
 
-import com.snxy.business.domain.IdInfo;
-
 public interface IdInfoMapper {
     int deleteByPrimaryKey(Long id);
 

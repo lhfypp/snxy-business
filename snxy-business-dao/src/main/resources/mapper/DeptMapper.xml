@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bsehk.business.dao.mapper.DeptMapper">
-  <resultMap id="BaseResultMap" type="com.bsehk.business.domain.Dept">
+<mapper namespace="com.snxy.business.dao.mapper.DeptMapper">
+  <resultMap id="BaseResultMap" type="com.snxy.business.domain.Dept">
     <id column="sid" jdbcType="INTEGER" property="sid" />
     <result column="deptCode" jdbcType="CHAR" property="deptcode" />
     <result column="name" jdbcType="VARCHAR" property="name" />
@@ -21,13 +21,13 @@
     delete from dept
     where sid = #{sid,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.bsehk.business.domain.Dept">
+  <insert id="insert" parameterType="com.snxy.business.domain.Dept">
     insert into dept (sid, deptCode, name, 
       level, pid)
     values (#{sid,jdbcType=INTEGER}, #{deptcode,jdbcType=CHAR}, #{name,jdbcType=VARCHAR}, 
       #{level,jdbcType=INTEGER}, #{pid,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.bsehk.business.domain.Dept">
+  <insert id="insertSelective" parameterType="com.snxy.business.domain.Dept">
     insert into dept
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="sid != null">
@@ -64,7 +64,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.bsehk.business.domain.Dept">
+  <update id="updateByPrimaryKeySelective" parameterType="com.snxy.business.domain.Dept">
     update dept
     <set>
       <if test="deptcode != null">
@@ -82,7 +82,7 @@
     </set>
     where sid = #{sid,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.bsehk.business.domain.Dept">
+  <update id="updateByPrimaryKey" parameterType="com.snxy.business.domain.Dept">
     update dept
     set deptCode = #{deptcode,jdbcType=CHAR},
       name = #{name,jdbcType=VARCHAR},

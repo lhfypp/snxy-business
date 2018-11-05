@@ -1,7 +1,5 @@
 package com.snxy.business.dao.mapper;
 
-import com.snxy.business.domain.DeliveryOrder;
-
 public interface DeliveryOrderMapper {
     int deleteByPrimaryKey(Long id);
 

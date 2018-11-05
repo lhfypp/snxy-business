@@ -1,7 +1,5 @@
 package com.snxy.business.dao.mapper;
 
-import com.snxy.business.domain.DirverInfo;
-
 public interface DirverInfoMapper {
     int deleteByPrimaryKey(Long id);
 

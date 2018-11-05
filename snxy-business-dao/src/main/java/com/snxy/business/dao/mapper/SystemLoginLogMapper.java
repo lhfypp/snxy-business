@@ -1,7 +1,5 @@
 package com.snxy.business.dao.mapper;
 
-import com.snxy.business.domain.SystemLoginLog;
-
 public interface SystemLoginLogMapper {
     int deleteByPrimaryKey(Long id);
 

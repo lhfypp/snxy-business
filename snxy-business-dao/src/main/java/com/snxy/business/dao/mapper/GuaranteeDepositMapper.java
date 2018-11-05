@@ -1,7 +1,5 @@
 package com.snxy.business.dao.mapper;
 
-import com.snxy.business.domain.GuaranteeDeposit;
-
 public interface GuaranteeDepositMapper {
     int deleteByPrimaryKey(Long id);
 

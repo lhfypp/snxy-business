@@ -1,7 +1,5 @@
 package com.snxy.business.dao.mapper;
 
-import com.snxy.business.domain.Staff;
-
 public interface StaffMapper {
     int deleteByPrimaryKey(Long id);
 

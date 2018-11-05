@@ -42,7 +42,6 @@ public class FeignMultipartEncoder extends FormEncoder {
         jsonHeaders.setContentType(MediaType.APPLICATION_JSON);
     }
 
-
     @Override
     public void encode(Object object, Type bodyType, RequestTemplate template) throws EncodeException {
         if (!bodyType.equals(MultipartFile.class)) {

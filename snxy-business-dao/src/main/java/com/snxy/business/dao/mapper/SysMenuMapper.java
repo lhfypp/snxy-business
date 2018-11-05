@@ -1,7 +1,5 @@
 package com.snxy.business.dao.mapper;
 
-import com.snxy.business.domain.SysMenu;
-
 public interface SysMenuMapper {
     int deleteByPrimaryKey(Long menuId);
 

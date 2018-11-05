@@ -1,7 +1,5 @@
 package com.snxy.business.dao.mapper;
 
-import com.snxy.business.domain.MerchantCompany;
-
 public interface MerchantCompanyMapper {
     int deleteByPrimaryKey(Long id);
 

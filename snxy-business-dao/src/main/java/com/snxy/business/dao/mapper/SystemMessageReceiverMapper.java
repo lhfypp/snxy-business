@@ -1,7 +1,5 @@
 package com.snxy.business.dao.mapper;
 
-import com.snxy.business.domain.SystemMessageReceiver;
-
 public interface SystemMessageReceiverMapper {
     int deleteByPrimaryKey(Long id);
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bsehk.business.dao.mapper.IdInfoMapper">
-  <resultMap id="BaseResultMap" type="com.bsehk.business.domain.IdInfo">
+<mapper namespace="com.snxy.business.dao.mapper.IdInfoMapper">
+  <resultMap id="BaseResultMap" type="com.snxy.business.domain.IdInfo">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="online_user_id" jdbcType="BIGINT" property="onlineUserId" />
     <result column="id_front_url" jdbcType="VARCHAR" property="idFrontUrl" />
@@ -29,7 +29,7 @@
     delete from id_info
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.bsehk.business.domain.IdInfo">
+  <insert id="insert" parameterType="com.snxy.business.domain.IdInfo">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -42,7 +42,7 @@
       #{idNumber,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, 
       #{certificationStatus,jdbcType=INTEGER}, #{isDelete,jdbcType=TINYINT})
   </insert>
-  <insert id="insertSelective" parameterType="com.bsehk.business.domain.IdInfo">
+  <insert id="insertSelective" parameterType="com.snxy.business.domain.IdInfo">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -118,7 +118,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.bsehk.business.domain.IdInfo">
+  <update id="updateByPrimaryKeySelective" parameterType="com.snxy.business.domain.IdInfo">
     update id_info
     <set>
       <if test="onlineUserId != null">
@@ -157,7 +157,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.bsehk.business.domain.IdInfo">
+  <update id="updateByPrimaryKey" parameterType="com.snxy.business.domain.IdInfo">
     update id_info
     set online_user_id = #{onlineUserId,jdbcType=BIGINT},
       id_front_url = #{idFrontUrl,jdbcType=VARCHAR},

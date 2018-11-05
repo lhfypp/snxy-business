@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bsehk.business.dao.mapper.EntranceFeeCapacityMapper">
-  <resultMap id="BaseResultMap" type="com.bsehk.business.domain.EntranceFeeCapacity">
+<mapper namespace="com.snxy.business.dao.mapper.EntranceFeeCapacityMapper">
+  <resultMap id="BaseResultMap" type="com.snxy.business.domain.EntranceFeeCapacity">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="carrying_capacity" jdbcType="VARCHAR" property="carryingCapacity" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
@@ -22,7 +22,7 @@
     delete from entrance_fee_capacity
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.bsehk.business.domain.EntranceFeeCapacity">
+  <insert id="insert" parameterType="com.snxy.business.domain.EntranceFeeCapacity">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -31,7 +31,7 @@
     values (#{carryingCapacity,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, 
       #{gmtModified,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=TINYINT})
   </insert>
-  <insert id="insertSelective" parameterType="com.bsehk.business.domain.EntranceFeeCapacity">
+  <insert id="insertSelective" parameterType="com.snxy.business.domain.EntranceFeeCapacity">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -71,7 +71,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.bsehk.business.domain.EntranceFeeCapacity">
+  <update id="updateByPrimaryKeySelective" parameterType="com.snxy.business.domain.EntranceFeeCapacity">
     update entrance_fee_capacity
     <set>
       <if test="carryingCapacity != null">
@@ -92,7 +92,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.bsehk.business.domain.EntranceFeeCapacity">
+  <update id="updateByPrimaryKey" parameterType="com.snxy.business.domain.EntranceFeeCapacity">
     update entrance_fee_capacity
     set carrying_capacity = #{carryingCapacity,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},

@@ -1,7 +1,5 @@
 package com.snxy.business.dao.mapper;
 
-import com.snxy.business.domain.VehicleGpsRecord;
-
 public interface VehicleGpsRecordMapper {
     int deleteByPrimaryKey(Long id);
 

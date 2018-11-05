@@ -1,7 +1,5 @@
 package com.snxy.business.dao.mapper;
 
-import com.snxy.business.domain.ShortMessage;
-
 public interface ShortMessageMapper {
     int deleteByPrimaryKey(Long id);
 
