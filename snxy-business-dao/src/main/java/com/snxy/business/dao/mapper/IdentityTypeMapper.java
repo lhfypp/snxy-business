@@ -1,5 +1,9 @@
 package com.snxy.business.dao.mapper;
 
+import com.snxy.business.domain.IdentityType;
+
+import java.util.List;
+
 public interface IdentityTypeMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -12,4 +16,6 @@ public interface IdentityTypeMapper {
     int updateByPrimaryKeySelective(IdentityType record);
 
     int updateByPrimaryKey(IdentityType record);
+
+    List<IdentityType> selectAllType();
 }

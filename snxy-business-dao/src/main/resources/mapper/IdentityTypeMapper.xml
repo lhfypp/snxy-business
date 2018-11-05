@@ -101,4 +101,12 @@
       gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <!--查询所有身份W-->
+  <select id="selectAllType" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List"/>
+    from identity_type
+    where is_delete = 0
+  </select>
 </mapper>

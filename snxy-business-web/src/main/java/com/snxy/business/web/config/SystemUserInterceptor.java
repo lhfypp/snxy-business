@@ -1,6 +1,7 @@
 package com.snxy.business.web.config;
 
 import com.alibaba.fastjson.JSONObject;
+import com.snxy.business.service.vo.SystemUserVO;
 import com.snxy.common.response.ResultData;
 
 import lombok.Data;
@@ -66,7 +67,7 @@ public class SystemUserInterceptor implements HandlerInterceptor {
 
         String newJson = URLDecoder.decode(userJson, "UTF-8");
         log.debug("用户信息JsonString:{}",newJson);
-        SystemUserVo systemUserVO = JSONObject.parseObject(newJson, SystemUserVo.class);// mapper.readValue(newJson, SystemUserVO.class);
+        SystemUserVO systemUserVO = JSONObject.parseObject(newJson, SystemUserVO.class);// mapper.readValue(newJson, SystemUserVO.class);
 
         request.setAttribute("systemUser", systemUserVO);
 
@@ -74,7 +75,7 @@ public class SystemUserInterceptor implements HandlerInterceptor {
     }
    private void setDebugSystemUser(HttpServletRequest request){
         String debugUserJson="{\"token\":\"F62ECF21F6E66FB1BAE4C0BFEAA5C9ADB7C1B460DF33A4AF72024AA4DF981700D28A27C878D25ABB00F363A0EABBDA02\",\"name\":\"thomas\",\"systemUserId\":1,\"identityTypes\":[{\"systemUserId\":1,\"identityId\":1,\"isActive\":true,\"identityName\":\"代办\"},{\"systemUserId\":1,\"identityId\":2,\"isActive\":false,\"identityName\":\"商户公司\"},{\"systemUserId\":1,\"identityId\":3,\"isActive\":false,\"identityName\":\"司机\"}],\"expireTime\":1540951624593,\"account\":\"10000001\"}";
-       SystemUserVo systemUserVO = JSONObject.parseObject(debugUserJson, SystemUserVo.class);// mapper.readValue(newJson, SystemUserVO.class);
+       SystemUserVO systemUserVO = JSONObject.parseObject(debugUserJson, SystemUserVO.class);// mapper.readValue(newJson, SystemUserVO.class);
 
        request.setAttribute("systemUser", systemUserVO);
    }
