@@ -1,6 +1,9 @@
 package com.snxy.business.web.controller;
 
 import com.snxy.business.service.IdentityTypeService;
+import com.snxy.business.service.OnlineUserService;
+import com.snxy.business.service.RegisterService;
+import com.snxy.business.service.SystemUserService;
 import com.snxy.business.service.vo.IdentityVO;
 import com.snxy.common.response.ResultData;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +19,8 @@ import java.util.List;
 public class RegisterController {
     @Resource
     private IdentityTypeService identityTypeService;
+    @Resource
+    private RegisterService registerService;
 
     /*
      * 注册获取身份列表W
@@ -30,8 +35,9 @@ public class RegisterController {
      * 注册选择身份W
      * */
     @RequestMapping("/identity/choose")
-    public ResultData chooseIdentity(){
-        return ResultData.success("");
+    public ResultData chooseIdentity(Long systemUserId,String name,Integer identityId){
+        String result = registerService.chooseIdentity(systemUserId,name,identityId);
+        return ResultData.success(result);
     }
 
 }

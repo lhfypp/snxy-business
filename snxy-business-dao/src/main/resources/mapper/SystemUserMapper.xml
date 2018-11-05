@@ -150,4 +150,13 @@
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <!--添加用户姓名W-->
+  <update id="updateNameByPrimaryKey">
+    UPDATE SYSTEM_USER
+    set chinese_name = #{name},
+      gmt_modified = #{date}
+    where id = #{systemUserId}
+    and is_delete = 0
+  </update>
 </mapper>
