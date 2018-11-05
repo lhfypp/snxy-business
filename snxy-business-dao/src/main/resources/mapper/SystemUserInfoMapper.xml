@@ -4,7 +4,6 @@
   <resultMap id="BaseResultMap" type="com.snxy.business.domain.SystemUserInfo">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="system_user_id" jdbcType="BIGINT" property="systemUserId" />
-    <result column="identity_card_number" jdbcType="VARCHAR" property="identityCardNumber" />
     <result column="department_id" jdbcType="BIGINT" property="departmentId" />
     <result column="mobile" jdbcType="VARCHAR" property="mobile" />
     <result column="nation" jdbcType="VARCHAR" property="nation" />
@@ -17,11 +16,9 @@
     <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
     <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
   </resultMap>
-
-  <!--查询订单信息 end-->
   <sql id="Base_Column_List">
-    id, system_user_id, identity_card_number, department_id, mobile, nation, mz, jg, 
-    email, qq, wx, gmt_create, gmt_modified, is_delete
+    id, system_user_id, department_id, mobile, nation, mz, jg, email, qq, wx, gmt_create, 
+    gmt_modified, is_delete
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -37,16 +34,14 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into system_user_info (system_user_id, identity_card_number, 
-      department_id, mobile, nation, 
-      mz, jg, email, qq, 
-      wx, gmt_create, gmt_modified, 
-      is_delete)
-    values (#{systemUserId,jdbcType=BIGINT}, #{identityCardNumber,jdbcType=VARCHAR}, 
-      #{departmentId,jdbcType=BIGINT}, #{mobile,jdbcType=VARCHAR}, #{nation,jdbcType=VARCHAR}, 
-      #{mz,jdbcType=VARCHAR}, #{jg,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{qq,jdbcType=VARCHAR}, 
-      #{wx,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, 
-      #{isDelete,jdbcType=TINYINT})
+    insert into system_user_info (system_user_id, department_id, mobile, 
+      nation, mz, jg, email, 
+      qq, wx, gmt_create, 
+      gmt_modified, is_delete)
+    values (#{systemUserId,jdbcType=BIGINT}, #{departmentId,jdbcType=BIGINT}, #{mobile,jdbcType=VARCHAR}, 
+      #{nation,jdbcType=VARCHAR}, #{mz,jdbcType=VARCHAR}, #{jg,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{qq,jdbcType=VARCHAR}, #{wx,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, 
+      #{gmtModified,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.snxy.business.domain.SystemUserInfo">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -56,9 +51,6 @@
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="systemUserId != null">
         system_user_id,
-      </if>
-      <if test="identityCardNumber != null">
-        identity_card_number,
       </if>
       <if test="departmentId != null">
         department_id,
@@ -97,9 +89,6 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="systemUserId != null">
         #{systemUserId,jdbcType=BIGINT},
-      </if>
-      <if test="identityCardNumber != null">
-        #{identityCardNumber,jdbcType=VARCHAR},
       </if>
       <if test="departmentId != null">
         #{departmentId,jdbcType=BIGINT},
@@ -142,9 +131,6 @@
       <if test="systemUserId != null">
         system_user_id = #{systemUserId,jdbcType=BIGINT},
       </if>
-      <if test="identityCardNumber != null">
-        identity_card_number = #{identityCardNumber,jdbcType=VARCHAR},
-      </if>
       <if test="departmentId != null">
         department_id = #{departmentId,jdbcType=BIGINT},
       </if>
@@ -184,7 +170,6 @@
   <update id="updateByPrimaryKey" parameterType="com.snxy.business.domain.SystemUserInfo">
     update system_user_info
     set system_user_id = #{systemUserId,jdbcType=BIGINT},
-      identity_card_number = #{identityCardNumber,jdbcType=VARCHAR},
       department_id = #{departmentId,jdbcType=BIGINT},
       mobile = #{mobile,jdbcType=VARCHAR},
       nation = #{nation,jdbcType=VARCHAR},

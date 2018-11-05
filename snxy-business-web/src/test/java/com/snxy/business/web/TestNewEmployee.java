@@ -1,8 +1,6 @@
 package com.snxy.business.web;
 
 import com.alibaba.fastjson.JSON;
-import com.snxy.business.domain.Identy;
-import com.snxy.business.service.vo.CompanyUserListVo;
 
 import java.util.ArrayList;
 import java.util.List;

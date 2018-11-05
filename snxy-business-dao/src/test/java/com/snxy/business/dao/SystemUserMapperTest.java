@@ -1,7 +1,5 @@
 package com.snxy.business.dao;
 
-import com.snxy.business.dao.mapper.SystemUserMapper;
-import com.snxy.business.domain.SystemUser;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;

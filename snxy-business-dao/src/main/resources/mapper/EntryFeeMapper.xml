@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.snxy.business.dao.mapper.EntryFeeMapper">
-  <resultMap id="BaseResultMap" type="com.snxy.business.domain.EntryFee">
+<mapper namespace="com.bsehk.business.dao.mapper.EntryFeeMapper">
+  <resultMap id="BaseResultMap" type="com.bsehk.business.domain.EntryFee">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="delivery_order_id" jdbcType="BIGINT" property="deliveryOrderId" />
     <result column="est_fee" jdbcType="DECIMAL" property="estFee" />
@@ -11,11 +11,13 @@
     <result column="pay_time" jdbcType="TIMESTAMP" property="payTime" />
     <result column="refund_time" jdbcType="TIMESTAMP" property="refundTime" />
     <result column="pay_method" jdbcType="TINYINT" property="payMethod" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
     <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
   </resultMap>
   <sql id="Base_Column_List">
     id, delivery_order_id, est_fee, actual_fee, status, remark, pay_time, refund_time, 
-    pay_method, is_delete
+    pay_method, gmt_create, gmt_modified, is_delete
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -27,20 +29,20 @@
     delete from entry_fee
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.snxy.business.domain.EntryFee">
+  <insert id="insert" parameterType="com.bsehk.business.domain.EntryFee">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into entry_fee (delivery_order_id, est_fee, actual_fee, 
       status, remark, pay_time, 
-      refund_time, pay_method, is_delete
-      )
+      refund_time, pay_method, gmt_create, 
+      gmt_modified, is_delete)
     values (#{deliveryOrderId,jdbcType=BIGINT}, #{estFee,jdbcType=DECIMAL}, #{actualFee,jdbcType=DECIMAL}, 
       #{status,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{payTime,jdbcType=TIMESTAMP}, 
-      #{refundTime,jdbcType=TIMESTAMP}, #{payMethod,jdbcType=TINYINT}, #{isDelete,jdbcType=TINYINT}
-      )
+      #{refundTime,jdbcType=TIMESTAMP}, #{payMethod,jdbcType=TINYINT}, #{gmtCreate,jdbcType=TIMESTAMP}, 
+      #{gmtModified,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=TINYINT})
   </insert>
-  <insert id="insertSelective" parameterType="com.snxy.business.domain.EntryFee">
+  <insert id="insertSelective" parameterType="com.bsehk.business.domain.EntryFee">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -69,6 +71,12 @@
       </if>
       <if test="payMethod != null">
         pay_method,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
       </if>
       <if test="isDelete != null">
         is_delete,
@@ -99,12 +107,18 @@
       <if test="payMethod != null">
         #{payMethod,jdbcType=TINYINT},
       </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
       <if test="isDelete != null">
         #{isDelete,jdbcType=TINYINT},
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.snxy.business.domain.EntryFee">
+  <update id="updateByPrimaryKeySelective" parameterType="com.bsehk.business.domain.EntryFee">
     update entry_fee
     <set>
       <if test="deliveryOrderId != null">
@@ -131,13 +145,19 @@
       <if test="payMethod != null">
         pay_method = #{payMethod,jdbcType=TINYINT},
       </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
       <if test="isDelete != null">
         is_delete = #{isDelete,jdbcType=TINYINT},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.snxy.business.domain.EntryFee">
+  <update id="updateByPrimaryKey" parameterType="com.bsehk.business.domain.EntryFee">
     update entry_fee
     set delivery_order_id = #{deliveryOrderId,jdbcType=BIGINT},
       est_fee = #{estFee,jdbcType=DECIMAL},
@@ -147,39 +167,9 @@
       pay_time = #{payTime,jdbcType=TIMESTAMP},
       refund_time = #{refundTime,jdbcType=TIMESTAMP},
       pay_method = #{payMethod,jdbcType=TINYINT},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
-  </update>
-
-  <!--管理员修改进门费用-->
-  <update id="updateByOrderNo" parameterType="com.snxy.business.domain.EntryFee">
-    update entry_fee
-    <set>
-      <if test="estFee != null">
-        est_fee = #{estFee,jdbcType=DECIMAL},
-      </if>
-      <if test="actualFee != null">
-        actual_fee = #{actualFee,jdbcType=DECIMAL},
-      </if>
-      <if test="status != null">
-        status = #{status,jdbcType=INTEGER},
-      </if>
-      <if test="remark != null">
-        remark = #{remark,jdbcType=VARCHAR},
-      </if>
-      <if test="payTime != null">
-        pay_time = #{payTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="refundTime != null">
-        refund_time = #{refundTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="payMethod != null">
-        pay_method = #{payMethod,jdbcType=TINYINT},
-      </if>
-      <if test="isDelete != null">
-        is_delete = #{isDelete,jdbcType=TINYINT},
-      </if>
-    </set>
-    where delivery_order_id = #{deliveryOrderId,jdbcType=BIGINT}
   </update>
 </mapper>

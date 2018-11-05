@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.snxy.business.dao.mapper.DirverInfoMapper">
-  <resultMap id="BaseResultMap" type="com.snxy.business.domain.DirverInfo">
+<mapper namespace="com.bsehk.business.dao.mapper.DirverInfoMapper">
+  <resultMap id="BaseResultMap" type="com.bsehk.business.domain.DirverInfo">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="online_user_id" jdbcType="BIGINT" property="onlineUserId" />
     <result column="driving_license_number" jdbcType="VARCHAR" property="drivingLicenseNumber" />
-    <result column="qualification_certificate_number" jdbcType="VARCHAR" property="qualificationCertificateNumber" />
     <result column="driving_license_url" jdbcType="VARCHAR" property="drivingLicenseUrl" />
     <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
     <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
     <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, online_user_id, driving_license_number, qualification_certificate_number, driving_license_url, 
-    gmt_create, gmt_modified, is_delete
+    id, online_user_id, driving_license_number, driving_license_url, gmt_create, gmt_modified, 
+    is_delete
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -25,20 +24,18 @@
     delete from dirver_info
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.snxy.business.domain.DirverInfo">
+  <insert id="insert" parameterType="com.bsehk.business.domain.DirverInfo">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into dirver_info (online_user_id, driving_license_number, 
-      qualification_certificate_number, driving_license_url, 
-      gmt_create, gmt_modified, is_delete
-      )
+      driving_license_url, gmt_create, gmt_modified, 
+      is_delete)
     values (#{onlineUserId,jdbcType=BIGINT}, #{drivingLicenseNumber,jdbcType=VARCHAR}, 
-      #{qualificationCertificateNumber,jdbcType=VARCHAR}, #{drivingLicenseUrl,jdbcType=VARCHAR}, 
-      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=TINYINT}
-      )
+      #{drivingLicenseUrl,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, 
+      #{isDelete,jdbcType=TINYINT})
   </insert>
-  <insert id="insertSelective" parameterType="com.snxy.business.domain.DirverInfo">
+  <insert id="insertSelective" parameterType="com.bsehk.business.domain.DirverInfo">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
@@ -49,9 +46,6 @@
       </if>
       <if test="drivingLicenseNumber != null">
         driving_license_number,
-      </if>
-      <if test="qualificationCertificateNumber != null">
-        qualification_certificate_number,
       </if>
       <if test="drivingLicenseUrl != null">
         driving_license_url,
@@ -73,9 +67,6 @@
       <if test="drivingLicenseNumber != null">
         #{drivingLicenseNumber,jdbcType=VARCHAR},
       </if>
-      <if test="qualificationCertificateNumber != null">
-        #{qualificationCertificateNumber,jdbcType=VARCHAR},
-      </if>
       <if test="drivingLicenseUrl != null">
         #{drivingLicenseUrl,jdbcType=VARCHAR},
       </if>
@@ -90,7 +81,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.snxy.business.domain.DirverInfo">
+  <update id="updateByPrimaryKeySelective" parameterType="com.bsehk.business.domain.DirverInfo">
     update dirver_info
     <set>
       <if test="onlineUserId != null">
@@ -98,9 +89,6 @@
       </if>
       <if test="drivingLicenseNumber != null">
         driving_license_number = #{drivingLicenseNumber,jdbcType=VARCHAR},
-      </if>
-      <if test="qualificationCertificateNumber != null">
-        qualification_certificate_number = #{qualificationCertificateNumber,jdbcType=VARCHAR},
       </if>
       <if test="drivingLicenseUrl != null">
         driving_license_url = #{drivingLicenseUrl,jdbcType=VARCHAR},
@@ -117,26 +105,14 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.snxy.business.domain.DirverInfo">
+  <update id="updateByPrimaryKey" parameterType="com.bsehk.business.domain.DirverInfo">
     update dirver_info
     set online_user_id = #{onlineUserId,jdbcType=BIGINT},
       driving_license_number = #{drivingLicenseNumber,jdbcType=VARCHAR},
-      qualification_certificate_number = #{qualificationCertificateNumber,jdbcType=VARCHAR},
       driving_license_url = #{drivingLicenseUrl,jdbcType=VARCHAR},
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <select id="selectByOnlineUserId" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List" />
-    from dirver_info
-    where online_user_id = #{onlineUserId}
-  </select>
-    <select id="selectIdByOnlineUserId" resultType="java.lang.Long">
-        select id
-         from dirver_info
-          where online_user_id=#{onlineUserId}
-    </select>
 </mapper>

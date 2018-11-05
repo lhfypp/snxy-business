@@ -1,7 +1,6 @@
 package com.snxy.business.web;
 
 import com.alibaba.fastjson.JSON;
-import com.snxy.business.service.vo.ModifyCompanyMessageVo;
 
 public class TestModifyCompany {
     public static void main(String[] args) {

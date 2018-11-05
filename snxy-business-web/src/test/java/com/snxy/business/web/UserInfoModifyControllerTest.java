@@ -1,7 +1,5 @@
 package com.snxy.business.web;
 
-import com.snxy.business.service.SystemUserService;
-import com.snxy.business.service.UserImageService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;

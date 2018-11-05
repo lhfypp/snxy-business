@@ -13,7 +13,11 @@ public class ShortMessage {
 
     private Date sendTime;
 
+    private Date gmtCreate;
+
     private Byte isDelete;
+
+    private Date gmtModified;
 
     public Long getId() {
         return id;
@@ -55,11 +59,27 @@ public class ShortMessage {
         this.sendTime = sendTime;
     }
 
+    public Date getGmtCreate() {
+        return gmtCreate;
+    }
+
+    public void setGmtCreate(Date gmtCreate) {
+        this.gmtCreate = gmtCreate;
+    }
+
     public Byte getIsDelete() {
         return isDelete;
     }
 
     public void setIsDelete(Byte isDelete) {
         this.isDelete = isDelete;
+    }
+
+    public Date getGmtModified() {
+        return gmtModified;
+    }
+
+    public void setGmtModified(Date gmtModified) {
+        this.gmtModified = gmtModified;
     }
 }

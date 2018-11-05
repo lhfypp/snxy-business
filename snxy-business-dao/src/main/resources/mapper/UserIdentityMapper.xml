@@ -1,147 +1,82 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.snxy.business.dao.mapper.UserIdentityMapper">
-    <resultMap id="BaseResultMap" type="com.snxy.business.domain.UserIdentity">
-        <id column="id" jdbcType="BIGINT" property="id"/>
-        <result column="online_user_id" jdbcType="BIGINT" property="onlineUserId"/>
-        <result column="identity_id" jdbcType="INTEGER" property="identityId"/>
-        <result column="is_delete" jdbcType="TINYINT" property="isDelete"/>
-    </resultMap>
-    <sql id="Base_Column_List">
+  <resultMap id="BaseResultMap" type="com.snxy.business.domain.UserIdentity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="online_user_id" jdbcType="TINYINT" property="onlineUserId" />
+    <result column="identity_id" jdbcType="INTEGER" property="identityId" />
+    <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+  </resultMap>
+  <sql id="Base_Column_List">
     id, online_user_id, identity_id, is_delete
   </sql>
-    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from user_identity
-        where id = #{id,jdbcType=BIGINT}
-    </select>
-
-    <!--公司员工信息和身份表联查-->
-    <resultMap id="IdentyResultMap" type="com.snxy.business.domain.Identy">
-        <id column="id" jdbcType="BIGINT" property="id"/>
-        <result column="online_user_id" jdbcType="BIGINT" property="onlineUserId"/>
-        <result column="identy_name" jdbcType="INTEGER" property="identyName"/>
-    </resultMap>
-    <select id="selectUserIdentyByOnlineUserIdList" resultMap="IdentyResultMap">
-        select u.online_user_id ,i.id ,i.identy_name
-        from user_identity u , identity_type i
-        where u.identity_id = i.id
-        AND u.online_user_id IN
-        <foreach collection="onlineUserIdList" item="onlineUserId" index="index" open="(" close=")" separator=",">
-            #{onlineUserId}
-        </foreach>
-    </select>
-
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user_identity
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from user_identity
     where id = #{id,jdbcType=BIGINT}
   </delete>
-    <insert id="insert" parameterType="com.snxy.business.domain.UserIdentity">
-        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
-            SELECT LAST_INSERT_ID()
-        </selectKey>
-        insert into user_identity (online_user_id, identity_id, is_delete
-        )
-        values (#{onlineUserId,jdbcType=BIGINT}, #{identityId,jdbcType=INTEGER}, #{isDelete,jdbcType=TINYINT}
-        )
-    </insert>
-    <insert id="insertSelective" parameterType="com.snxy.business.domain.UserIdentity">
-        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
-            SELECT LAST_INSERT_ID()
-        </selectKey>
-        insert into user_identity
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="onlineUserId != null">
-                online_user_id,
-            </if>
-            <if test="identityId != null">
-                identity_id,
-            </if>
-            <if test="isDelete != null">
-                is_delete,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="onlineUserId != null">
-                #{onlineUserId,jdbcType=TINYINT},
-            </if>
-            <if test="identityId != null">
-                #{identityId,jdbcType=INTEGER},
-            </if>
-            <if test="isDelete != null">
-                #{isDelete,jdbcType=TINYINT},
-            </if>
-        </trim>
-    </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.snxy.business.domain.UserIdentity">
-        update user_identity
-        <set>
-            <if test="onlineUserId != null">
-                online_user_id = #{onlineUserId,jdbcType=BIGINT},
-            </if>
-            <if test="identityId != null">
-                identity_id = #{identityId,jdbcType=INTEGER},
-            </if>
-            <if test="isDelete != null">
-                is_delete = #{isDelete,jdbcType=TINYINT},
-            </if>
-        </set>
-        where id = #{id,jdbcType=BIGINT}
-    </update>
-    <update id="updateByPrimaryKey" parameterType="com.snxy.business.domain.UserIdentity">
+  <insert id="insert" parameterType="com.snxy.business.domain.UserIdentity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into user_identity (online_user_id, identity_id, is_delete
+      )
+    values (#{onlineUserId,jdbcType=TINYINT}, #{identityId,jdbcType=INTEGER}, #{isDelete,jdbcType=TINYINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.snxy.business.domain.UserIdentity">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into user_identity
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="onlineUserId != null">
+        online_user_id,
+      </if>
+      <if test="identityId != null">
+        identity_id,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="onlineUserId != null">
+        #{onlineUserId,jdbcType=TINYINT},
+      </if>
+      <if test="identityId != null">
+        #{identityId,jdbcType=INTEGER},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.snxy.business.domain.UserIdentity">
     update user_identity
-    set online_user_id = #{onlineUserId,jdbcType=BIGINT},
+    <set>
+      <if test="onlineUserId != null">
+        online_user_id = #{onlineUserId,jdbcType=TINYINT},
+      </if>
+      <if test="identityId != null">
+        identity_id = #{identityId,jdbcType=INTEGER},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.snxy.business.domain.UserIdentity">
+    update user_identity
+    set online_user_id = #{onlineUserId,jdbcType=TINYINT},
       identity_id = #{identityId,jdbcType=INTEGER},
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
-
-    <delete id="deleteIdentity">
-    DELETE  FROM user_identity
-    WHERE online_user_id = #{onlineUserId,jdbcType=BIGINT}
-
-  </delete>
-
-    <insert id="insertBatch">
-        insert into user_identity
-        (online_user_id, identity_id, is_delete)
-        VALUES
-        <foreach collection="list" item="userIdentity" separator=",">
-            (
-            #{userIdentity.onlineUserId,jdbcType=BIGINT},
-            #{userIdentity.identityId,jdbcType=INTEGER},
-            #{userIdentity.isDelete,jdbcType=TINYINT})
-        </foreach>
-    </insert>
-
-    <!--<update id="updateByOnlineUserIdList">
-        <foreach collection="userIdentityList" item="userIdentity" open="(" close=")" index="index" separator=",">
-            update user_identity
-
-            set identity_id = #{userIdentity.identityId,jdbcType=INTEGER},
-
-            where online_user_id = #{userIdentity.onlineUserId}
-        </foreach>
-    </update>-->
-
-    <!--<insert id="updateByOnlineUserIdList" >
-        insert into
-        user_identity(online_user_id,identity_id)
-        VALUES
-        <foreach collection="list" item="userIdentity" separator=",">
-            <trim prefix="(" suffix=")" suffixOverrides=",">
-                #{userIdentity.onlineUserId}, #{userIdentity.identityId}
-            </trim>
-        </foreach>
-        ON DUPLICATE KEY UPDATE
-        online_user_id = VALUES(online_user_id),identity_id = VALUES(identity_id)
-    </insert>-->
-
-    <update id="updateByOnlineUserId">
-        update user_identity
-        set is_delete = #{isDelete}
-        where online_user_id = #{onlineUserId}
-    </update>
-
 </mapper>

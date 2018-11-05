@@ -5,15 +5,18 @@
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="system_user_id" jdbcType="BIGINT" property="systemUserId" />
     <result column="file_type" jdbcType="VARCHAR" property="fileType" />
-    <result column="file_size" jdbcType="BIGINT" property="fileSize" />
+    <result column="file_size" jdbcType="INTEGER" property="fileSize" />
     <result column="file_name" jdbcType="VARCHAR" property="fileName" />
     <result column="url" jdbcType="VARCHAR" property="url" />
     <result column="property1" jdbcType="VARCHAR" property="property1" />
     <result column="property2" jdbcType="VARCHAR" property="property2" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
     <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, system_user_id, file_type, file_size, file_name, url, property1, property2, is_delete
+    id, system_user_id, file_type, file_size, file_name, url, property1, property2, gmt_create, 
+    gmt_modified, is_delete
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -31,10 +34,12 @@
     </selectKey>
     insert into user_image (system_user_id, file_type, file_size, 
       file_name, url, property1, 
-      property2, is_delete)
-    values (#{systemUserId,jdbcType=BIGINT}, #{fileType,jdbcType=VARCHAR}, #{fileSize,jdbcType=BIGINT}, 
+      property2, gmt_create, gmt_modified, 
+      is_delete)
+    values (#{systemUserId,jdbcType=BIGINT}, #{fileType,jdbcType=VARCHAR}, #{fileSize,jdbcType=INTEGER}, 
       #{fileName,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{property1,jdbcType=VARCHAR}, 
-      #{property2,jdbcType=VARCHAR}, #{isDelete,jdbcType=TINYINT})
+      #{property2,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, 
+      #{isDelete,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.snxy.business.domain.UserImage">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -63,6 +68,12 @@
       <if test="property2 != null">
         property2,
       </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
       <if test="isDelete != null">
         is_delete,
       </if>
@@ -75,7 +86,7 @@
         #{fileType,jdbcType=VARCHAR},
       </if>
       <if test="fileSize != null">
-        #{fileSize,jdbcType=BIGINT},
+        #{fileSize,jdbcType=INTEGER},
       </if>
       <if test="fileName != null">
         #{fileName,jdbcType=VARCHAR},
@@ -88,6 +99,12 @@
       </if>
       <if test="property2 != null">
         #{property2,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
       </if>
       <if test="isDelete != null">
         #{isDelete,jdbcType=TINYINT},
@@ -104,7 +121,7 @@
         file_type = #{fileType,jdbcType=VARCHAR},
       </if>
       <if test="fileSize != null">
-        file_size = #{fileSize,jdbcType=BIGINT},
+        file_size = #{fileSize,jdbcType=INTEGER},
       </if>
       <if test="fileName != null">
         file_name = #{fileName,jdbcType=VARCHAR},
@@ -118,6 +135,12 @@
       <if test="property2 != null">
         property2 = #{property2,jdbcType=VARCHAR},
       </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
       <if test="isDelete != null">
         is_delete = #{isDelete,jdbcType=TINYINT},
       </if>
@@ -128,13 +151,14 @@
     update user_image
     set system_user_id = #{systemUserId,jdbcType=BIGINT},
       file_type = #{fileType,jdbcType=VARCHAR},
-      file_size = #{fileSize,jdbcType=BIGINT},
+      file_size = #{fileSize,jdbcType=INTEGER},
       file_name = #{fileName,jdbcType=VARCHAR},
       url = #{url,jdbcType=VARCHAR},
       property1 = #{property1,jdbcType=VARCHAR},
       property2 = #{property2,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
-
 </mapper>

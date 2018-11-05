@@ -1,7 +1,6 @@
 package com.snxy.business.web;
 
 import com.alibaba.fastjson.JSON;
-import com.snxy.business.service.vo.AddCompanyGoodsVo;
 
 public class TestAddCompanyGoods {
     public static void main(String[] args) {

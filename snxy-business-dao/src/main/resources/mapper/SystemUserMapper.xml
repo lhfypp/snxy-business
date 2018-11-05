@@ -6,27 +6,20 @@
     <result column="account" jdbcType="VARCHAR" property="account" />
     <result column="mobile" jdbcType="VARCHAR" property="mobile" />
     <result column="chinese_name" jdbcType="VARCHAR" property="chineseName" />
-    <result column="nick" jdbcType="VARCHAR" property="nick" />
     <result column="pwd" jdbcType="VARCHAR" property="pwd" />
-    <result column="gender" jdbcType="TINYINT" property="gender" />
     <result column="reg_date" jdbcType="DATE" property="regDate" />
+    <result column="account_status" jdbcType="TINYINT" property="accountStatus" />
     <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
     <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
-    <result column="account_status" jdbcType="TINYINT" property="accountStatus" />
     <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, account, mobile, chinese_name, nick, pwd, gender, reg_date, gmt_create, gmt_modified, 
-    account_status, is_delete
+    id, account, mobile, chinese_name, pwd, reg_date, account_status, gmt_create, gmt_modified, 
+    is_delete
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from system_user
-    where id = #{id,jdbcType=BIGINT}
-  </select>
-  <select id="selectMobileById" parameterType="java.lang.Long" resultType="java.lang.String">
-    select mobile
     from system_user
     where id = #{id,jdbcType=BIGINT}
   </select>
@@ -39,13 +32,13 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into system_user (account, mobile, chinese_name, 
-      nick, pwd, gender, 
-      reg_date, gmt_create, gmt_modified, 
-      account_status, is_delete)
+      pwd, reg_date, account_status, 
+      gmt_create, gmt_modified, is_delete
+      )
     values (#{account,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{chineseName,jdbcType=VARCHAR}, 
-      #{nick,jdbcType=VARCHAR}, #{pwd,jdbcType=VARCHAR}, #{gender,jdbcType=TINYINT}, 
-      #{regDate,jdbcType=DATE}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, 
-      #{accountStatus,jdbcType=TINYINT}, #{isDelete,jdbcType=TINYINT})
+      #{pwd,jdbcType=VARCHAR}, #{regDate,jdbcType=DATE}, #{accountStatus,jdbcType=TINYINT}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=TINYINT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.snxy.business.domain.SystemUser">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -62,26 +55,20 @@
       <if test="chineseName != null">
         chinese_name,
       </if>
-      <if test="nick != null">
-        nick,
-      </if>
       <if test="pwd != null">
         pwd,
       </if>
-      <if test="gender != null">
-        gender,
-      </if>
       <if test="regDate != null">
         reg_date,
+      </if>
+      <if test="accountStatus != null">
+        account_status,
       </if>
       <if test="gmtCreate != null">
         gmt_create,
       </if>
       <if test="gmtModified != null">
         gmt_modified,
-      </if>
-      <if test="accountStatus != null">
-        account_status,
       </if>
       <if test="isDelete != null">
         is_delete,
@@ -97,26 +84,20 @@
       <if test="chineseName != null">
         #{chineseName,jdbcType=VARCHAR},
       </if>
-      <if test="nick != null">
-        #{nick,jdbcType=VARCHAR},
-      </if>
       <if test="pwd != null">
         #{pwd,jdbcType=VARCHAR},
       </if>
-      <if test="gender != null">
-        #{gender,jdbcType=TINYINT},
-      </if>
       <if test="regDate != null">
         #{regDate,jdbcType=DATE},
+      </if>
+      <if test="accountStatus != null">
+        #{accountStatus,jdbcType=TINYINT},
       </if>
       <if test="gmtCreate != null">
         #{gmtCreate,jdbcType=TIMESTAMP},
       </if>
       <if test="gmtModified != null">
         #{gmtModified,jdbcType=TIMESTAMP},
-      </if>
-      <if test="accountStatus != null">
-        #{accountStatus,jdbcType=TINYINT},
       </if>
       <if test="isDelete != null">
         #{isDelete,jdbcType=TINYINT},
@@ -135,26 +116,20 @@
       <if test="chineseName != null">
         chinese_name = #{chineseName,jdbcType=VARCHAR},
       </if>
-      <if test="nick != null">
-        nick = #{nick,jdbcType=VARCHAR},
-      </if>
       <if test="pwd != null">
         pwd = #{pwd,jdbcType=VARCHAR},
       </if>
-      <if test="gender != null">
-        gender = #{gender,jdbcType=TINYINT},
-      </if>
       <if test="regDate != null">
         reg_date = #{regDate,jdbcType=DATE},
+      </if>
+      <if test="accountStatus != null">
+        account_status = #{accountStatus,jdbcType=TINYINT},
       </if>
       <if test="gmtCreate != null">
         gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       </if>
       <if test="gmtModified != null">
         gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
-      </if>
-      <if test="accountStatus != null">
-        account_status = #{accountStatus,jdbcType=TINYINT},
       </if>
       <if test="isDelete != null">
         is_delete = #{isDelete,jdbcType=TINYINT},
@@ -167,24 +142,12 @@
     set account = #{account,jdbcType=VARCHAR},
       mobile = #{mobile,jdbcType=VARCHAR},
       chinese_name = #{chineseName,jdbcType=VARCHAR},
-      nick = #{nick,jdbcType=VARCHAR},
       pwd = #{pwd,jdbcType=VARCHAR},
-      gender = #{gender,jdbcType=TINYINT},
       reg_date = #{regDate,jdbcType=DATE},
+      account_status = #{accountStatus,jdbcType=TINYINT},
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
-      account_status = #{accountStatus,jdbcType=TINYINT},
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
-
-  <select id="selectByMobile"  resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List" />
-    from system_user
-    where mobile = #{mobile,jdbcType=VARCHAR}
-           AND is_delete = #{isDelete,jdbcType=TINYINT}
-
-  </select>
-
 </mapper>

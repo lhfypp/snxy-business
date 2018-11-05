@@ -22,6 +22,10 @@ public class EntryFee {
 
     private Byte payMethod;
 
+    private Date gmtCreate;
+
+    private Date gmtModified;
+
     private Byte isDelete;
 
     public Long getId() {
@@ -94,6 +98,22 @@ public class EntryFee {
 
     public void setPayMethod(Byte payMethod) {
         this.payMethod = payMethod;
+    }
+
+    public Date getGmtCreate() {
+        return gmtCreate;
+    }
+
+    public void setGmtCreate(Date gmtCreate) {
+        this.gmtCreate = gmtCreate;
+    }
+
+    public Date getGmtModified() {
+        return gmtModified;
+    }
+
+    public void setGmtModified(Date gmtModified) {
+        this.gmtModified = gmtModified;
     }
 
     public Byte getIsDelete() {

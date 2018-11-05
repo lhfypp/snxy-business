@@ -1,23 +1,13 @@
 package com.snxy.business.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.util.Date;
-@Builder
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+
 public class DirverInfo {
     private Long id;
 
     private Long onlineUserId;
 
     private String drivingLicenseNumber;
-
-    private String qualificationCertificateNumber;
 
     private String drivingLicenseUrl;
 
@@ -49,14 +39,6 @@ public class DirverInfo {
 
     public void setDrivingLicenseNumber(String drivingLicenseNumber) {
         this.drivingLicenseNumber = drivingLicenseNumber;
-    }
-
-    public String getQualificationCertificateNumber() {
-        return qualificationCertificateNumber;
-    }
-
-    public void setQualificationCertificateNumber(String qualificationCertificateNumber) {
-        this.qualificationCertificateNumber = qualificationCertificateNumber;
     }
 
     public String getDrivingLicenseUrl() {

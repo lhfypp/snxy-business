@@ -8,6 +8,8 @@ public class GuaranteeDeposit {
 
     private Long deliveryOrderId;
 
+    private Long onlineUserId;
+
     private BigDecimal guaranteeDeposit;
 
     private Integer status;
@@ -19,6 +21,10 @@ public class GuaranteeDeposit {
     private Integer payMethod;
 
     private Date refundTime;
+
+    private Date gmtCreate;
+
+    private Date gmtModified;
 
     private Byte isDelete;
 
@@ -36,6 +42,14 @@ public class GuaranteeDeposit {
 
     public void setDeliveryOrderId(Long deliveryOrderId) {
         this.deliveryOrderId = deliveryOrderId;
+    }
+
+    public Long getOnlineUserId() {
+        return onlineUserId;
+    }
+
+    public void setOnlineUserId(Long onlineUserId) {
+        this.onlineUserId = onlineUserId;
     }
 
     public BigDecimal getGuaranteeDeposit() {
@@ -84,6 +98,22 @@ public class GuaranteeDeposit {
 
     public void setRefundTime(Date refundTime) {
         this.refundTime = refundTime;
+    }
+
+    public Date getGmtCreate() {
+        return gmtCreate;
+    }
+
+    public void setGmtCreate(Date gmtCreate) {
+        this.gmtCreate = gmtCreate;
+    }
+
+    public Date getGmtModified() {
+        return gmtModified;
+    }
+
+    public void setGmtModified(Date gmtModified) {
+        this.gmtModified = gmtModified;
     }
 
     public Byte getIsDelete() {

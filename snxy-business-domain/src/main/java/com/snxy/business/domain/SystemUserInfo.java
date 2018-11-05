@@ -7,8 +7,6 @@ public class SystemUserInfo {
 
     private Long systemUserId;
 
-    private String identityCardNumber;
-
     private Long departmentId;
 
     private String mobile;
@@ -45,14 +43,6 @@ public class SystemUserInfo {
 
     public void setSystemUserId(Long systemUserId) {
         this.systemUserId = systemUserId;
-    }
-
-    public String getIdentityCardNumber() {
-        return identityCardNumber;
-    }
-
-    public void setIdentityCardNumber(String identityCardNumber) {
-        this.identityCardNumber = identityCardNumber;
     }
 
     public Long getDepartmentId() {

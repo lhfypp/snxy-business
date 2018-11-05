@@ -1,8 +1,5 @@
 package com.snxy.business.biz.util;
 
-import com.snxy.business.service.vo.SystemUserVo;
-import com.snxy.business.service.vo.UserIdentityVo;
-
 import java.util.List;
 
 public class JudgIdentityUtil {

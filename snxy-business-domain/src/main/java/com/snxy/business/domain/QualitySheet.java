@@ -1,17 +1,19 @@
 package com.snxy.business.domain;
 
-import lombok.Builder;
-
 import java.util.Date;
-@Builder
+
 public class QualitySheet {
     private Long id;
 
+    private String code;
+
     private Long deliveryOrderId;
 
-    private Long proposer;
+    private Float weight;
 
-    private Long checkerId;
+    private Long vegetableCategoryId;
+
+    private String categoryName;
 
     private String vehiclePlateNumber;
 
@@ -19,17 +21,17 @@ public class QualitySheet {
 
     private Date checkTime;
 
-    private String url;
-
     private String qrcodeUrl;
+
+    private Integer status;
 
     private Integer qualified;
 
     private String remark;
 
-    private Float weight;
+    private Date gmtCreate;
 
-    private Long vegetableCategoryId;
+    private Date gmtModified;
 
     private Byte isDelete;
 
@@ -41,6 +43,14 @@ public class QualitySheet {
         this.id = id;
     }
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     public Long getDeliveryOrderId() {
         return deliveryOrderId;
     }
@@ -49,20 +59,28 @@ public class QualitySheet {
         this.deliveryOrderId = deliveryOrderId;
     }
 
-    public Long getProposer() {
-        return proposer;
+    public Float getWeight() {
+        return weight;
     }
 
-    public void setProposer(Long proposer) {
-        this.proposer = proposer;
+    public void setWeight(Float weight) {
+        this.weight = weight;
     }
 
-    public Long getCheckerId() {
-        return checkerId;
+    public Long getVegetableCategoryId() {
+        return vegetableCategoryId;
     }
 
-    public void setCheckerId(Long checkerId) {
-        this.checkerId = checkerId;
+    public void setVegetableCategoryId(Long vegetableCategoryId) {
+        this.vegetableCategoryId = vegetableCategoryId;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 
     public String getVehiclePlateNumber() {
@@ -89,20 +107,20 @@ public class QualitySheet {
         this.checkTime = checkTime;
     }
 
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
     public String getQrcodeUrl() {
         return qrcodeUrl;
     }
 
     public void setQrcodeUrl(String qrcodeUrl) {
         this.qrcodeUrl = qrcodeUrl;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public Integer getQualified() {
@@ -121,20 +139,20 @@ public class QualitySheet {
         this.remark = remark;
     }
 
-    public Float getWeight() {
-        return weight;
+    public Date getGmtCreate() {
+        return gmtCreate;
     }
 
-    public void setWeight(Float weight) {
-        this.weight = weight;
+    public void setGmtCreate(Date gmtCreate) {
+        this.gmtCreate = gmtCreate;
     }
 
-    public Long getVegetableCategoryId() {
-        return vegetableCategoryId;
+    public Date getGmtModified() {
+        return gmtModified;
     }
 
-    public void setVegetableCategoryId(Long vegetableCategoryId) {
-        this.vegetableCategoryId = vegetableCategoryId;
+    public void setGmtModified(Date gmtModified) {
+        this.gmtModified = gmtModified;
     }
 
     public Byte getIsDelete() {

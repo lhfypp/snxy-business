@@ -1,5 +1,7 @@
 package com.snxy.business.domain;
 
+import java.util.Date;
+
 public class UserImage {
     private Long id;
 
@@ -7,7 +9,7 @@ public class UserImage {
 
     private String fileType;
 
-    private Long fileSize;
+    private Integer fileSize;
 
     private String fileName;
 
@@ -16,6 +18,10 @@ public class UserImage {
     private String property1;
 
     private String property2;
+
+    private Date gmtCreate;
+
+    private Date gmtModified;
 
     private Byte isDelete;
 
@@ -43,11 +49,11 @@ public class UserImage {
         this.fileType = fileType;
     }
 
-    public Long getFileSize() {
+    public Integer getFileSize() {
         return fileSize;
     }
 
-    public void setFileSize(Long fileSize) {
+    public void setFileSize(Integer fileSize) {
         this.fileSize = fileSize;
     }
 
@@ -81,6 +87,22 @@ public class UserImage {
 
     public void setProperty2(String property2) {
         this.property2 = property2;
+    }
+
+    public Date getGmtCreate() {
+        return gmtCreate;
+    }
+
+    public void setGmtCreate(Date gmtCreate) {
+        this.gmtCreate = gmtCreate;
+    }
+
+    public Date getGmtModified() {
+        return gmtModified;
+    }
+
+    public void setGmtModified(Date gmtModified) {
+        this.gmtModified = gmtModified;
     }
 
     public Byte getIsDelete() {

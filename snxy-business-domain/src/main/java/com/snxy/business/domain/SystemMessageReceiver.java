@@ -13,6 +13,10 @@ public class SystemMessageReceiver {
 
     private Date readTime;
 
+    private Date gmtCreate;
+
+    private Date gmtModified;
+
     private Byte isDelete;
 
     public Long getId() {
@@ -53,6 +57,22 @@ public class SystemMessageReceiver {
 
     public void setReadTime(Date readTime) {
         this.readTime = readTime;
+    }
+
+    public Date getGmtCreate() {
+        return gmtCreate;
+    }
+
+    public void setGmtCreate(Date gmtCreate) {
+        this.gmtCreate = gmtCreate;
+    }
+
+    public Date getGmtModified() {
+        return gmtModified;
+    }
+
+    public void setGmtModified(Date gmtModified) {
+        this.gmtModified = gmtModified;
     }
 
     public Byte getIsDelete() {

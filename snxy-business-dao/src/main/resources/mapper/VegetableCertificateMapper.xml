@@ -8,10 +8,14 @@
     <result column="upload_time" jdbcType="TIMESTAMP" property="uploadTime" />
     <result column="certificate_type" jdbcType="INTEGER" property="certificateType" />
     <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="xfd_certificate" jdbcType="INTEGER" property="xfdCertificate" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
     <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, delivery_order_id, url, upload_time, certificate_type, status, is_delete
+    id, delivery_order_id, url, upload_time, certificate_type, status, xfd_certificate, 
+    gmt_create, gmt_modified, is_delete
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -19,14 +23,6 @@
     from vegetable_certificate
     where id = #{id,jdbcType=BIGINT}
   </select>
-
-  <select id="selectByOrderId" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select
-    url,certificate_type
-    from vegetable_certificate
-    where delivery_order_id = #{id,jdbcType=BIGINT}
-  </select>
-
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from vegetable_certificate
     where id = #{id,jdbcType=BIGINT}
@@ -36,31 +32,14 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into vegetable_certificate (delivery_order_id, url, upload_time, 
-      certificate_type, status, is_delete
+      certificate_type, status, xfd_certificate, 
+      gmt_create, gmt_modified, is_delete
       )
     values (#{deliveryOrderId,jdbcType=BIGINT}, #{url,jdbcType=VARCHAR}, #{uploadTime,jdbcType=TIMESTAMP}, 
-      #{certificateType,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{isDelete,jdbcType=TINYINT}
+      #{certificateType,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{xfdCertificate,jdbcType=INTEGER}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=TINYINT}
       )
   </insert>
-
-  <insert id="insertImageList">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into vegetable_certificate (delivery_order_id, url, upload_time,certificate_type, status, is_delete)
-    values
-    <foreach collection="vegetableCertificateList" item="vegetableCertificate" separator=",">
-      (
-      #{vegetableCertificate.deliveryOrderId},
-      #{vegetableCertificate.url},
-      #{vegetableCertificate.uploadTime},
-      #{vegetableCertificate.certificateType},
-      #{vegetableCertificate.status},
-      #{vegetableCertificate.isDelete}
-      )
-    </foreach>
-  </insert>
-
   <insert id="insertSelective" parameterType="com.snxy.business.domain.VegetableCertificate">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
@@ -82,6 +61,15 @@
       <if test="status != null">
         status,
       </if>
+      <if test="xfdCertificate != null">
+        xfd_certificate,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
       <if test="isDelete != null">
         is_delete,
       </if>
@@ -101,6 +89,15 @@
       </if>
       <if test="status != null">
         #{status,jdbcType=INTEGER},
+      </if>
+      <if test="xfdCertificate != null">
+        #{xfdCertificate,jdbcType=INTEGER},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
       </if>
       <if test="isDelete != null">
         #{isDelete,jdbcType=TINYINT},
@@ -125,6 +122,15 @@
       <if test="status != null">
         status = #{status,jdbcType=INTEGER},
       </if>
+      <if test="xfdCertificate != null">
+        xfd_certificate = #{xfdCertificate,jdbcType=INTEGER},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
       <if test="isDelete != null">
         is_delete = #{isDelete,jdbcType=TINYINT},
       </if>
@@ -138,17 +144,10 @@
       upload_time = #{uploadTime,jdbcType=TIMESTAMP},
       certificate_type = #{certificateType,jdbcType=INTEGER},
       status = #{status,jdbcType=INTEGER},
+      xfd_certificate = #{xfdCertificate,jdbcType=INTEGER},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <resultMap id="selectListByOrderId" type="com.snxy.business.domain.Valication">
-    <result column="url" jdbcType="VARCHAR" property="url" />
-    <result column="certificate_type" jdbcType="INTEGER" property="certificateType" />
-  </resultMap>
-  <select id="selectListByOrderId" parameterType="java.lang.Long">
-    select
-    url,certificate_type
-    from vegetable_certificate
-    where delivery_order_id = #{deliveryOrderId}
-  </select>
 </mapper>

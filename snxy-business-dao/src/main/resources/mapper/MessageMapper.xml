@@ -11,10 +11,13 @@
     <result column="url" jdbcType="VARCHAR" property="url" />
     <result column="importance_level" jdbcType="INTEGER" property="importanceLevel" />
     <result column="is_top" jdbcType="INTEGER" property="isTop" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
     <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, title, content, remark, sender, has_picture, url, importance_level, is_top, is_delete
+    id, title, content, remark, sender, has_picture, url, importance_level, is_top, gmt_create, 
+    gmt_modified, is_delete
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -32,12 +35,12 @@
     </selectKey>
     insert into message (title, content, remark, 
       sender, has_picture, url, 
-      importance_level, is_top, is_delete
-      )
+      importance_level, is_top, gmt_create, 
+      gmt_modified, is_delete)
     values (#{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
       #{sender,jdbcType=BIGINT}, #{hasPicture,jdbcType=INTEGER}, #{url,jdbcType=VARCHAR}, 
-      #{importanceLevel,jdbcType=INTEGER}, #{isTop,jdbcType=INTEGER}, #{isDelete,jdbcType=TINYINT}
-      )
+      #{importanceLevel,jdbcType=INTEGER}, #{isTop,jdbcType=INTEGER}, #{gmtCreate,jdbcType=TIMESTAMP}, 
+      #{gmtModified,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.snxy.business.domain.Message">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -69,6 +72,12 @@
       <if test="isTop != null">
         is_top,
       </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
       <if test="isDelete != null">
         is_delete,
       </if>
@@ -97,6 +106,12 @@
       </if>
       <if test="isTop != null">
         #{isTop,jdbcType=INTEGER},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
       </if>
       <if test="isDelete != null">
         #{isDelete,jdbcType=TINYINT},
@@ -130,6 +145,12 @@
       <if test="isTop != null">
         is_top = #{isTop,jdbcType=INTEGER},
       </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
       <if test="isDelete != null">
         is_delete = #{isDelete,jdbcType=TINYINT},
       </if>
@@ -146,6 +167,8 @@
       url = #{url,jdbcType=VARCHAR},
       importance_level = #{importanceLevel,jdbcType=INTEGER},
       is_top = #{isTop,jdbcType=INTEGER},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>

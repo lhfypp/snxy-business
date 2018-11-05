@@ -9,15 +9,11 @@ public class Vehicle {
 
     private String plateNumber;
 
-    private Long truckTypeId;
+    private Long entranceFeeCapacityId;
 
     private String vehicleDrivingLicenseNumber;
 
     private String vehicleDrivingLicenseUrl;
-
-    private String vehicleUrl;
-
-    private String operationCertificate;
 
     private String tonnage;
 
@@ -53,12 +49,12 @@ public class Vehicle {
         this.plateNumber = plateNumber;
     }
 
-    public Long getTruckTypeId() {
-        return truckTypeId;
+    public Long getEntranceFeeCapacityId() {
+        return entranceFeeCapacityId;
     }
 
-    public void setTruckTypeId(Long truckTypeId) {
-        this.truckTypeId = truckTypeId;
+    public void setEntranceFeeCapacityId(Long entranceFeeCapacityId) {
+        this.entranceFeeCapacityId = entranceFeeCapacityId;
     }
 
     public String getVehicleDrivingLicenseNumber() {
@@ -75,22 +71,6 @@ public class Vehicle {
 
     public void setVehicleDrivingLicenseUrl(String vehicleDrivingLicenseUrl) {
         this.vehicleDrivingLicenseUrl = vehicleDrivingLicenseUrl;
-    }
-
-    public String getVehicleUrl() {
-        return vehicleUrl;
-    }
-
-    public void setVehicleUrl(String vehicleUrl) {
-        this.vehicleUrl = vehicleUrl;
-    }
-
-    public String getOperationCertificate() {
-        return operationCertificate;
-    }
-
-    public void setOperationCertificate(String operationCertificate) {
-        this.operationCertificate = operationCertificate;
     }
 
     public String getTonnage() {

@@ -1,5 +1,7 @@
 package com.snxy.business.domain;
 
+import java.util.Date;
+
 public class Message {
     private Long id;
 
@@ -18,6 +20,10 @@ public class Message {
     private Integer importanceLevel;
 
     private Integer isTop;
+
+    private Date gmtCreate;
+
+    private Date gmtModified;
 
     private Byte isDelete;
 
@@ -91,6 +97,22 @@ public class Message {
 
     public void setIsTop(Integer isTop) {
         this.isTop = isTop;
+    }
+
+    public Date getGmtCreate() {
+        return gmtCreate;
+    }
+
+    public void setGmtCreate(Date gmtCreate) {
+        this.gmtCreate = gmtCreate;
+    }
+
+    public Date getGmtModified() {
+        return gmtModified;
+    }
+
+    public void setGmtModified(Date gmtModified) {
+        this.gmtModified = gmtModified;
     }
 
     public Byte getIsDelete() {

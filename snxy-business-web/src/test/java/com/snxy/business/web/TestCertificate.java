@@ -1,7 +1,6 @@
 package com.snxy.business.web;
 
 import com.alibaba.fastjson.JSON;
-import com.snxy.business.service.vo.CertificateVo;
 
 public class TestCertificate {
     public static void main(String[] args) {

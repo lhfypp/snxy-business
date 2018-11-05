@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.snxy.business.dao.mapper.SysRoleMenuMapper">
+  <resultMap id="BaseResultMap" type="com.snxy.business.domain.SysRoleMenu">
+    <result column="sys_role_id" jdbcType="BIGINT" property="sysRoleId" />
+    <result column="sys_menu_id" jdbcType="BIGINT" property="sysMenuId" />
+    <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+  </resultMap>
+  <insert id="insert" parameterType="com.snxy.business.domain.SysRoleMenu">
+    insert into sys_role_menu (sys_role_id, sys_menu_id, is_delete
+      )
+    values (#{sysRoleId,jdbcType=BIGINT}, #{sysMenuId,jdbcType=BIGINT}, #{isDelete,jdbcType=TINYINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.snxy.business.domain.SysRoleMenu">
+    insert into sys_role_menu
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="sysRoleId != null">
+        sys_role_id,
+      </if>
+      <if test="sysMenuId != null">
+        sys_menu_id,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="sysRoleId != null">
+        #{sysRoleId,jdbcType=BIGINT},
+      </if>
+      <if test="sysMenuId != null">
+        #{sysMenuId,jdbcType=BIGINT},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+</mapper>

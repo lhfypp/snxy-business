@@ -7,10 +7,12 @@
     <result column="receiver_id" jdbcType="BIGINT" property="receiverId" />
     <result column="is_read" jdbcType="INTEGER" property="isRead" />
     <result column="read_time" jdbcType="TIMESTAMP" property="readTime" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
     <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, message_id, receiver_id, is_read, read_time, is_delete
+    id, message_id, receiver_id, is_read, read_time, gmt_create, gmt_modified, is_delete
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -27,9 +29,11 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into system_message_receiver (message_id, receiver_id, is_read, 
-      read_time, is_delete)
+      read_time, gmt_create, gmt_modified, 
+      is_delete)
     values (#{messageId,jdbcType=BIGINT}, #{receiverId,jdbcType=BIGINT}, #{isRead,jdbcType=INTEGER}, 
-      #{readTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=TINYINT})
+      #{readTime,jdbcType=TIMESTAMP}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, 
+      #{isDelete,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.snxy.business.domain.SystemMessageReceiver">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -49,6 +53,12 @@
       <if test="readTime != null">
         read_time,
       </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
       <if test="isDelete != null">
         is_delete,
       </if>
@@ -65,6 +75,12 @@
       </if>
       <if test="readTime != null">
         #{readTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
       </if>
       <if test="isDelete != null">
         #{isDelete,jdbcType=TINYINT},
@@ -86,6 +102,12 @@
       <if test="readTime != null">
         read_time = #{readTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
       <if test="isDelete != null">
         is_delete = #{isDelete,jdbcType=TINYINT},
       </if>
@@ -98,6 +120,8 @@
       receiver_id = #{receiverId,jdbcType=BIGINT},
       is_read = #{isRead,jdbcType=INTEGER},
       read_time = #{readTime,jdbcType=TIMESTAMP},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>

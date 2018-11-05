@@ -11,19 +11,15 @@ public class SystemUser {
 
     private String chineseName;
 
-    private String nick;
-
     private String pwd;
 
-    private Byte gender;
-
     private Date regDate;
+
+    private Byte accountStatus;
 
     private Date gmtCreate;
 
     private Date gmtModified;
-
-    private Byte accountStatus;
 
     private Byte isDelete;
 
@@ -59,14 +55,6 @@ public class SystemUser {
         this.chineseName = chineseName;
     }
 
-    public String getNick() {
-        return nick;
-    }
-
-    public void setNick(String nick) {
-        this.nick = nick;
-    }
-
     public String getPwd() {
         return pwd;
     }
@@ -75,20 +63,20 @@ public class SystemUser {
         this.pwd = pwd;
     }
 
-    public Byte getGender() {
-        return gender;
-    }
-
-    public void setGender(Byte gender) {
-        this.gender = gender;
-    }
-
     public Date getRegDate() {
         return regDate;
     }
 
     public void setRegDate(Date regDate) {
         this.regDate = regDate;
+    }
+
+    public Byte getAccountStatus() {
+        return accountStatus;
+    }
+
+    public void setAccountStatus(Byte accountStatus) {
+        this.accountStatus = accountStatus;
     }
 
     public Date getGmtCreate() {
@@ -105,14 +93,6 @@ public class SystemUser {
 
     public void setGmtModified(Date gmtModified) {
         this.gmtModified = gmtModified;
-    }
-
-    public Byte getAccountStatus() {
-        return accountStatus;
-    }
-
-    public void setAccountStatus(Byte accountStatus) {
-        this.accountStatus = accountStatus;
     }
 
     public Byte getIsDelete() {

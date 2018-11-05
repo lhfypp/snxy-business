@@ -1,12 +1,15 @@
 package com.snxy.business.domain;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class DeliveryOrder {
     private Long id;
 
     private String orderNo;
+
+    private Long creatorId;
+
+    private String creator;
 
     private String senderName;
 
@@ -17,6 +20,16 @@ public class DeliveryOrder {
     private String receiverName;
 
     private String receiverCompany;
+
+    private Long onlineUserId;
+
+    private String driverName;
+
+    private String driverMobile;
+
+    private Long vehicleId;
+
+    private String driverPlateNumber;
 
     private Date driverLeaveTime;
 
@@ -38,28 +51,19 @@ public class DeliveryOrder {
 
     private Integer qualityCertificate;
 
+    private String qrcodeUrl;
+
+    private Integer isAuthPay;
+
+    private Integer infoIntegrity;
+
+    private Integer status;
+
     private Date gmtCreate;
 
     private Date gmtModified;
 
-    private BigDecimal deliveryFee;
-
-    private String qrcodeUrl;
-
-    //待接单0，取消1，已接单2，装货完成3，运输中4，检测中5，合格关闭6，不合格关闭7 -- 被遣离8
-    private Integer status;
-
     private Byte isDelete;
-
-    private Integer truckTypeId;
-
-    public Integer getTruckTypeId() {
-        return truckTypeId;
-    }
-
-    public void setTruckTypeId(Integer truckTypeId) {
-        this.truckTypeId = truckTypeId;
-    }
 
     public Long getId() {
         return id;
@@ -75,6 +79,22 @@ public class DeliveryOrder {
 
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo;
+    }
+
+    public Long getCreatorId() {
+        return creatorId;
+    }
+
+    public void setCreatorId(Long creatorId) {
+        this.creatorId = creatorId;
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
     }
 
     public String getSenderName() {
@@ -115,6 +135,46 @@ public class DeliveryOrder {
 
     public void setReceiverCompany(String receiverCompany) {
         this.receiverCompany = receiverCompany;
+    }
+
+    public Long getOnlineUserId() {
+        return onlineUserId;
+    }
+
+    public void setOnlineUserId(Long onlineUserId) {
+        this.onlineUserId = onlineUserId;
+    }
+
+    public String getDriverName() {
+        return driverName;
+    }
+
+    public void setDriverName(String driverName) {
+        this.driverName = driverName;
+    }
+
+    public String getDriverMobile() {
+        return driverMobile;
+    }
+
+    public void setDriverMobile(String driverMobile) {
+        this.driverMobile = driverMobile;
+    }
+
+    public Long getVehicleId() {
+        return vehicleId;
+    }
+
+    public void setVehicleId(Long vehicleId) {
+        this.vehicleId = vehicleId;
+    }
+
+    public String getDriverPlateNumber() {
+        return driverPlateNumber;
+    }
+
+    public void setDriverPlateNumber(String driverPlateNumber) {
+        this.driverPlateNumber = driverPlateNumber;
     }
 
     public Date getDriverLeaveTime() {
@@ -197,6 +257,38 @@ public class DeliveryOrder {
         this.qualityCertificate = qualityCertificate;
     }
 
+    public String getQrcodeUrl() {
+        return qrcodeUrl;
+    }
+
+    public void setQrcodeUrl(String qrcodeUrl) {
+        this.qrcodeUrl = qrcodeUrl;
+    }
+
+    public Integer getIsAuthPay() {
+        return isAuthPay;
+    }
+
+    public void setIsAuthPay(Integer isAuthPay) {
+        this.isAuthPay = isAuthPay;
+    }
+
+    public Integer getInfoIntegrity() {
+        return infoIntegrity;
+    }
+
+    public void setInfoIntegrity(Integer infoIntegrity) {
+        this.infoIntegrity = infoIntegrity;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
     public Date getGmtCreate() {
         return gmtCreate;
     }
@@ -211,30 +303,6 @@ public class DeliveryOrder {
 
     public void setGmtModified(Date gmtModified) {
         this.gmtModified = gmtModified;
-    }
-
-    public BigDecimal getDeliveryFee() {
-        return deliveryFee;
-    }
-
-    public void setDeliveryFee(BigDecimal deliveryFee) {
-        this.deliveryFee = deliveryFee;
-    }
-
-    public String getQrcodeUrl() {
-        return qrcodeUrl;
-    }
-
-    public void setQrcodeUrl(String qrcodeUrl) {
-        this.qrcodeUrl = qrcodeUrl;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
     }
 
     public Byte getIsDelete() {

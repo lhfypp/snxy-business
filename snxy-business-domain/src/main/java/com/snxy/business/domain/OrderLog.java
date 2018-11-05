@@ -1,5 +1,7 @@
 package com.snxy.business.domain;
 
+import java.util.Date;
+
 public class OrderLog {
     private Long id;
 
@@ -14,6 +16,10 @@ public class OrderLog {
     private String operationDesc;
 
     private String remark;
+
+    private Date gmtCreate;
+
+    private Date gmtModified;
 
     private Byte isDelete;
 
@@ -71,6 +77,22 @@ public class OrderLog {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public Date getGmtCreate() {
+        return gmtCreate;
+    }
+
+    public void setGmtCreate(Date gmtCreate) {
+        this.gmtCreate = gmtCreate;
+    }
+
+    public Date getGmtModified() {
+        return gmtModified;
+    }
+
+    public void setGmtModified(Date gmtModified) {
+        this.gmtModified = gmtModified;
     }
 
     public Byte getIsDelete() {

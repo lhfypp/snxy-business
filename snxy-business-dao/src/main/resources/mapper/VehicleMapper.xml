@@ -5,11 +5,9 @@
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="driver_info_id" jdbcType="BIGINT" property="driverInfoId" />
     <result column="plate_number" jdbcType="VARCHAR" property="plateNumber" />
-    <result column="truck_type_id" jdbcType="BIGINT" property="truckTypeId" />
+    <result column="entrance_fee_capacity_id" jdbcType="BIGINT" property="entranceFeeCapacityId" />
     <result column="vehicle_driving_license_number" jdbcType="VARCHAR" property="vehicleDrivingLicenseNumber" />
     <result column="vehicle_driving_license_url" jdbcType="VARCHAR" property="vehicleDrivingLicenseUrl" />
-    <result column="vehicle_url" jdbcType="VARCHAR" property="vehicleUrl" />
-    <result column="operation_certificate" jdbcType="VARCHAR" property="operationCertificate" />
     <result column="tonnage" jdbcType="VARCHAR" property="tonnage" />
     <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
     <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
@@ -17,9 +15,8 @@
     <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, driver_info_id, plate_number, truck_type_id, vehicle_driving_license_number, 
-    vehicle_driving_license_url, vehicle_url, operation_certificate, tonnage, gmt_create, 
-    gmt_modified, online_user_id, is_delete
+    id, driver_info_id, plate_number, entrance_fee_capacity_id, vehicle_driving_license_number, 
+    vehicle_driving_license_url, tonnage, gmt_create, gmt_modified, online_user_id, is_delete
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -35,16 +32,14 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into vehicle (driver_info_id, plate_number, truck_type_id, 
+    insert into vehicle (driver_info_id, plate_number, entrance_fee_capacity_id, 
       vehicle_driving_license_number, vehicle_driving_license_url, 
-      vehicle_url, operation_certificate, tonnage, 
-      gmt_create, gmt_modified, online_user_id, 
-      is_delete)
-    values (#{driverInfoId,jdbcType=BIGINT}, #{plateNumber,jdbcType=VARCHAR}, #{truckTypeId,jdbcType=BIGINT}, 
+      tonnage, gmt_create, gmt_modified, 
+      online_user_id, is_delete)
+    values (#{driverInfoId,jdbcType=BIGINT}, #{plateNumber,jdbcType=VARCHAR}, #{entranceFeeCapacityId,jdbcType=BIGINT}, 
       #{vehicleDrivingLicenseNumber,jdbcType=VARCHAR}, #{vehicleDrivingLicenseUrl,jdbcType=VARCHAR}, 
-      #{vehicleUrl,jdbcType=VARCHAR}, #{operationCertificate,jdbcType=VARCHAR}, #{tonnage,jdbcType=VARCHAR}, 
-      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, #{onlineUserId,jdbcType=BIGINT}, 
-      #{isDelete,jdbcType=TINYINT})
+      #{tonnage,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, 
+      #{onlineUserId,jdbcType=BIGINT}, #{isDelete,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.snxy.business.domain.Vehicle">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -58,20 +53,14 @@
       <if test="plateNumber != null">
         plate_number,
       </if>
-      <if test="truckTypeId != null">
-        truck_type_id,
+      <if test="entranceFeeCapacityId != null">
+        entrance_fee_capacity_id,
       </if>
       <if test="vehicleDrivingLicenseNumber != null">
         vehicle_driving_license_number,
       </if>
       <if test="vehicleDrivingLicenseUrl != null">
         vehicle_driving_license_url,
-      </if>
-      <if test="vehicleUrl != null">
-        vehicle_url,
-      </if>
-      <if test="operationCertificate != null">
-        operation_certificate,
       </if>
       <if test="tonnage != null">
         tonnage,
@@ -96,20 +85,14 @@
       <if test="plateNumber != null">
         #{plateNumber,jdbcType=VARCHAR},
       </if>
-      <if test="truckTypeId != null">
-        #{truckTypeId,jdbcType=BIGINT},
+      <if test="entranceFeeCapacityId != null">
+        #{entranceFeeCapacityId,jdbcType=BIGINT},
       </if>
       <if test="vehicleDrivingLicenseNumber != null">
         #{vehicleDrivingLicenseNumber,jdbcType=VARCHAR},
       </if>
       <if test="vehicleDrivingLicenseUrl != null">
         #{vehicleDrivingLicenseUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="vehicleUrl != null">
-        #{vehicleUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="operationCertificate != null">
-        #{operationCertificate,jdbcType=VARCHAR},
       </if>
       <if test="tonnage != null">
         #{tonnage,jdbcType=VARCHAR},
@@ -137,20 +120,14 @@
       <if test="plateNumber != null">
         plate_number = #{plateNumber,jdbcType=VARCHAR},
       </if>
-      <if test="truckTypeId != null">
-        truck_type_id = #{truckTypeId,jdbcType=BIGINT},
+      <if test="entranceFeeCapacityId != null">
+        entrance_fee_capacity_id = #{entranceFeeCapacityId,jdbcType=BIGINT},
       </if>
       <if test="vehicleDrivingLicenseNumber != null">
         vehicle_driving_license_number = #{vehicleDrivingLicenseNumber,jdbcType=VARCHAR},
       </if>
       <if test="vehicleDrivingLicenseUrl != null">
         vehicle_driving_license_url = #{vehicleDrivingLicenseUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="vehicleUrl != null">
-        vehicle_url = #{vehicleUrl,jdbcType=VARCHAR},
-      </if>
-      <if test="operationCertificate != null">
-        operation_certificate = #{operationCertificate,jdbcType=VARCHAR},
       </if>
       <if test="tonnage != null">
         tonnage = #{tonnage,jdbcType=VARCHAR},
@@ -174,11 +151,9 @@
     update vehicle
     set driver_info_id = #{driverInfoId,jdbcType=BIGINT},
       plate_number = #{plateNumber,jdbcType=VARCHAR},
-      truck_type_id = #{truckTypeId,jdbcType=BIGINT},
+      entrance_fee_capacity_id = #{entranceFeeCapacityId,jdbcType=BIGINT},
       vehicle_driving_license_number = #{vehicleDrivingLicenseNumber,jdbcType=VARCHAR},
       vehicle_driving_license_url = #{vehicleDrivingLicenseUrl,jdbcType=VARCHAR},
-      vehicle_url = #{vehicleUrl,jdbcType=VARCHAR},
-      operation_certificate = #{operationCertificate,jdbcType=VARCHAR},
       tonnage = #{tonnage,jdbcType=VARCHAR},
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
@@ -186,33 +161,4 @@
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <!-- 司机查看自己的车辆信息 start -->
-  <resultMap id="VehiclePartInfo" type="com.snxy.business.domain.VehiclePartInfo">
-    <result column="plate_number" jdbcType="VARCHAR" property="plateNumber" />
-    <result column="type_desc" jdbcType="VARCHAR" property="carTypeDesc" />
-    <result column="vehicle_id" jdbcType="VARCHAR" property="vehicleId" />
-
-  </resultMap>
-  <sql id="selectVehiclePartInfo">
-    b.plate_number as plate_number,c.type_desc as type_desc,b.id as vehicle_id
-  </sql>
-  <select id="searchVehiclePartInfo" parameterType="java.lang.Long" resultMap="VehiclePartInfo">
-select
-<include refid="selectVehiclePartInfo"/>
-    from
-      dirver_info a ,
-
-      vehicle     b left join truck_type c on b.truck_type_id=c.id
-
-    where   a.id=b.driver_info_id
-      and  a.online_user_id=#{onlineUserId}
-
-  </select>
-  <!-- 司机查看自己的车辆信息 end -->
-  
-  <select id="searchVehicleList" resultMap="BaseResultMap">
-    SELECT *
-        FROM vehicle
-         WHERE driver_info_id=#{driverInfoId}
-  </select>
 </mapper>

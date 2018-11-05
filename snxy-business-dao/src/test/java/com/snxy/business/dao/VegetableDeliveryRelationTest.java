@@ -1,9 +1,6 @@
 package com.snxy.business.dao;
 
 
-import com.snxy.business.dao.mapper.VegetableDeliveryRelationMapper;
-import com.snxy.business.domain.Goods;
-import com.snxy.business.domain.VegetableDeliveryRelation;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;

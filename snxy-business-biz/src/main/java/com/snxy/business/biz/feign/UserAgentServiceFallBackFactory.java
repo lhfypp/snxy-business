@@ -1,7 +1,5 @@
 package com.snxy.business.biz.feign;
 
-import com.snxy.business.service.vo.LoginUserVO;
-import com.snxy.business.service.vo.SystemUserVo;
 import com.snxy.common.response.ResultData;
 
 import org.springframework.stereotype.Component;

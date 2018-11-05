@@ -9,11 +9,13 @@
     <result column="height" jdbcType="REAL" property="height" />
     <result column="online_user_id" jdbcType="BIGINT" property="onlineUserId" />
     <result column="collection_time" jdbcType="TIMESTAMP" property="collectionTime" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
     <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
   </resultMap>
   <sql id="Base_Column_List">
     id, delivery_order_id, longitude, latitude, height, online_user_id, collection_time, 
-    is_delete
+    gmt_create, gmt_modified, is_delete
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -21,25 +23,6 @@
     from vehicle_gps_record
     where id = #{id,jdbcType=BIGINT}
   </select>
-
-  <!--下载GPS-->
-  <resultMap id="GPSResultMap" type="com.snxy.business.domain.GPSLocation">
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="longitude" jdbcType="REAL" property="longitude" />
-    <result column="latitude" jdbcType="REAL" property="latitude" />
-    <result column="height" jdbcType="REAL" property="height" />
-    <result column="collection_time" jdbcType="TIMESTAMP" property="collectionTime" />
-  </resultMap>
-  <sql id="GPS_Column_List">
-    longitude, latitude, height,collection_time
-  </sql>
-  <select id="selectByDeviveryOrderId" parameterType="java.lang.Long" resultMap="GPSResultMap">
-    SELECT
-    <include refid="GPS_Column_List"/>
-    from vehicle_gps_record
-    where delivery_order_id = #{deliveryOrderId}
-  </select>
-
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from vehicle_gps_record
     where id = #{id,jdbcType=BIGINT}
@@ -50,10 +33,12 @@
     </selectKey>
     insert into vehicle_gps_record (delivery_order_id, longitude, latitude, 
       height, online_user_id, collection_time, 
-      is_delete)
+      gmt_create, gmt_modified, is_delete
+      )
     values (#{deliveryOrderId,jdbcType=BIGINT}, #{longitude,jdbcType=REAL}, #{latitude,jdbcType=REAL}, 
       #{height,jdbcType=REAL}, #{onlineUserId,jdbcType=BIGINT}, #{collectionTime,jdbcType=TIMESTAMP}, 
-      #{isDelete,jdbcType=TINYINT})
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=TINYINT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.snxy.business.domain.VehicleGpsRecord">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -79,6 +64,12 @@
       <if test="collectionTime != null">
         collection_time,
       </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
       <if test="isDelete != null">
         is_delete,
       </if>
@@ -101,6 +92,12 @@
       </if>
       <if test="collectionTime != null">
         #{collectionTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
       </if>
       <if test="isDelete != null">
         #{isDelete,jdbcType=TINYINT},
@@ -128,6 +125,12 @@
       <if test="collectionTime != null">
         collection_time = #{collectionTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
       <if test="isDelete != null">
         is_delete = #{isDelete,jdbcType=TINYINT},
       </if>
@@ -142,6 +145,8 @@
       height = #{height,jdbcType=REAL},
       online_user_id = #{onlineUserId,jdbcType=BIGINT},
       collection_time = #{collectionTime,jdbcType=TIMESTAMP},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>

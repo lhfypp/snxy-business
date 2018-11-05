@@ -17,6 +17,10 @@ public class VehicleGpsRecord {
 
     private Date collectionTime;
 
+    private Date gmtCreate;
+
+    private Date gmtModified;
+
     private Byte isDelete;
 
     public Long getId() {
@@ -73,6 +77,22 @@ public class VehicleGpsRecord {
 
     public void setCollectionTime(Date collectionTime) {
         this.collectionTime = collectionTime;
+    }
+
+    public Date getGmtCreate() {
+        return gmtCreate;
+    }
+
+    public void setGmtCreate(Date gmtCreate) {
+        this.gmtCreate = gmtCreate;
+    }
+
+    public Date getGmtModified() {
+        return gmtModified;
+    }
+
+    public void setGmtModified(Date gmtModified) {
+        this.gmtModified = gmtModified;
     }
 
     public Byte getIsDelete() {

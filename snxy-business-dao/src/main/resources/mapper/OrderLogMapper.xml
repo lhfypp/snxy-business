@@ -9,11 +9,13 @@
     <result column="operator_name" jdbcType="VARCHAR" property="operatorName" />
     <result column="operation_desc" jdbcType="VARCHAR" property="operationDesc" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
     <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
   </resultMap>
   <sql id="Base_Column_List">
     id, delivery_order_id, status, operator_id, operator_name, operation_desc, remark, 
-    is_delete
+    gmt_create, gmt_modified, is_delete
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -31,10 +33,12 @@
     </selectKey>
     insert into order_log (delivery_order_id, status, operator_id, 
       operator_name, operation_desc, remark, 
-      is_delete)
+      gmt_create, gmt_modified, is_delete
+      )
     values (#{deliveryOrderId,jdbcType=BIGINT}, #{status,jdbcType=INTEGER}, #{operatorId,jdbcType=BIGINT}, 
       #{operatorName,jdbcType=VARCHAR}, #{operationDesc,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
-      #{isDelete,jdbcType=TINYINT})
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=TINYINT}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.snxy.business.domain.OrderLog">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -60,6 +64,12 @@
       <if test="remark != null">
         remark,
       </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
       <if test="isDelete != null">
         is_delete,
       </if>
@@ -82,6 +92,12 @@
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
       </if>
       <if test="isDelete != null">
         #{isDelete,jdbcType=TINYINT},
@@ -109,6 +125,12 @@
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
       </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
       <if test="isDelete != null">
         is_delete = #{isDelete,jdbcType=TINYINT},
       </if>
@@ -123,6 +145,8 @@
       operator_name = #{operatorName,jdbcType=VARCHAR},
       operation_desc = #{operationDesc,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
