@@ -1,6 +1,7 @@
 package com.snxy.business.web.config;
 
 import com.alibaba.fastjson.JSONObject;
+import com.snxy.business.service.vo.SystemUserVO;
 import com.snxy.common.response.ResultData;
 
 import lombok.Data;
