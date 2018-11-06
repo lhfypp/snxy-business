@@ -23,16 +23,16 @@
     delete from company_user_relation
     where id = #{id,jdbcType=BIGINT}
   </delete>
+
+  <!--商户负责人完善公司信息绑定-->
   <insert id="insert" parameterType="com.snxy.business.domain.CompanyUserRelation">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into company_user_relation (company_id, onlline_user_id, is_responsible, 
-      gmt_create, gmt_modifed, is_delete
-      )
-    values (#{companyId,jdbcType=BIGINT}, #{onllineUserId,jdbcType=BIGINT}, #{isResponsible,jdbcType=INTEGER}, 
-      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModifed,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=TINYINT}
-      )
+      gmt_create, gmt_modifed)
+    values (#{companyId}, #{onllineUserId}, #{isResponsible},
+      #{gmtCreate}, #{gmtModifed})
   </insert>
   <insert id="insertSelective" parameterType="com.snxy.business.domain.CompanyUserRelation">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">

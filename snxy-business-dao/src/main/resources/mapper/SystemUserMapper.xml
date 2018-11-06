@@ -153,7 +153,7 @@
 
   <!--添加用户姓名W-->
   <update id="updateNameByPrimaryKey">
-    UPDATE SYSTEM_USER
+    UPDATE system_user
     set chinese_name = #{name},
       gmt_modified = #{date}
     where id = #{systemUserId}

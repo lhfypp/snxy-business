@@ -1,5 +1,7 @@
 package com.snxy.business.dao.mapper;
 
+import com.snxy.business.domain.Dept;
+
 public interface DeptMapper {
     int deleteByPrimaryKey(Integer sid);
 
