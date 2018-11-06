@@ -46,7 +46,7 @@ public class SystemUserInterceptor implements HandlerInterceptor {
         if (StringUtils.isEmpty(userJson)) {
             ///TODO 正式系统需要设置false,并且返回验证信息
             if (localDebug == true) {
-                setDebugSystemUser(  request);
+                this.setDebugSystemUser(  request);
                 return true;
             }
             ResultData<String> errorResult = ResultData.fail("没有用户信息,请求被拒绝", 401);

@@ -1,82 +1,88 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.snxy.business.dao.mapper.UserIdentityMapper">
-  <resultMap id="BaseResultMap" type="com.snxy.business.domain.UserIdentity">
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="online_user_id" jdbcType="TINYINT" property="onlineUserId" />
-    <result column="identity_id" jdbcType="INTEGER" property="identityId" />
-    <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
-  </resultMap>
-  <sql id="Base_Column_List">
+    <resultMap id="BaseResultMap" type="com.snxy.business.domain.UserIdentity">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="online_user_id" jdbcType="TINYINT" property="onlineUserId"/>
+        <result column="identity_id" jdbcType="INTEGER" property="identityId"/>
+        <result column="is_delete" jdbcType="TINYINT" property="isDelete"/>
+    </resultMap>
+    <sql id="Base_Column_List">
     id, online_user_id, identity_id, is_delete
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from user_identity
-    where id = #{id,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from user_identity
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from user_identity
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.snxy.business.domain.UserIdentity">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into user_identity (online_user_id, identity_id, is_delete
-      )
-    values (#{onlineUserId,jdbcType=TINYINT}, #{identityId,jdbcType=INTEGER}, #{isDelete,jdbcType=TINYINT}
-      )
-  </insert>
-  <insert id="insertSelective" parameterType="com.snxy.business.domain.UserIdentity">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into user_identity
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="onlineUserId != null">
-        online_user_id,
-      </if>
-      <if test="identityId != null">
-        identity_id,
-      </if>
-      <if test="isDelete != null">
-        is_delete,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="onlineUserId != null">
-        #{onlineUserId,jdbcType=TINYINT},
-      </if>
-      <if test="identityId != null">
-        #{identityId,jdbcType=INTEGER},
-      </if>
-      <if test="isDelete != null">
-        #{isDelete,jdbcType=TINYINT},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.snxy.business.domain.UserIdentity">
-    update user_identity
-    <set>
-      <if test="onlineUserId != null">
-        online_user_id = #{onlineUserId,jdbcType=TINYINT},
-      </if>
-      <if test="identityId != null">
-        identity_id = #{identityId,jdbcType=INTEGER},
-      </if>
-      <if test="isDelete != null">
-        is_delete = #{isDelete,jdbcType=TINYINT},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.snxy.business.domain.UserIdentity">
+    <insert id="insert" parameterType="com.snxy.business.domain.UserIdentity">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into user_identity (online_user_id, identity_id, is_delete
+        )
+        values (#{onlineUserId,jdbcType=TINYINT}, #{identityId,jdbcType=INTEGER}, #{isDelete,jdbcType=TINYINT}
+        )
+    </insert>
+    <insert id="insertSelective" parameterType="com.snxy.business.domain.UserIdentity">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into user_identity
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="onlineUserId != null">
+                online_user_id,
+            </if>
+            <if test="identityId != null">
+                identity_id,
+            </if>
+            <if test="isDelete != null">
+                is_delete,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="onlineUserId != null">
+                #{onlineUserId,jdbcType=TINYINT},
+            </if>
+            <if test="identityId != null">
+                #{identityId,jdbcType=INTEGER},
+            </if>
+            <if test="isDelete != null">
+                #{isDelete,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.snxy.business.domain.UserIdentity">
+        update user_identity
+        <set>
+            <if test="onlineUserId != null">
+                online_user_id = #{onlineUserId,jdbcType=TINYINT},
+            </if>
+            <if test="identityId != null">
+                identity_id = #{identityId,jdbcType=INTEGER},
+            </if>
+            <if test="isDelete != null">
+                is_delete = #{isDelete,jdbcType=TINYINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.snxy.business.domain.UserIdentity">
     update user_identity
     set online_user_id = #{onlineUserId,jdbcType=TINYINT},
       identity_id = #{identityId,jdbcType=INTEGER},
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+    <!--新建用户时的权限绑定W-->
+    <insert id="insertIdentity">
+    insert into user_identity (online_user_id, identity_id)
+    values (#{onlineUserId}, #{identityId})
+  </insert>
 </mapper>

@@ -2,7 +2,7 @@ package com.snxy.business.service;
 
 public interface OnlineUserService {
 
-    Long selectOnlineIdBySystemId(Long systemUserId);
+    void updateName(Long systemUserId, String name);
 
-    void updateNameById(Long onlineUserId, String userName);
+    Long selectOnlineUserIdBySystemUserId(Long systemUserId);
 }

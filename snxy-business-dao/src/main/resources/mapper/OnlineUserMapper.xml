@@ -6,7 +6,7 @@
     <result column="system_user_id" jdbcType="BIGINT" property="systemUserId" />
     <result column="company_type" jdbcType="INTEGER" property="companyType" />
     <result column="is_responsible" jdbcType="INTEGER" property="isResponsible" />
-    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_name" jdbcType="VARCHAR" property="name" />
     <result column="phone" jdbcType="VARCHAR" property="phone" />
     <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
   </resultMap>
@@ -28,7 +28,7 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into online_user (system_user_id, company_type, is_responsible,
-    user_name, phone, is_delete
+      user_name, phone, is_delete
       )
     values (#{systemUserId,jdbcType=BIGINT}, #{companyType,jdbcType=INTEGER}, #{isResponsible,jdbcType=INTEGER}, 
       #{userName,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{isDelete,jdbcType=TINYINT}
@@ -49,8 +49,9 @@
       <if test="isResponsible != null">
         is_responsible,
       </if>
-      <if test="user_name != null">
-        userName,
+
+      <if test="name != null">
+        user_name,
       </if>
       <if test="phone != null">
         phone,
@@ -92,8 +93,9 @@
       <if test="isResponsible != null">
         is_responsible = #{isResponsible,jdbcType=INTEGER},
       </if>
-      <if test="user_name != null">
-        name = #{userName,jdbcType=VARCHAR},
+
+      <if test="name != null">
+        user_name = #{name,jdbcType=VARCHAR},
       </if>
       <if test="phone != null">
         phone = #{phone,jdbcType=VARCHAR},
@@ -109,23 +111,25 @@
     set system_user_id = #{systemUserId,jdbcType=BIGINT},
       company_type = #{companyType,jdbcType=INTEGER},
       is_responsible = #{isResponsible,jdbcType=INTEGER},
-      user_name = #{userName,jdbcType=VARCHAR},
+      user_name = #{name,jdbcType=VARCHAR},
       phone = #{phone,jdbcType=VARCHAR},
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
 
-  <select id="selectOnlineIdBySystemId" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select
-    id
-    from online_user
-    where system_user_id= #{systemUserId,jdbcType=BIGINT}
-  </select>
-
-  <update id="updateNameById" parameterType="com.snxy.business.domain.OnlineUser">
+  <!--添加用户名字W-->
+  <update id="updateNameBySystemUserId">
     update online_user
-    set
-      user_name = #{userName,jdbcType=VARCHAR},
-    where id = #{id,jdbcType=BIGINT}
+    set user_name = #{name}
+    where system_user_id = #{systemUserId}
+    and is_delete = 0
   </update>
+
+  <!--查询onlineUserId通过systemUserId W-->
+  <select id="selectOnlineUserIdBySystemUserId" resultType="java.lang.Long">
+    select id
+    from online_user
+    where system_user_id = #{systemUserId}
+    and is_delete = 0
+  </select>
 </mapper>

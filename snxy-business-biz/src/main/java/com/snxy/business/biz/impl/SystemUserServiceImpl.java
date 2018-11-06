@@ -7,15 +7,19 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
+
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
 @Service
 @Slf4j
 public class SystemUserServiceImpl implements SystemUserService {
-
     @Resource
     private SystemUserMapper systemUserMapper;
 
     @Override
-    public void updateUserNameById(Long systemUserId, String userName) {
-        systemUserMapper.updateUserNameById(systemUserId,userName);
+    @Transactional(rollbackFor = Exception.class)
+    public void updateName(Long systemUserId, String name) {
+        systemUserMapper.updateNameByPrimaryKey(systemUserId,name,new Date());
     }
 }

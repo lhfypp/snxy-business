@@ -1,5 +1,7 @@
 package com.snxy.business.dao.mapper;
 
+import com.snxy.business.domain.VegetableCertificate;
+
 public interface VegetableCertificateMapper {
     int deleteByPrimaryKey(Long id);
 

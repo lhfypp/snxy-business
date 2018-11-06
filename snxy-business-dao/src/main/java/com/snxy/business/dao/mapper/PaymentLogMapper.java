@@ -1,5 +1,7 @@
 package com.snxy.business.dao.mapper;
 
+import com.snxy.business.domain.PaymentLog;
+
 public interface PaymentLogMapper {
     int deleteByPrimaryKey(Long id);
 
