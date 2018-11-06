@@ -1,5 +1,7 @@
 package com.snxy.business.dao.mapper;
 
+import com.snxy.business.domain.OnlineUser;
+
 public interface OnlineUserMapper {
     int deleteByPrimaryKey(Long id);
 
@@ -12,4 +14,8 @@ public interface OnlineUserMapper {
     int updateByPrimaryKeySelective(OnlineUser record);
 
     int updateByPrimaryKey(OnlineUser record);
+
+    Long selectOnlineIdBySystemId(Long systemUserId);
+
+    void updateNameById(Long onlineUserId, String userName);
 }
