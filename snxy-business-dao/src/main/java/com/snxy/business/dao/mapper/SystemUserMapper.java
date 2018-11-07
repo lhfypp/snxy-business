@@ -4,6 +4,7 @@ import com.snxy.business.domain.SystemUser;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
+import java.util.List;
 
 public interface SystemUserMapper {
     int deleteByPrimaryKey(Long id);
@@ -19,4 +20,8 @@ public interface SystemUserMapper {
     int updateByPrimaryKey(SystemUser record);
 
     void updateNameByPrimaryKey(@Param("systemUserId") Long systemUserId, @Param("name") String name, @Param("date") Date date);
+
+    void insertSystemUser(SystemUser systemUser);
+
+    void insertSystemUserList(List<SystemUser> list);
 }

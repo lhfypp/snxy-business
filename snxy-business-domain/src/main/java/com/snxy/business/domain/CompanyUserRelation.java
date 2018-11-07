@@ -16,7 +16,7 @@ public class CompanyUserRelation {
 
     private Long companyId;
 
-    private Long onllineUserId;
+    private Long onlineUserId;
 
     private Integer isResponsible;//当为0时是负责人，当为1时不是负责人
 

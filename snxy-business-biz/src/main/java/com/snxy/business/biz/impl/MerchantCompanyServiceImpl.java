@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -19,5 +20,11 @@ public class MerchantCompanyServiceImpl implements MerchantCompanyService {
     @Transactional(rollbackFor = Exception.class)
     public void insertCompanyMessage(MerchantCompany merchantCompany) {
         merchantCompanyMapper.insertSelective(merchantCompany);
+    }
+
+    @Override
+    public List<String> selectAllName() {
+        List<String> nameList = merchantCompanyMapper.selectAllName();
+        return nameList;
     }
 }
