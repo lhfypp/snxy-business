@@ -132,4 +132,12 @@
     where system_user_id = #{systemUserId}
     and is_delete = 0
   </select>
+
+  <!--修改在线用户手机号-->
+  <update id="updateOnlineMobile" >
+    update online_user
+    set phone = #{mobile}
+    where id = #{onlineUserId}
+    and is_delete = 0
+  </update>
 </mapper>

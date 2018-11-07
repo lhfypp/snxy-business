@@ -183,4 +183,13 @@
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="selectMobileBySystemUserId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    mobile
+    from system_user_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+
+
 </mapper>
