@@ -2,6 +2,8 @@ package com.snxy.business.dao.mapper;
 
 import com.snxy.business.domain.CommonProblems;
 
+import java.util.List;
+
 public interface CommonProblemsMapper {
     int deleteByPrimaryKey(Long id);
 
@@ -14,4 +16,6 @@ public interface CommonProblemsMapper {
     int updateByPrimaryKeySelective(CommonProblems record);
 
     int updateByPrimaryKey(CommonProblems record);
+
+    List<CommonProblems> selectAllCommonProblems();
 }

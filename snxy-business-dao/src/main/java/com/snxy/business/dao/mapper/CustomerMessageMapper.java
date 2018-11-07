@@ -2,6 +2,8 @@ package com.snxy.business.dao.mapper;
 
 import com.snxy.business.domain.CustomerMessage;
 
+import java.util.List;
+
 public interface CustomerMessageMapper {
     int deleteByPrimaryKey(Long id);
 
@@ -14,4 +16,6 @@ public interface CustomerMessageMapper {
     int updateByPrimaryKeySelective(CustomerMessage record);
 
     int updateByPrimaryKey(CustomerMessage record);
+
+    List<CustomerMessage> selectAllCustomerMessage();
 }

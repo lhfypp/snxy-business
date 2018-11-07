@@ -2,6 +2,8 @@ package com.snxy.business.dao.mapper;
 
 import com.snxy.business.domain.Vehicle;
 
+import java.util.Date;
+
 public interface VehicleMapper {
     int deleteByPrimaryKey(Long id);
 
@@ -14,4 +16,5 @@ public interface VehicleMapper {
     int updateByPrimaryKeySelective(Vehicle record);
 
     int updateByPrimaryKey(Vehicle record);
+
 }
