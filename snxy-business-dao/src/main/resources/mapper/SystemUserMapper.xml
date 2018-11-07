@@ -160,6 +160,31 @@
     and is_delete = 0
   </update>
 
+  <!--添加systemUser-->
+  <insert id="insertSystemUser" parameterType="com.snxy.business.domain.SystemUser">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into system_user (account, mobile, chinese_name,
+    reg_date, account_status,gmt_create,pwd)
+    values (#{account}, #{mobile}, #{chineseName},
+    #{regDate}, #{accountStatus}, #{gmtCreate},#{pwd})
+  </insert>
+
+  <!--批量添加systemUser-->
+  <insert id="insertSystemUserList" useGeneratedKeys="true" keyProperty="id">
+    <!--<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">-->
+      <!--SELECT LAST_INSERT_ID()-->
+    <!--</selectKey>-->
+    insert into system_user (account, mobile, chinese_name,
+    reg_date, account_status,gmt_create,pwd)
+    values
+    <foreach collection="list" item="systemUser" separator=",">
+      (#{systemUser.account}, #{systemUser.mobile}, #{systemUser.chineseName},
+      #{systemUser.regDate}, #{systemUser.accountStatus}, #{systemUser.gmtCreate},#{systemUser.pwd})
+    </foreach>
+  </insert>
+
   <!--修改系统用户手机号-->
   <update id="updateSystemMobile">
     UPDATE system_user

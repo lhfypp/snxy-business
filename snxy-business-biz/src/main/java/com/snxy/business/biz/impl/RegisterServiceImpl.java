@@ -1,5 +1,8 @@
 package com.snxy.business.biz.impl;
 
+import com.snxy.business.biz.asy.AsyRefreshCacheUser;
+import com.snxy.business.biz.feign.UserAgentService;
+import com.snxy.business.domain.UserIdentity;
 import com.snxy.business.service.OnlineUserService;
 import com.snxy.business.service.RegisterService;
 import com.snxy.business.service.SystemUserService;
@@ -11,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Date;
 
 @Service
 @Slf4j
@@ -21,6 +25,8 @@ public class RegisterServiceImpl implements RegisterService {
     private SystemUserService systemUserService;
     @Resource
     private UserIdentityService userIdentityService;
+    @Resource
+    private AsyRefreshCacheUser asyRefreshCacheUser;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -35,8 +41,15 @@ public class RegisterServiceImpl implements RegisterService {
                 throw new BizException("您还没有选择身份，请先选择身份。");
             }
             systemUserService.updateName(systemUserId, name);
+            asyRefreshCacheUser.refreshCacheUser(systemUserId);
+            log.info("当前线程名   ："+Thread.currentThread().getName());
+
             onlineUserService.updateName(systemUserId, name);
-            userIdentityService.insertIdentity(onlineUserId, identityId);
+            UserIdentity userIdentity = UserIdentity.builder()
+                    .identityId(identityId)
+                    .onlineUserId(onlineUserId)
+                    .build();
+            userIdentityService.insertIdentity(userIdentity);
         }
     }
 }

@@ -81,8 +81,20 @@
   </update>
 
     <!--新建用户时的权限绑定W-->
-    <insert id="insertIdentity">
-    insert into user_identity (online_user_id, identity_id)
-    values (#{onlineUserId}, #{identityId})
-  </insert>
+    <insert id="insertIdentity" parameterType="com.snxy.business.domain.UserIdentity">
+        insert into user_identity (online_user_id, identity_id)
+        values (#{onlineUserId}, #{identityId})
+    </insert>
+
+    <!--批量添加用户权限绑定-->
+    <insert id="insertIdentityList" useGeneratedKeys="true" keyProperty="id">
+        <!--<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">-->
+            <!--SELECT LAST_INSERT_ID()-->
+        <!--</selectKey>-->
+        insert into user_identity (online_user_id, identity_id)
+        values
+        <foreach collection="list" item="userIdentity" separator=",">
+            (#{userIdentity.onlineUserId}, #{userIdentity.identityId})
+        </foreach>
+    </insert>
 </mapper>
