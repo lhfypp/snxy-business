@@ -5,9 +5,12 @@ import com.snxy.business.domain.SystemUser;
 import com.snxy.business.service.SystemUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+
+
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Date;
 import java.util.List;
 
@@ -33,5 +36,10 @@ public class SystemUserServiceImpl implements SystemUserService {
     @Transactional(rollbackFor = Exception.class)
     public void insertSystemUserList(List<SystemUser> systemUserList) {
         systemUserMapper.insertSystemUserList(systemUserList);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void updateSystemMobile(Long systemUserId, String newMobile) {
+        systemUserMapper.updateSystemMobile(systemUserId, newMobile);
     }
 }

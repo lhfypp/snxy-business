@@ -13,5 +13,7 @@ public interface UserImageMapper {
 
     int updateByPrimaryKeySelective(UserImage record);
 
-    int updateByPrimaryKey(UserImage record);
+    int updateByPrimaryKey(Long record);
+
+    void updateImageById(Long systemUserId, String url);
 }

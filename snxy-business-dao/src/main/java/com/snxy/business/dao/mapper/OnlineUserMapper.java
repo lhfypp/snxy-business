@@ -1,10 +1,10 @@
 package com.snxy.business.dao.mapper;
 
 import com.snxy.business.domain.OnlineUser;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 
 public interface OnlineUserMapper {
     int deleteByPrimaryKey(Long id);
@@ -30,4 +30,8 @@ public interface OnlineUserMapper {
     void insertOnlineUserList(List<OnlineUser> list);
 
     List<OnlineUser> selectByOnlineUserIdList(@Param("onlineUserIdList") List<Long> onlineUserIdList);
+
+    Long selectOnlineUserIdBySystemUserId(Long systemUserId);
+
+    void updateOnlineMobile(@Param("onlineUserId") Long onlineUserId ,@Param("mobile") String newMobile);
 }

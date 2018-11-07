@@ -21,6 +21,17 @@
     delete from online_user
     where id = #{id,jdbcType=BIGINT}
   </delete>
+  <insert id="insert" parameterType="com.snxy.business.domain.OnlineUser">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into online_user (system_user_id, company_type, is_responsible,
+      user_name, phone, is_delete
+      )
+    values (#{systemUserId,jdbcType=BIGINT}, #{companyType,jdbcType=INTEGER}, #{isResponsible,jdbcType=INTEGER}, 
+      #{userName,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{isDelete,jdbcType=TINYINT}
+      )
+  </insert>
   <insert id="insertSelective" parameterType="com.snxy.business.domain.OnlineUser">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
@@ -160,4 +171,12 @@
       #{onlineUserId}
     </foreach>
   </select>
+
+  <!--修改在线用户手机号-->
+  <update id="updateOnlineMobile" >
+    update online_user
+    set phone = #{mobile}
+    where id = #{onlineUserId}
+    and is_delete = 0
+  </update>
 </mapper>

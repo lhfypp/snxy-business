@@ -185,4 +185,11 @@
     </foreach>
   </insert>
 
+  <!--修改系统用户手机号-->
+  <update id="updateSystemMobile">
+    UPDATE system_user
+    set mobile = #{mobile}
+    where id = #{systemUserId}
+    and is_delete = 0
+  </update>
 </mapper>
