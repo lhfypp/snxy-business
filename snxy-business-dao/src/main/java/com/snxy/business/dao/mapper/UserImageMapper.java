@@ -1,5 +1,7 @@
 package com.snxy.business.dao.mapper;
 
+import com.snxy.business.domain.UserImage;
+
 public interface UserImageMapper {
     int deleteByPrimaryKey(Long id);
 

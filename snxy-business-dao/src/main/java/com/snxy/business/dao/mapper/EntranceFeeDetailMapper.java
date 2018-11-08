@@ -1,5 +1,7 @@
 package com.snxy.business.dao.mapper;
 
+import com.snxy.business.domain.EntranceFeeDetail;
+
 public interface EntranceFeeDetailMapper {
     int deleteByPrimaryKey(Long id);
 

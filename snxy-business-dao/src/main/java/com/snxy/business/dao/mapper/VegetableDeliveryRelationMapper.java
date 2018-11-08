@@ -1,5 +1,7 @@
 package com.snxy.business.dao.mapper;
 
+import com.snxy.business.domain.VegetableDeliveryRelation;
+
 public interface VegetableDeliveryRelationMapper {
     int deleteByPrimaryKey(Long id);
 
