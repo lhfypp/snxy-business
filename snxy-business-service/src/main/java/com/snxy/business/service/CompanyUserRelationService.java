@@ -1,7 +1,12 @@
 package com.snxy.business.service;
 
 import com.snxy.business.domain.CompanyUserRelation;
-import com.snxy.business.service.vo.ChangePrincipleVO;
+
+
+
+
+
+
 
 import java.util.List;
 
@@ -17,4 +22,5 @@ public interface CompanyUserRelationService {
     List<CompanyUserRelation> selectAllByCompanyId(Long companyId);
 
     void updateIsResponsible(List<CompanyUserRelation> companyUserRelationList);
+    int insert(CompanyUserRelation record);
 }

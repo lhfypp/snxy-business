@@ -1,5 +1,8 @@
 package com.snxy.business.dao.mapper;
 
+import com.snxy.business.domain.DriverPicture;
+import com.snxy.business.domain.IdInfo;
+
 import com.snxy.business.domain.IdInfo;
 
 public interface IdInfoMapper {

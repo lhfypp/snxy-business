@@ -1,9 +1,12 @@
 package com.snxy.business.dao.mapper;
 
 import com.snxy.business.domain.CompanyUserRelation;
+
+
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+
 
 public interface CompanyUserRelationMapper {
     int deleteByPrimaryKey(Long id);
@@ -22,9 +25,9 @@ public interface CompanyUserRelationMapper {
 
     CompanyUserRelation selectByOnlineUserId(Long id);
 
-    void insertCompanyRelationList(List<CompanyUserRelation> list);
+    void insertCompanyRelationList(List<CompanyUserRelation> companyUserRelationList);
 
     List<CompanyUserRelation> selectAllByCompanyId(Long companyId);
 
-    void updateByCompanyUserRelationList(@Param("companyUserRelationList") List<CompanyUserRelation> companyUserRelationList);
+    void updateByCompanyUserRelationList(List<CompanyUserRelation> companyUserRelationList);
 }

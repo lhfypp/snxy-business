@@ -35,4 +35,9 @@ public class IdentityTypeServiceImpl implements IdentityTypeService {
 //        }
         return identityVOList;
     }
+
+    @Override
+    public List<IdentityType> listAll(boolean b) {
+        return null;
+    }
 }

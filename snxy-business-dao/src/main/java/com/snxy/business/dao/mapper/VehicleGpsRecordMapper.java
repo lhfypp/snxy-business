@@ -1,10 +1,14 @@
 package com.snxy.business.dao.mapper;
 
 import com.snxy.business.domain.VehicleGpsRecord;
+
+import com.snxy.business.domain.VehicleGpsRecord;
+
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
 import java.util.List;
+
 
 public interface VehicleGpsRecordMapper {
     int deleteByPrimaryKey(Long id);

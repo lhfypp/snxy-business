@@ -14,4 +14,6 @@ public interface DirverInfoMapper {
     int updateByPrimaryKeySelective(DirverInfo record);
 
     int updateByPrimaryKey(DirverInfo record);
+
+
 }
