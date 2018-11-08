@@ -1,7 +1,13 @@
 package com.snxy.business.domain;
 
-import java.util.Date;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
+import java.util.Date;
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class CompanyUserRelation {
     private Long id;
 
