@@ -8,6 +8,8 @@ import com.snxy.business.service.vo.CompanyVO;
 import com.snxy.business.service.vo.SystemUserVO;
 import com.snxy.common.response.ResultData;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +26,7 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequestMapping("/person")
+@Validated
 public class PersonalCenterController {
     @Resource
     private PerSettingsHomepageService PerSettingsHomepageService;
@@ -38,10 +41,10 @@ public class PersonalCenterController {
     }
     //选择加入商户
     @RequestMapping("/company/save")
-   public ResultData saveJoinTheMerchants(@RequestAttribute(value = "systemUser",required = false) SystemUserVO systemUserVO, long companyId){
+   public ResultData saveJoinTheMerchants(@RequestAttribute(value = "systemUser",required = false) SystemUserVO systemUserVO, @NotBlank(message="公司id不能为空") String companyId){
        long userId=onlineUserService.searchOnlineUserId(systemUserVO.getSystemUserId().toString()) ;//查询出在线id
 
-     return ResultData.success(PerSettingsHomepageService.saveJoinTheMerchants(userId,companyId));
+     return ResultData.success(PerSettingsHomepageService.saveJoinTheMerchants(userId,Long.parseLong(companyId)));
    }
     //通知商户模板信息下载
     @RequestMapping("/company/Notify/download")
