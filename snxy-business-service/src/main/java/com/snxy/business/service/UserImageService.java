@@ -1,9 +1,9 @@
 package com.snxy.business.service;
 
 
-import java.io.File;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface UserImageService {
 
-    void updateImageById(Long systemUserId, File file);
+    void updateImageById(Long systemUserId, MultipartFile multipartFile  );
 }
