@@ -14,4 +14,6 @@ public interface SystemUserInfoMapper {
     int updateByPrimaryKeySelective(SystemUserInfo record);
 
     int updateByPrimaryKey(SystemUserInfo record);
+
+    String selectMobileBySystemUserId(Long systemUserId);
 }

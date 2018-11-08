@@ -161,4 +161,12 @@
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+
+  <update id="updateImageById" parameterType="com.snxy.business.domain.UserImage">
+    update user_image
+    set
+      url = #{url,jdbcType=VARCHAR}
+    where system_user_id = #{systemUserId,jdbcType=BIGINT}
+  </update>
 </mapper>

@@ -150,4 +150,58 @@
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+<!--上传地理位置-->
+  <insert id="uploadLocation" parameterType="com.snxy.business.domain.VehicleGpsRecord">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into vehicle_gps_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="deliveryOrderId != null">
+        delivery_order_id,
+      </if>
+      <if test="longitude != null">
+        longitude,
+      </if>
+      <if test="latitude != null">
+        latitude,
+      </if>
+      <if test="onlineUserId != null">
+        online_user_id,
+      </if>
+      <if test="time != null">
+        collection_time,
+      </if>
+
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="deliveryOrderId != null">
+        #{deliveryOrderId,jdbcType=BIGINT},
+      </if>
+      <if test="longitude != null">
+        #{longitude,jdbcType=REAL},
+      </if>
+      <if test="latitude != null">
+        #{latitude,jdbcType=REAL},
+      </if>
+
+      <if test="onlineUserId != null">
+        #{onlineUserId,jdbcType=BIGINT},
+      </if>
+      <if test="time != null">
+        #{time,jdbcType=TIMESTAMP},
+      </if>
+
+    </trim>
+  </insert>
+
+
+  <!--查询gps地理位置信洗列表-->
+  <select id="selectVehicleGpsRecordByDeliveryOrderId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from vehicle_gps_record
+    where delivery_order_id = #{deliveryOrderId,jdbcType=BIGINT}
+  </select>
 </mapper>

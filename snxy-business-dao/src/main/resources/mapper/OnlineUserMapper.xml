@@ -4,14 +4,12 @@
   <resultMap id="BaseResultMap" type="com.snxy.business.domain.OnlineUser">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="system_user_id" jdbcType="BIGINT" property="systemUserId" />
-    <result column="company_type" jdbcType="INTEGER" property="companyType" />
-    <result column="is_responsible" jdbcType="INTEGER" property="isResponsible" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
     <result column="phone" jdbcType="VARCHAR" property="phone" />
     <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, system_user_id, company_type, is_responsible, name, phone, is_delete
+    id, system_user_id, user_name, phone, is_delete
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -27,11 +25,11 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into online_user (system_user_id, company_type, is_responsible, 
-      name, phone, is_delete
+    insert into online_user (system_user_id, company_type, is_responsible,
+      user_name, phone, is_delete
       )
     values (#{systemUserId,jdbcType=BIGINT}, #{companyType,jdbcType=INTEGER}, #{isResponsible,jdbcType=INTEGER}, 
-      #{name,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{isDelete,jdbcType=TINYINT}
+      #{userName,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{isDelete,jdbcType=TINYINT}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.snxy.business.domain.OnlineUser">
@@ -49,8 +47,8 @@
       <if test="isResponsible != null">
         is_responsible,
       </if>
-      <if test="name != null">
-        name,
+      <if test="userName != null">
+        user_name,
       </if>
       <if test="phone != null">
         phone,
@@ -69,8 +67,8 @@
       <if test="isResponsible != null">
         #{isResponsible,jdbcType=INTEGER},
       </if>
-      <if test="name != null">
-        #{name,jdbcType=VARCHAR},
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
       </if>
       <if test="phone != null">
         #{phone,jdbcType=VARCHAR},
@@ -92,8 +90,8 @@
       <if test="isResponsible != null">
         is_responsible = #{isResponsible,jdbcType=INTEGER},
       </if>
-      <if test="name != null">
-        name = #{name,jdbcType=VARCHAR},
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
       </if>
       <if test="phone != null">
         phone = #{phone,jdbcType=VARCHAR},
@@ -109,11 +107,12 @@
     set system_user_id = #{systemUserId,jdbcType=BIGINT},
       company_type = #{companyType,jdbcType=INTEGER},
       is_responsible = #{isResponsible,jdbcType=INTEGER},
-      name = #{name,jdbcType=VARCHAR},
+      user_name = #{userName,jdbcType=VARCHAR},
       phone = #{phone,jdbcType=VARCHAR},
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
   <select id="selectIdBySystemUserID" resultType="java.lang.Long">
     select id
         from
@@ -121,5 +120,74 @@
          where
          system_user_id=#{SystemUserId}
   </select>
+
+
+
+  <!--添加用户名字W-->
+  <update id="updateNameBySystemUserId">
+    update online_user
+    set user_name = #{name}
+    where system_user_id = #{systemUserId}
+    and is_delete = 0
+  </update>
+
+  <!--通过手机号查询onlineUser-->
+  <select id="selectByPhone" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from online_user
+    where phone = #{phone}
+  </select>
+
+  <!--添加onlineUser-->
+  <insert id="insertOnlineUser" parameterType="com.snxy.business.domain.OnlineUser">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into online_user (system_user_id,user_name, phone)
+    values (#{systemUserId}, #{userName}, #{phone})
+  </insert>
+
+  <select id="selectByPhoneList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from online_user
+    where phone in
+    <foreach collection="phoneList" index="index" item="phone" open="(" separator="," close=")">
+      #{phone}
+    </foreach>
+    AND is_delete = 0
+  </select>
+
+  <!--批量添加onlineUser-->
+  <insert id="insertOnlineUserList" useGeneratedKeys="true" keyProperty="id">
+    <!--<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">-->
+      <!--SELECT LAST_INSERT_ID()-->
+    <!--</selectKey>-->
+    insert into online_user (system_user_id, user_name, phone)
+    values
+    <foreach collection="list" item="onlineUser" separator=",">
+      (#{onlineUser.systemUserId}, #{onlineUser.userName}, #{onlineUser.phone})
+    </foreach>
+  </insert>
+
+  <!--查询所有公司员工-->
+  <select id="selectByOnlineUserIdList" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    from online_user
+    where id IN
+    <foreach collection="onlineUserIdList" index="index" item="onlineUserId" open="(" separator="," close=")">
+      #{onlineUserId}
+    </foreach>
+  </select>
+
+  <!--修改在线用户手机号-->
+  <update id="updateOnlineMobile" >
+    update online_user
+    set phone = #{mobile}
+    where id = #{onlineUserId}
+    and is_delete = 0
+  </update>
 
 </mapper>
