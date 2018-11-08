@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface VehicleService {
 
-    void saveVehicle(Vehicle vehicle);
+    String saveVehicle(Vehicle vehicle);
 
     List<Vehicle> vehicleList(Long dirverInfoId);
 }

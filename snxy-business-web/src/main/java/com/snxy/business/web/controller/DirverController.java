@@ -33,17 +33,17 @@ class DirverController {
     @Resource
     private FilePicService filePicService;
 
-    //司机信息  身份证  驾驶证
+    //司机信息  身份证  驾驶证保存
     @RequestMapping("/basicInfo/new")
     public ResultData saveDriver(DriverPicture driverPicture) {
         dirverInfoService.saveDriverInfo(driverPicture);
-        return ResultData.success("保存成功");
+        return ResultData.success("");
     }
     //车辆行驶证保存
     @RequestMapping("/vehicle/new")
     public ResultData saveVehicle(Vehicle vehicle){
-        vehicleService.saveVehicle(vehicle);
-        return ResultData.success("保存成功");
+        String result = vehicleService.saveVehicle(vehicle);
+        return ResultData.success(result);
     }
     //车类型列表
     @RequestMapping("/carType/list")
