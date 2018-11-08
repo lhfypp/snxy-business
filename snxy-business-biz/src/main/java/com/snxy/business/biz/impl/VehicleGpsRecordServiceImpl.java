@@ -30,9 +30,9 @@ public class VehicleGpsRecordServiceImpl implements VehicleGpsRecordService {
     @Override
     public void uploadLocation(Long systemUserId, Long deliveryOrderId, String longitude, String latitude, Date time) {
 //        根据系统用户id获取在线用户id
-        Long onlineUserId = onlineUserService.selectOnlineUserIdBySystemUserId(systemUserId);
+       Long onlineUserId = onlineUserService.selectOnlineUserIdBySystemUserId(systemUserId);
 //        给当前在线用户添加地理位置信息
-        vehicleGpsRecordMapper.uploadLocation(onlineUserId,deliveryOrderId,longitude,latitude,time);
+       vehicleGpsRecordMapper.uploadLocation(onlineUserId,deliveryOrderId,longitude,latitude,time);
     }
 
     /**
