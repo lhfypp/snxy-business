@@ -127,7 +127,7 @@
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
-<<<<<<< HEAD
+
   <resultMap id="selectAllComInfoByComNameMap" type="com.snxy.business.domain.CompanyPartInfo">
     <result column="merchant_name" jdbcType="VARCHAR" property="companyName" />
     <result column="name" jdbcType="VARCHAR" property="responsiblePerson" />

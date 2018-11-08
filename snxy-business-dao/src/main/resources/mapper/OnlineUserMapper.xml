@@ -189,9 +189,8 @@
     where id = #{onlineUserId}
     and is_delete = 0
   </update>
-<<<<<<< HEAD
 
-=======
+
 <!--根据系统id获取onlineUserId-->
   <select id="selectOnlineUserIdBySystemUserId" parameterType="java.lang.Long" resultType="java.lang.Long">
     select
@@ -199,5 +198,5 @@
     from online_user
     where system_user_id = #{systemUserId,jdbcType=BIGINT}
   </select>
->>>>>>> 62edd728285d2aa4c16204f202c089085c3cd533
+
 </mapper>
