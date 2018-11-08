@@ -1,6 +1,7 @@
 package com.snxy.business.dao.mapper;
 
 import com.snxy.business.domain.UserImage;
+import org.apache.ibatis.annotations.Param;
 
 public interface UserImageMapper {
     int deleteByPrimaryKey(Long id);
@@ -15,5 +16,5 @@ public interface UserImageMapper {
 
     int updateByPrimaryKey(Long record);
 
-    void updateImageById(Long systemUserId, String url);
+    void updateImageById(@Param("systemUserId") Long systemUserId, @Param("url")String url);
 }
