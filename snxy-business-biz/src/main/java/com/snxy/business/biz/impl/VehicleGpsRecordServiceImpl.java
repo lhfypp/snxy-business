@@ -6,6 +6,7 @@ import com.snxy.business.service.OnlineUserService;
 import com.snxy.business.service.VehicleGpsRecordService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -28,11 +29,12 @@ public class VehicleGpsRecordServiceImpl implements VehicleGpsRecordService {
      * @param time
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void uploadLocation(Long systemUserId, Long deliveryOrderId, String longitude, String latitude, Date time) {
 //        根据系统用户id获取在线用户id
-        Long onlineUserId = onlineUserService.selectOnlineUserIdBySystemUserId(systemUserId);
+       Long onlineUserId = onlineUserService.selectOnlineUserIdBySystemUserId(systemUserId);
 //        给当前在线用户添加地理位置信息
-        vehicleGpsRecordMapper.uploadLocation(onlineUserId,deliveryOrderId,longitude,latitude,time);
+       vehicleGpsRecordMapper.uploadLocation(onlineUserId,deliveryOrderId,longitude,latitude,time);
     }
 
     /**

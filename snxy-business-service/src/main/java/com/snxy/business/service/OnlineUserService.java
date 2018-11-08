@@ -1,11 +1,15 @@
 package com.snxy.business.service;
 
+
+
+
+
 import com.snxy.business.domain.OnlineUser;
 
 import java.util.List;
 
 public interface OnlineUserService {
-
+    long searchOnlineUserId(String SystemUserId);
     void updateName(Long systemUserId, String name);
 
     OnlineUser selectByPhone(String phone);

@@ -2,7 +2,11 @@ package com.snxy.business.dao.mapper;
 
 import com.snxy.business.domain.CompanyUserRelation;
 
+
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
+
 
 public interface CompanyUserRelationMapper {
     int deleteByPrimaryKey(Long id);

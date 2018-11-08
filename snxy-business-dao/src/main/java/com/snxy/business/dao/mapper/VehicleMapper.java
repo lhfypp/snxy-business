@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.snxy.business.domain.Vehicle;
 
+
 import java.util.Date;
 
 public interface VehicleMapper {

@@ -1,6 +1,12 @@
 package com.snxy.business.dao.mapper;
 
+
+import com.snxy.business.domain.CompanyPartInfo;
 import com.snxy.business.domain.MerchantCompany;
+import org.apache.ibatis.annotations.Param;
+
+
+
 
 import com.snxy.business.domain.MerchantCompany;
 
@@ -19,5 +25,9 @@ public interface MerchantCompanyMapper {
 
     int updateByPrimaryKey(MerchantCompany record);
 
+    List<CompanyPartInfo> selectAllComInfoByComName(@Param("companyName") String companyName);
+
+
     List<String> selectAllName();
+
 }

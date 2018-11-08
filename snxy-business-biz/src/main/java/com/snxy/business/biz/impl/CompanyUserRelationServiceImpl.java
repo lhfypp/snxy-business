@@ -3,13 +3,20 @@ package com.snxy.business.biz.impl;
 import com.snxy.business.dao.mapper.CompanyUserRelationMapper;
 import com.snxy.business.domain.CompanyUserRelation;
 import com.snxy.business.service.CompanyUserRelationService;
-import com.snxy.business.service.vo.ChangePrincipleVO;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+
+
+
+
+import org.springframework.transaction.annotation.Transactional;
+
+
 import java.util.List;
+
 
 @Service
 @Slf4j
@@ -17,6 +24,11 @@ public class CompanyUserRelationServiceImpl implements CompanyUserRelationServic
     @Resource
     private CompanyUserRelationMapper companyUserRelationMapper;
 
+    @Override
+    public int insert(CompanyUserRelation record) {
+        return companyUserRelationMapper.insert(record);
+
+    }
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void insertCompanyUserRelation(CompanyUserRelation companyUserRelation) {
@@ -49,5 +61,6 @@ public class CompanyUserRelationServiceImpl implements CompanyUserRelationServic
     @Override
     public void updateIsResponsible(List<CompanyUserRelation> companyUserRelationList) {
         companyUserRelationMapper.updateByCompanyUserRelationList(companyUserRelationList);
+
     }
 }

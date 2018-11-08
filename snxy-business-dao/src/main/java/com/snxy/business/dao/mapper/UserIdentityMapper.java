@@ -3,9 +3,11 @@ package com.snxy.business.dao.mapper;
 import com.snxy.business.domain.UserIdentity;
 
 import com.snxy.business.domain.UserIdentity;
-import org.apache.ibatis.annotations.Param;
+
+
 
 import java.util.List;
+
 
 public interface UserIdentityMapper {
     int deleteByPrimaryKey(Long id);

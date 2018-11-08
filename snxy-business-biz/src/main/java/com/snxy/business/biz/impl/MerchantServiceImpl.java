@@ -1,7 +1,7 @@
 package com.snxy.business.biz.impl;
 
 import com.snxy.business.biz.feign.FileService;
-import com.snxy.business.biz.feign.UserAgentService;
+
 import com.snxy.business.domain.*;
 import com.snxy.business.service.*;
 import com.snxy.business.service.vo.ChangePrincipleVO;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Map;

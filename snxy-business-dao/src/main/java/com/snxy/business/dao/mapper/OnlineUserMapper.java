@@ -6,7 +6,11 @@ import com.snxy.business.domain.OnlineUser;
 
 import java.util.List;
 
+import java.util.Map;
+
+
 import org.apache.ibatis.annotations.Param;
+
 
 public interface OnlineUserMapper {
     int deleteByPrimaryKey(Long id);
@@ -20,6 +24,10 @@ public interface OnlineUserMapper {
     int updateByPrimaryKeySelective(OnlineUser record);
 
     int updateByPrimaryKey(OnlineUser record);
+
+    long selectIdBySystemUserID(String SystemUserId);
+
+
 
     void updateNameBySystemUserId(@Param("systemUserId") Long systemUserId, @Param("name") String name);
 
@@ -36,4 +44,5 @@ public interface OnlineUserMapper {
     Long selectOnlineUserIdBySystemUserId(Long systemUserId);
 
     void updateOnlineMobile(@Param("onlineUserId") Long onlineUserId ,@Param("mobile") String newMobile);
+
 }
