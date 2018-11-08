@@ -49,7 +49,7 @@ public class PerSettingsHomepageServiceImpl implements PerSettingsHomepageServic
         CompanyUserRelation CompanyUserRelation=null;
         CompanyUserRelation= CompanyUserRelation.builder()
                 .companyId(companyId)
-                .onllineUserId(userId)
+                .onlineUserId(userId)
                 .gmtCreate(now)
                 .gmtModifed(null)
                 .isResponsible(0)
