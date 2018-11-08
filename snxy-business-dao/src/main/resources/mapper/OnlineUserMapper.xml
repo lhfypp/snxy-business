@@ -179,4 +179,11 @@
     where id = #{onlineUserId}
     and is_delete = 0
   </update>
+<!--根据系统id获取onlineUserId-->
+  <select id="selectOnlineUserIdBySystemUserId" parameterType="java.lang.Long" resultType="java.lang.Long">
+    select
+    id
+    from online_user
+    where system_user_id = #{systemUserId,jdbcType=BIGINT}
+  </select>
 </mapper>

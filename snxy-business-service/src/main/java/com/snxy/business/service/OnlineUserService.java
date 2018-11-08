@@ -22,4 +22,6 @@ public interface OnlineUserService {
     String  getSmsCode(String oldMobile);
 //    更换在线用户手机号
     void updateOnlineMobile(Long systemUserId ,String oldMobile,String newMobile,String smsCode);
+
+    Long selectOnlineUserIdBySystemUserId(Long systemUserId);
 }

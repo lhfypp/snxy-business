@@ -27,7 +27,7 @@ public class OnlineUserServiceImpl implements OnlineUserService {
     private SystemUserService systemUserService;
 
     /**
-     * 更换系统用户姓名
+     * 更换在线用户姓名
      * @param systemUserId
      * @param name
      */
@@ -36,11 +36,7 @@ public class OnlineUserServiceImpl implements OnlineUserService {
         onlineUserMapper.updateNameBySystemUserId(systemUserId,name);
     }
 
-    /**
-     * 通过系统id查询在线用户id
-     * @param systemUserId
-     * @return
-     */
+
     @Override
     public OnlineUser selectByPhone(String phone) {
         OnlineUser onlineUser = onlineUserMapper.selectByPhone(phone);
@@ -118,5 +114,14 @@ public class OnlineUserServiceImpl implements OnlineUserService {
         onlineUserMapper.updateOnlineMobile(onlineUserId ,newMobile);
 //        修改系统用户的手机号
         systemUserService.updateSystemMobile(systemUserId,newMobile);
+    }
+    /**
+     * 通过系统id查询在线用户id
+     * @param systemUserId
+     * @return
+     */
+    @Override
+    public Long selectOnlineUserIdBySystemUserId(Long systemUserId) {
+        return onlineUserMapper.selectOnlineUserIdBySystemUserId(systemUserId);
     }
 }
