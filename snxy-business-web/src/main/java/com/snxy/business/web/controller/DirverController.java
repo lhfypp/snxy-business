@@ -7,7 +7,9 @@ import com.snxy.business.domain.Vehicle;
 import com.snxy.business.service.DirverInfoService;
 import com.snxy.business.service.EntranceFeeCapacityService;
 import com.snxy.business.service.VehicleService;
+import com.snxy.business.service.vo.DriverLicenseVO;
 import com.snxy.business.service.vo.IdCardInfoVO;
+import com.snxy.business.service.vo.VehicleLicenseVO;
 import com.snxy.common.response.ResultData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -57,14 +59,26 @@ class DirverController {
     }
     //身份证正面上传识别
     @RequestMapping("/file/picture/front")
-    public ResultData fileFront(MultipartFile idFrontUrl){
-       ResultData<IdCardInfoVO> idCardInfoVO = filePicService.idcardFront(idFrontUrl);
+    public ResultData fileFront(MultipartFile file){
+       ResultData<IdCardInfoVO> idCardInfoVO = filePicService.idcardFront(file);
         return ResultData.success(idCardInfoVO);
     }
     //身份证反面上传识别
     @RequestMapping("/file/picture/back")
-    public ResultData fileBack(MultipartFile idBackUrl){
-        ResultData<IdCardInfoVO> idCardInfoVO = filePicService.idcardBack(idBackUrl);
+    public ResultData fileBack(MultipartFile file){
+        ResultData<IdCardInfoVO> idCardInfoVO = filePicService.idcardBack(file);
         return ResultData.success(idCardInfoVO);
+    }
+    //驾驶证上传识别
+    @RequestMapping("/file/driving")
+    public ResultData drivingFront(MultipartFile file){
+        ResultData<DriverLicenseVO> driverLicenseVO = filePicService.drivingFront(file);
+        return ResultData.success(driverLicenseVO);
+    }
+    //行驶证上传识别
+    @RequestMapping("/file/vehicle")
+    public ResultData vehicleFront(MultipartFile file) {
+        ResultData<VehicleLicenseVO> vehicleLicenseVO = filePicService.vehicFront(file);
+        return ResultData.success(vehicleLicenseVO);
     }
 }
