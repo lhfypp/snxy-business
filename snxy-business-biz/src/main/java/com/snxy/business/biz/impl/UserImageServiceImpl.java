@@ -21,6 +21,12 @@ public class UserImageServiceImpl implements UserImageService {
     private UserImageMapper userImageMapper;
     @Resource
     private FileService fileService;
+
+    /**
+     * 更换用户头像
+     * @param systemUserId
+     * @param file
+     */
     @Override
     public void updateImageById(Long systemUserId, File file) {
 //        调用文件服务上传文件到服务器，返回一个resultData
