@@ -4,14 +4,14 @@
   <resultMap id="BaseResultMap" type="com.snxy.business.domain.CompanyUserRelation">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
-    <result column="onlline_user_id" jdbcType="BIGINT" property="onllineUserId" />
+    <result column="online_user_id" jdbcType="BIGINT" property="onlineUserId" />
     <result column="is_responsible" jdbcType="INTEGER" property="isResponsible" />
     <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
     <result column="gmt_modifed" jdbcType="TIMESTAMP" property="gmtModifed" />
     <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, company_id, onlline_user_id, is_responsible, gmt_create, gmt_modifed, is_delete
+    id, company_id, online_user_id, is_responsible, gmt_create, gmt_modifed, is_delete
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -23,16 +23,16 @@
     delete from company_user_relation
     where id = #{id,jdbcType=BIGINT}
   </delete>
+
+  <!--商户负责人完善公司信息绑定-->
   <insert id="insert" parameterType="com.snxy.business.domain.CompanyUserRelation">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into company_user_relation (company_id, onlline_user_id, is_responsible, 
-      gmt_create, gmt_modifed, is_delete
-      )
-    values (#{companyId,jdbcType=BIGINT}, #{onllineUserId,jdbcType=BIGINT}, #{isResponsible,jdbcType=INTEGER}, 
-      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModifed,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=TINYINT}
-      )
+    insert into company_user_relation (company_id, online_user_id, is_responsible,
+      gmt_create, gmt_modifed)
+    values (#{companyId}, #{onlineUserId}, #{isResponsible},
+      #{gmtCreate}, #{gmtModifed})
   </insert>
   <insert id="insertSelective" parameterType="com.snxy.business.domain.CompanyUserRelation">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -43,8 +43,8 @@
       <if test="companyId != null">
         company_id,
       </if>
-      <if test="onllineUserId != null">
-        onlline_user_id,
+      <if test="onlineUserId != null">
+        online_user_id,
       </if>
       <if test="isResponsible != null">
         is_responsible,
@@ -63,8 +63,8 @@
       <if test="companyId != null">
         #{companyId,jdbcType=BIGINT},
       </if>
-      <if test="onllineUserId != null">
-        #{onllineUserId,jdbcType=BIGINT},
+      <if test="onlineUserId != null">
+        #{onlineUserId,jdbcType=BIGINT},
       </if>
       <if test="isResponsible != null">
         #{isResponsible,jdbcType=INTEGER},
@@ -86,8 +86,8 @@
       <if test="companyId != null">
         company_id = #{companyId,jdbcType=BIGINT},
       </if>
-      <if test="onllineUserId != null">
-        onlline_user_id = #{onllineUserId,jdbcType=BIGINT},
+      <if test="onlineUserId != null">
+        online_user_id = #{onlineUserId,jdbcType=BIGINT},
       </if>
       <if test="isResponsible != null">
         is_responsible = #{isResponsible,jdbcType=INTEGER},
@@ -107,11 +107,74 @@
   <update id="updateByPrimaryKey" parameterType="com.snxy.business.domain.CompanyUserRelation">
     update company_user_relation
     set company_id = #{companyId,jdbcType=BIGINT},
-      onlline_user_id = #{onllineUserId,jdbcType=BIGINT},
+      online_user_id = #{onlineUserId,jdbcType=BIGINT},
       is_responsible = #{isResponsible,jdbcType=INTEGER},
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       gmt_modifed = #{gmtModifed,jdbcType=TIMESTAMP},
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <!--更改公司负责人-->
+  <update id="changePrinciple">
+    update company_user_relation
+    set is_responsible = #{isResponsible}
+    where company_id = #{companyId}
+    AND is_delete = 0
+    and online_user_id = #{onlineUserId}
+  </update>
+
+  <!--添加公司员工-->
+  <insert id="insertCompanyRelation" parameterType="com.snxy.business.domain.CompanyUserRelation">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into company_user_relation (company_id, online_user_id, is_responsible,
+    gmt_create)
+    values (#{companyId}, #{onlineUserId}, #{isResponsible},
+    #{gmtCreate})
+  </insert>
+
+  <!--查询通过onlineUserId-->
+  <select id="selectByOnlineUserId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from company_user_relation
+    where online_user_id = #{id}
+  </select>
+
+  <!--批量添加公司员工-->
+  <insert id="insertCompanyRelationList" useGeneratedKeys="true" keyProperty="id">
+    <!--<selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">-->
+      <!--SELECT LAST_INSERT_ID()-->
+    <!--</selectKey>-->
+    insert into company_user_relation (company_id, online_user_id, is_responsible,
+    gmt_create)
+    values
+    <foreach collection="list" item="companyUserRelation" separator=",">
+      (#{companyUserRelation.companyId}, #{companyUserRelation.onlineUserId}, #{companyUserRelation.isResponsible},
+      #{companyUserRelation.gmtCreate})
+    </foreach>
+  </insert>
+
+  <!--查询公司所有员工-->
+  <select id="selectAllByCompanyId" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    from company_user_relation
+    where company_id = #{companyId}
+    and is_delete = 0
+  </select>
+
+  <!--批量修改员工负责人状态-->
+  <update id="updateByCompanyUserRelationList"  parameterType="java.util.List">
+    <foreach collection="companyUserRelationList" item="item" index="index" open="" close="" separator=";">
+      update company_user_relation
+      <set>
+        is_responsible = #{item.isResponsible},
+        gmt_modifed = #{item.gmtModifed}
+      </set>
+      where online_user_id = ${item.onlineUserId}
+    </foreach>
   </update>
 </mapper>

@@ -2,6 +2,11 @@ package com.snxy.business.dao.mapper;
 
 import com.snxy.business.domain.UserIdentity;
 
+import com.snxy.business.domain.UserIdentity;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+
 public interface UserIdentityMapper {
     int deleteByPrimaryKey(Long id);
 
@@ -14,4 +19,8 @@ public interface UserIdentityMapper {
     int updateByPrimaryKeySelective(UserIdentity record);
 
     int updateByPrimaryKey(UserIdentity record);
+
+    void insertIdentity(UserIdentity userIdentity);
+
+    void insertIdentityList(List<UserIdentity> list);
 }

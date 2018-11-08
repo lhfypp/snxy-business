@@ -10,6 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
  */
 @SpringBootApplication
 @EnableFeignClients
+
 @ComponentScan({"com.snxy.business.biz","com.snxy.business.dao"})
 public class SnxyBizApplication {
     public static void main(String[] args) {
