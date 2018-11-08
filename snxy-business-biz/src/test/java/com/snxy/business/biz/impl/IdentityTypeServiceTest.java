@@ -1,5 +1,10 @@
 package com.snxy.business.biz.impl;
 
+import com.snxy.business.dao.mapper.IdentityTypeMapper;
+import com.snxy.business.dao.mapper.SystemUserMapper;
+import com.snxy.business.domain.IdentityType;
+import com.snxy.business.domain.SystemUser;
+import com.snxy.business.service.IdentityTypeService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;

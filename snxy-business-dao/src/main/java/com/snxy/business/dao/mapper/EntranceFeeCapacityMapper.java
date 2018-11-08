@@ -1,5 +1,9 @@
 package com.snxy.business.dao.mapper;
 
+import com.snxy.business.domain.EntranceFeeCapacity;
+
+import java.util.List;
+
 public interface EntranceFeeCapacityMapper {
     int deleteByPrimaryKey(Long id);
 
@@ -12,4 +16,6 @@ public interface EntranceFeeCapacityMapper {
     int updateByPrimaryKeySelective(EntranceFeeCapacity record);
 
     int updateByPrimaryKey(EntranceFeeCapacity record);
+
+    List<EntranceFeeCapacity> selectcarList();
 }

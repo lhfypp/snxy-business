@@ -1,5 +1,7 @@
 package com.snxy.business.dao.mapper;
 
+import com.snxy.business.domain.OnlineUser;
+
 public interface OnlineUserMapper {
     int deleteByPrimaryKey(Long id);
 

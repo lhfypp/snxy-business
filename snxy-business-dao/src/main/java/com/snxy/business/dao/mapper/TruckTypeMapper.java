@@ -1,5 +1,7 @@
 package com.snxy.business.dao.mapper;
 
+import com.snxy.business.domain.TruckType;
+
 public interface TruckTypeMapper {
     int deleteByPrimaryKey(Long id);
 

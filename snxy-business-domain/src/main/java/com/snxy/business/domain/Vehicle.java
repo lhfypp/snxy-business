@@ -1,7 +1,10 @@
 package com.snxy.business.domain;
 
+import lombok.Data;
+
 import java.util.Date;
 
+@Data
 public class Vehicle {
     private Long id;
 
@@ -13,7 +16,9 @@ public class Vehicle {
 
     private String vehicleDrivingLicenseNumber;
 
-    private String vehicleDrivingLicenseUrl;
+    private String vehicleDrivingLicenseFrontUrl;
+
+    private String vehicleDrivingLicenseBackUrl;
 
     private String tonnage;
 
@@ -24,6 +29,8 @@ public class Vehicle {
     private Long onlineUserId;
 
     private Byte isDelete;
+
+    private String carryingCapacity;
 
     public Long getId() {
         return id;
@@ -65,12 +72,20 @@ public class Vehicle {
         this.vehicleDrivingLicenseNumber = vehicleDrivingLicenseNumber;
     }
 
-    public String getVehicleDrivingLicenseUrl() {
-        return vehicleDrivingLicenseUrl;
+    public String getVehicleDrivingLicenseFrontUrl() {
+        return vehicleDrivingLicenseFrontUrl;
     }
 
-    public void setVehicleDrivingLicenseUrl(String vehicleDrivingLicenseUrl) {
-        this.vehicleDrivingLicenseUrl = vehicleDrivingLicenseUrl;
+    public void setVehicleDrivingLicenseFrontUrl(String vehicleDrivingLicenseFrontUrl) {
+        this.vehicleDrivingLicenseFrontUrl = vehicleDrivingLicenseFrontUrl;
+    }
+
+    public String getVehicleDrivingLicenseBackUrl() {
+        return vehicleDrivingLicenseBackUrl;
+    }
+
+    public void setVehicleDrivingLicenseBackUrl(String vehicleDrivingLicenseBackUrl) {
+        this.vehicleDrivingLicenseBackUrl = vehicleDrivingLicenseBackUrl;
     }
 
     public String getTonnage() {
@@ -111,5 +126,13 @@ public class Vehicle {
 
     public void setIsDelete(Byte isDelete) {
         this.isDelete = isDelete;
+    }
+
+    public String getCarryingCapacity() {
+        return carryingCapacity;
+    }
+
+    public void setCarryingCapacity(String carryingCapacity) {
+        this.carryingCapacity = carryingCapacity;
     }
 }

@@ -101,4 +101,9 @@
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="selectcarList" resultMap="BaseResultMap">
+    select id,carrying_capacity
+    from entrance_fee_capacity
+  </select>
 </mapper>

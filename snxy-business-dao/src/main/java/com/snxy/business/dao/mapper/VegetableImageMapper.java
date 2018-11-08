@@ -1,5 +1,7 @@
 package com.snxy.business.dao.mapper;
 
+import com.snxy.business.domain.VegetableImage;
+
 public interface VegetableImageMapper {
     int deleteByPrimaryKey(Long id);
 
