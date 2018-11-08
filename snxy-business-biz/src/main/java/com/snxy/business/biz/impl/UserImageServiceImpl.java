@@ -7,6 +7,7 @@ import com.snxy.common.exception.BizException;
 import com.snxy.common.response.ResultData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -28,6 +29,7 @@ public class UserImageServiceImpl implements UserImageService {
      * @param multipartFile
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void updateImageById(Long systemUserId, MultipartFile multipartFile) {
 //        调用文件服务上传文件到服务器，返回一个resultData
         ResultData<String> resultData = fileService.upload(multipartFile);
