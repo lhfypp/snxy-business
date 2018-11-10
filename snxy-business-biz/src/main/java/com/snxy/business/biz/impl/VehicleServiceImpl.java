@@ -3,6 +3,7 @@ package com.snxy.business.biz.impl;
 import com.snxy.business.dao.mapper.VehicleMapper;
 import com.snxy.business.domain.Vehicle;
 import com.snxy.business.service.VehicleService;
+import com.snxy.common.exception.BizException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -19,9 +20,13 @@ public class VehicleServiceImpl implements VehicleService {
 
     //保存行驶证
     @Override
-    public void saveVehicle(Vehicle vehicle) {
+    public String saveVehicle(Vehicle vehicle) {
         vehicle.setGmtCreate(new Date());
-        vehicleMapper.insert(vehicle);
+        int result =vehicleMapper.insert(vehicle);
+        if (result!=1){
+            throw new BizException("保存失败，请重新再试");
+        }
+        return "保存成功";
     }
 
     //行驶证列表展示

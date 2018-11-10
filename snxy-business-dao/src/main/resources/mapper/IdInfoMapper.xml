@@ -172,4 +172,10 @@
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="selectByidNumber" resultType="java.lang.String">
+    select id_number
+    from id_info
+    where id_number = #{identityNO}
+  </select>
 </mapper>

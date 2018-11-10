@@ -17,4 +17,6 @@ public interface IdInfoMapper {
     int updateByPrimaryKeySelective(IdInfo record);
 
     int updateByPrimaryKey(IdInfo record);
+
+    String selectByidNumber(String identityNO);
 }

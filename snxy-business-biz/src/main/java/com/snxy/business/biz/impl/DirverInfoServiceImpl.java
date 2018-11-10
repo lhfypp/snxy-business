@@ -6,6 +6,7 @@ import com.snxy.business.domain.*;
 import com.snxy.business.service.CompanyUserRelationService;
 import com.snxy.business.service.DirverInfoService;
 import com.snxy.business.service.MerchantCompanyService;
+import com.snxy.common.exception.BizException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -41,21 +42,26 @@ public class DirverInfoServiceImpl implements DirverInfoService {
                 driverPicture.setDrivingLicenseUrl(image.getFileaPath());
             }
         }
-        //保存驾驶证
-        DirverInfo dirverInfo = new DirverInfo();
-        dirverInfo.setOnlineUserId(driverPicture.getOnlineUserId());
-        dirverInfo.setDrivingLicenseUrl(driverPicture.getDrivingLicenseUrl());
-        dirverInfo.setGmtCreate(driverPicture.getGmtCreate());
-        dirverInfoMapper.insert(dirverInfo);
-        //保存身份证
-        IdInfo idInfo = new IdInfo();
-        idInfo.setName(driverPicture.getName());
-        idInfo.setOnlineUserId(driverPicture.getOnlineUserId());
-        idInfo.setIdNumber(driverPicture.getIdentityNO());
-        idInfo.setIdFrontUrl(driverPicture.getIdFrontUrl());
-        idInfo.setIdBackUrl(driverPicture.getIdBackUrl());
-        idInfo.setGmtCreate(driverPicture.getGmtCreate());
-        idInfoMapper.insert(idInfo);
+        String idNumber = idInfoMapper.selectByidNumber(driverPicture.getIdentityNO());
+        if (!idNumber.equals(driverPicture.getIdentityNO())){
+            //保存驾驶证
+            DirverInfo dirverInfo = new DirverInfo();
+            dirverInfo.setOnlineUserId(driverPicture.getOnlineUserId());
+            dirverInfo.setDrivingLicenseUrl(driverPicture.getDrivingLicenseUrl());
+            dirverInfo.setGmtCreate(driverPicture.getGmtCreate());
+            dirverInfoMapper.insert(dirverInfo);
+            //保存身份证
+            IdInfo idInfo = new IdInfo();
+            idInfo.setName(driverPicture.getName());
+            idInfo.setOnlineUserId(driverPicture.getOnlineUserId());
+            idInfo.setIdNumber(driverPicture.getIdentityNO());
+            idInfo.setIdFrontUrl(driverPicture.getIdFrontUrl());
+            idInfo.setIdBackUrl(driverPicture.getIdBackUrl());
+            idInfo.setGmtCreate(driverPicture.getGmtCreate());
+            idInfoMapper.insert(idInfo);
+        }else {
+            throw new BizException("您已注册，请登录");
+        }
     }
 
     /**
