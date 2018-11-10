@@ -9,14 +9,14 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CommonProblems {
+public class Door {
     private Long id;
 
-    private String question;
+    private String doorName;
 
-    private String answer;
+    private Double longitude;
 
-    private String problemDetail;
+    private Double latitude;
 
     private Byte isDelete;
 

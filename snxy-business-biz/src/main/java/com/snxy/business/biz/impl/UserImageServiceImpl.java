@@ -42,4 +42,14 @@ public class UserImageServiceImpl implements UserImageService {
 //        将url保存到userImage表中
         userImageMapper.updateImageById(systemUserId,url);
     }
+
+    /**
+     * 查询用户头像
+     * @param systemUserId
+     * @return
+     */
+    @Override
+    public String selectImageBySystemUserId(Long systemUserId) {
+        return userImageMapper.selectImageBySystemUserId(systemUserId);
+    }
 }

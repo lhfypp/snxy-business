@@ -13,7 +13,6 @@ import lombok.Data;
 
 
 @Data
-
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor

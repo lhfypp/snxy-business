@@ -30,4 +30,5 @@ public interface MerchantCompanyMapper {
 
     List<String> selectAllName();
 
+    List<MerchantCompany> selectCompanyByCompanyIdList(@Param("companyIdList") List<Long> companyIdList);
 }

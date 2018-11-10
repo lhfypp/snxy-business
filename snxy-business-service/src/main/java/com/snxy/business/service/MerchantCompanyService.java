@@ -8,4 +8,6 @@ public interface MerchantCompanyService {
     void insertCompanyMessage(MerchantCompany merchantCompany);
 
     List<String> selectAllName();
+
+    List<MerchantCompany> selectCompanyByCompanyIdList(List<Long> companyIdList);
 }

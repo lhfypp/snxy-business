@@ -6,4 +6,6 @@ import org.springframework.web.multipart.MultipartFile;
 public interface UserImageService {
 
     void updateImageById(Long systemUserId, MultipartFile multipartFile  );
+
+    String selectImageBySystemUserId(Long systemUserId);
 }
