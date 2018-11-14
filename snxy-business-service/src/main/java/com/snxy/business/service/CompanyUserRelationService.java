@@ -2,6 +2,7 @@ package com.snxy.business.service;
 
 import com.snxy.business.domain.CompanyUserRelation;
 import com.snxy.business.domain.MerchantCompany;
+import com.snxy.business.service.vo.PersonalVO;
 
 
 import java.util.List;
@@ -27,9 +28,13 @@ public interface CompanyUserRelationService {
 
     MerchantCompany selectBossCompanyByUserId(Long onlineUserId);
 
+    void deleteCompanyUserRelationByOnlineUserId(Long onlineUserId);
+
     MerchantCompany selectEmployCompanyByUserId(Long onlineUserId);
 
     List<Long> selectCompanyIdByOnlineUserId(Long onlineUserId);
+
+    PersonalVO selectPersonalByOnlineUserId(Long systemUserId);
 
 
 

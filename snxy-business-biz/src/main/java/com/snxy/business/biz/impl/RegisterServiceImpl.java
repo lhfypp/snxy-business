@@ -53,4 +53,10 @@ public class RegisterServiceImpl implements RegisterService {
         }
         userIdentityService.insertIdentity(userIdentity);
     }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void newPassword(String password, Long systemUserId) {
+        systemUserService.updatePassword(password,systemUserId);
+    }
 }

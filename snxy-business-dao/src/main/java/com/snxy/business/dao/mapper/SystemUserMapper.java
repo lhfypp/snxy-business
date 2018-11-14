@@ -33,4 +33,6 @@ public interface SystemUserMapper {
     void updateSystemMobile(@Param("systemUserId") Long systemUserId, @Param("mobile") String newMobile);
 
     SystemUser selectByPhone(String phone);
+
+    void updatePassword(@Param("password") String password, @Param("systemUserId") Long systemUserId);
 }

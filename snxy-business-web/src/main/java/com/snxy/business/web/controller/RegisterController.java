@@ -23,6 +23,15 @@ public class RegisterController {
     private RegisterService registerService;
 
     /*
+    * 注册登陆密码设置
+    * */
+    @RequestMapping("/password/new")
+    public ResultData newPassword(@RequestAttribute("systemUser")SystemUserVO systemUserVO, String password){
+        registerService.newPassword(password,systemUserVO.getSystemUserId());
+        return ResultData.success("");
+    }
+
+    /*
      * 注册获取身份列表(前台显示列表)W
      * */
     @RequestMapping("/identity/show/list")

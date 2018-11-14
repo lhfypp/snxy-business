@@ -200,4 +200,12 @@
     from system_user
     where mobile =#{phone}
   </select>
+
+  <!--设置密码-->
+  <update id="updatePassword">
+    update system_user
+    set pwd = #{password}
+    where id = #{systemUserId}
+    and is_delete = 0
+  </update>
 </mapper>

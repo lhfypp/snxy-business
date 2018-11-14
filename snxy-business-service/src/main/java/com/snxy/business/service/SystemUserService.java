@@ -16,4 +16,6 @@ public interface SystemUserService {
     void updateSystemMobile(Long systemUserId, String newMobile);
 
     SystemUser selectByMobile(String phone);
+
+    void updatePassword(String password, Long systemUserId);
 }

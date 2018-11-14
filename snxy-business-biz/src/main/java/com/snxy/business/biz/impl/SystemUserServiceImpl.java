@@ -58,4 +58,9 @@ public class SystemUserServiceImpl implements SystemUserService {
         SystemUser systemUser = systemUserMapper.selectByPhone(phone);
         return systemUser;
     }
+
+    @Override
+    public void updatePassword(String password, Long systemUserId) {
+        systemUserMapper.updatePassword(password,systemUserId);
+    }
 }

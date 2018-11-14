@@ -1,6 +1,7 @@
 package com.snxy.business.biz.impl;
 
 import com.snxy.business.biz.config.IdentityTypeEnum;
+import com.snxy.business.domain.IdentityType;
 import com.snxy.business.service.IdentityTypeService;
 import com.snxy.business.service.vo.IdentityVO;
 import lombok.extern.slf4j.Slf4j;
