@@ -1,9 +1,13 @@
 package com.snxy.business.dao.mapper;
 
 import com.snxy.business.domain.CompanyUserRelation;
+
+
+import com.snxy.business.domain.MerchantCompany;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+
 
 public interface CompanyUserRelationMapper {
     int deleteByPrimaryKey(Long id);
@@ -22,7 +26,7 @@ public interface CompanyUserRelationMapper {
 
     CompanyUserRelation selectByOnlineUserId(Long id);
 
-    void insertCompanyRelationList(List<CompanyUserRelation> list);
+    void insertCompanyRelationList(List<CompanyUserRelation> companyUserRelationList);
 
     List<CompanyUserRelation> selectAllByCompanyId(Long companyId);
 
@@ -31,4 +35,16 @@ public interface CompanyUserRelationMapper {
     List<CompanyUserRelation> selectUserRelationByOnlineUserIdList(@Param("onlineUserIdList") List<Long> onlineUserIdList);
 
     CompanyUserRelation selectByCompanyId(Long companyId);
+
+    MerchantCompany selectBossCompanyByUserId(@Param("onlineUserId") Long onlineUserId );
+
+    List<Long> selectCompanyIdByOnlineUserId(Long onlineUserId);
+
+    void deleteCompanyUserRelationByOnlineUserId(Long onlineUserId);
+
+    MerchantCompany selectEmployCompanyByUserId(Long onlineUserId);
+
+    String selectUserNameByOlineUserId(Long onlineUserId);
+
+    String selectPhoneByOnlineUserId(Long onlineUserId);
 }

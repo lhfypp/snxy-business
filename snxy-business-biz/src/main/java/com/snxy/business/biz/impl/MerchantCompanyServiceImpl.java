@@ -40,10 +40,14 @@ public class MerchantCompanyServiceImpl implements MerchantCompanyService {
     public List<CompanyVO> selectByCompanyName(String companyName) {
         List<MerchantCompany> merchantCompanyList = merchantCompanyMapper.selectByCompanyName(companyName);
         List<CompanyVO> companyVOList = merchantCompanyList.parallelStream().map(merchantCompany -> CompanyVO.builder()
-                                                 .companyId(merchantCompany.getId())
-                                                 .companyName(merchantCompany.getMerchantName())
-                                                 .build())
-                                                 .collect(Collectors.toList());
+                .companyId(merchantCompany.getId())
+                .companyName(merchantCompany.getMerchantName())
+                .build())
+                .collect(Collectors.toList());
         return companyVOList;
+    }
+    public List<MerchantCompany> selectCompanyByCompanyIdList(List<Long> companyIdList) {
+
+        return  merchantCompanyMapper.selectCompanyByCompanyIdList(companyIdList);
     }
 }

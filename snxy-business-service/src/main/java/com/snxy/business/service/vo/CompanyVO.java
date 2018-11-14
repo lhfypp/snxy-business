@@ -20,4 +20,5 @@ public class CompanyVO {
     private String headName;
 
     private String headPhone;
+
 }

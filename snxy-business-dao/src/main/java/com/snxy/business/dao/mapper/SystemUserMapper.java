@@ -1,10 +1,15 @@
 package com.snxy.business.dao.mapper;
 
 import com.snxy.business.domain.SystemUser;
+
+import com.snxy.business.domain.SystemUser;
+
+
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
 import java.util.List;
+
 
 public interface SystemUserMapper {
     int deleteByPrimaryKey(Long id);

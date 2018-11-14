@@ -162,11 +162,21 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
 
-
   <update id="updateImageById" parameterType="com.snxy.business.domain.UserImage">
     update user_image
     set
       url = #{url,jdbcType=VARCHAR}
     where system_user_id = #{systemUserId,jdbcType=BIGINT}
   </update>
+
+<!--查询用户头像-->
+  <select id="selectImageBySystemUserId" parameterType="java.lang.Long" resultType="String">
+    select
+    ui.url
+    from user_image as  ui
+    where system_user_id = #{systemUserId,jdbcType=BIGINT}
+  </select>
+
+
+
 </mapper>

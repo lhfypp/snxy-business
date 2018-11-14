@@ -20,12 +20,22 @@ public class SystemUserServiceImpl implements SystemUserService {
     @Resource
     private SystemUserMapper systemUserMapper;
 
+    /**
+     * 更换系统用户姓名
+     * @param systemUserId
+     * @param name
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateName(Long systemUserId, String name) {
         systemUserMapper.updateNameByPrimaryKey(systemUserId,name,new Date());
     }
 
+    /**
+     * 更换系统用户手机号
+     * @param systemUserId
+     * @param newMobile
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void insertSystemUser(SystemUser systemUser) {

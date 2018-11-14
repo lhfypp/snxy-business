@@ -17,7 +17,7 @@
     id, account, mobile, chinese_name, pwd, reg_date, account_status, gmt_create, gmt_modified, 
     is_delete
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey"  resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from system_user

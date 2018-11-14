@@ -1,6 +1,7 @@
 package com.snxy.business.biz.impl;
 
 import com.snxy.business.biz.feign.FileService;
+
 import com.snxy.business.domain.*;
 import com.snxy.business.service.*;
 import com.snxy.business.service.vo.*;
@@ -9,7 +10,6 @@ import com.snxy.common.response.ResultData;
 import com.snxy.common.util.MD5Util;
 import com.snxy.common.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;

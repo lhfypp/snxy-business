@@ -30,7 +30,7 @@ public class GetSmsCodeTests {
      */
     @Test
     public void updateOnlineMobileT(){
-        onlineUserService.updateOnlineMobile(11L,"13611163216","13611163215","630176");
+        onlineUserService.updateOnlineMobile(11L,"13611163216","13611163210","322251");
         System.out.println("==============================");
     }
 }

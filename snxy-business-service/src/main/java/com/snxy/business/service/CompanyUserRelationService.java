@@ -1,7 +1,8 @@
 package com.snxy.business.service;
 
 import com.snxy.business.domain.CompanyUserRelation;
-import com.snxy.business.service.vo.ChangePrincipleVO;
+import com.snxy.business.domain.MerchantCompany;
+
 
 import java.util.List;
 
@@ -21,4 +22,16 @@ public interface CompanyUserRelationService {
     List<CompanyUserRelation> selectUserRelationByOnlineUserIdList(List<Long> onlineUserIdList);
 
     CompanyUserRelation selectUserRelationByCompanyId(Long companyId);
+
+    int insert(CompanyUserRelation record);
+
+    MerchantCompany selectBossCompanyByUserId(Long onlineUserId);
+
+    MerchantCompany selectEmployCompanyByUserId(Long onlineUserId);
+
+    List<Long> selectCompanyIdByOnlineUserId(Long onlineUserId);
+
+
+
+
 }

@@ -21,7 +21,6 @@ public class SystemUserInfoServiceImpl implements SystemUserInfoService {
      */
     @Override
     public String selectMobileBySystemUserId(Long systemUserId) {
-
         return systemUserInfoMapper.selectMobileBySystemUserId(systemUserId);
     }
 }

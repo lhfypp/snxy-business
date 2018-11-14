@@ -18,4 +18,6 @@ public interface IdentityTypeMapper {
     int updateByPrimaryKey(IdentityType record);
 
     List<IdentityType> selectAllType();
+
+    List<IdentityType> listAll(byte b);
 }

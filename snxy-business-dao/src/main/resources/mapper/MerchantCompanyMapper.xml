@@ -123,6 +123,25 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
 
+  <resultMap id="selectAllComInfoByComNameMap" type="com.snxy.business.domain.CompanyPartInfo">
+    <result column="merchant_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="name" jdbcType="VARCHAR" property="responsiblePerson" />
+    <result column="phone" jdbcType="VARCHAR" property="mobile" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+  </resultMap>
+  <sql id="selectAllComInfoByComNameFuzzy">
+     a.merchant_name as merchant_name,c.name as name,c.phone as phone,b.company_id as company_id
+  </sql>
+  <select id="selectAllComInfoByComName" resultMap="selectAllComInfoByComNameMap" parameterType="java.lang.String">
+    select
+    <include refid="selectAllComInfoByComNameFuzzy"/>
+    from merchant_company a,company_user_relation b,online_user c
+    where a.id=b.company_id
+         and b.onlline_user_id=c.id
+         and b.is_responsible=1
+         and a.merchant_name like concat('%',#{companyName,jdbcType=VARCHAR},'%')
+
+  </select>
   <!--查询所有公司名-->
   <select id="selectAllName">
     select merchant_name
@@ -136,5 +155,17 @@
     <include refid="Base_Column_List" />
     from merchant_company
     where merchant_name LIKE concat('%',#{companyName},'%')
+  </select>
+
+  <!--查询司机所属公司信息-->
+  <select id="selectCompanyByCompanyIdList" parameterType="List" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from merchant_company
+    where id in
+    <foreach collection="companyIdList" item="id"  open="(" separator="," close=")">
+    #{id}
+  </foreach>
+    and is_delete = 0
   </select>
 </mapper>

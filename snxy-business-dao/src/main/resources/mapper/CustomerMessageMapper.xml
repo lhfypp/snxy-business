@@ -90,4 +90,10 @@
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="selectAllCustomerMessage"   resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from customer_message
+  </select>
 </mapper>

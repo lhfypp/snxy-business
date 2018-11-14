@@ -113,6 +113,16 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
 
+  <select id="selectIdBySystemUserID" resultType="java.lang.Long">
+    select id
+        from
+        online_user
+         where
+         system_user_id=#{SystemUserId}
+  </select>
+
+
+
   <!--添加用户名字W-->
   <update id="updateNameBySystemUserId">
     update online_user
@@ -181,4 +191,14 @@
     where id = #{onlineUserId}
     and is_delete = 0
   </update>
+
+
+<!--根据系统id获取onlineUserId-->
+  <select id="selectOnlineUserIdBySystemUserId" parameterType="java.lang.Long" resultType="java.lang.Long">
+    select
+    id
+    from online_user
+    where system_user_id = #{systemUserId,jdbcType=BIGINT}
+  </select>
+
 </mapper>
