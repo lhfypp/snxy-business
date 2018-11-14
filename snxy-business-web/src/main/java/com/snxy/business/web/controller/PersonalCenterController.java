@@ -3,10 +3,9 @@ package com.snxy.business.web.controller;
 
 
 import com.snxy.business.biz.feign.FileService;
-import com.snxy.business.service.OnlineUserService;
-import com.snxy.business.service.PerSettingsHomepageService;
-import com.snxy.business.service.UserImageService;
-import com.snxy.business.service.VersionService;
+import com.snxy.business.domain.CommonProblems;
+import com.snxy.business.domain.CustomerMessage;
+import com.snxy.business.service.*;
 import com.snxy.business.service.vo.CompanyVO;
 import com.snxy.business.service.vo.SystemUserVO;
 import com.snxy.common.response.ResultData;
@@ -20,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
@@ -45,6 +43,14 @@ public class PersonalCenterController {
     private FileService fileService;
     @Resource
     private VersionService versionService;
+    @Resource
+    private SystemUserService systemUserService;
+    @Resource
+    private CommonProblemsService commonProblemsService;
+    @Resource
+    private SystemUserInfoService systemUserInfoService;
+    @Resource
+    private CustomerMessageService customerMessageService;
 
     //设置所属商户(搜索)
     @RequestMapping("/company/search")
@@ -85,6 +91,26 @@ public class PersonalCenterController {
         log.info("============================");
         userImageService.updateImageById(systemUserId, file);
     }
+
+    /**
+     * 修改在线用户姓名
+     * @param systemUserId
+     * @param name
+     */
+    @RequestMapping("/updateOnlineUserName")
+    public void updateUserName(Long systemUserId, String name){
+        onlineUserService.updateName(systemUserId,name);
+    }
+
+    /**
+     * 修改系统用户姓名
+     * @param systemUserId
+     * @param name
+     */
+    @RequestMapping("/updateSysUserName")
+    public void updateSysUserName(Long systemUserId, String name){
+        systemUserService.updateName(systemUserId,name);
+    }
     /**
      * 下载版本
      * @param systemUserId
@@ -117,4 +143,44 @@ public class PersonalCenterController {
     public void release(Long systemUserId, String versionNum, MultipartFile file){
         versionService.release(systemUserId,versionNum,file);
     }
+    /**
+     * 常见问题列表
+     * @return
+     */
+    @RequestMapping("/commonProblem/list")
+    public ResultData selectAllCommonProblems(){
+        List<CommonProblems> commonProblemsList = commonProblemsService.selectAllCommonProblems();
+        return  ResultData.success(commonProblemsList);
+    }
+    /**
+     * 问题详情
+     * @param id
+     * @return
+     */
+    @RequestMapping("/commonProblem/show")
+    public ResultData selectCommonProblemsById( Long id ){
+        CommonProblems commonProblems = commonProblemsService.selectCommonProblemsById(id);
+        return  ResultData.success(commonProblems);
+    }
+    /**
+     * 查询客服电话
+     * @param systemUserId
+     * @return
+     */
+    @RequestMapping("/mobile/show")
+    public ResultData selectMobileBySystemUserId(Long systemUserId){
+        String mobile = systemUserInfoService.selectMobileBySystemUserId(systemUserId);
+        return ResultData.success(mobile);
+    }
+
+    /**
+     * 问题留言
+     * @return
+     */
+    @RequestMapping("/customerMessage/show")
+    public ResultData selectAllCustomerMessage(){
+        List<CustomerMessage> customerMessageList = customerMessageService.selectAllCustomerMessage();
+        return ResultData.success(customerMessageList);
+    }
+
 }
