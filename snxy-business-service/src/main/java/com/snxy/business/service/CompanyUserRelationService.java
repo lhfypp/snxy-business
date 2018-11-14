@@ -2,7 +2,6 @@ package com.snxy.business.service;
 
 import com.snxy.business.domain.CompanyUserRelation;
 import com.snxy.business.domain.MerchantCompany;
-import com.snxy.business.service.vo.CompanyVO;
 import com.snxy.business.service.vo.PersonalVO;
 
 
@@ -20,6 +19,11 @@ public interface CompanyUserRelationService {
     List<CompanyUserRelation> selectAllByCompanyId(Long companyId);
 
     void updateIsResponsible(List<CompanyUserRelation> companyUserRelationList);
+
+    List<CompanyUserRelation> selectUserRelationByOnlineUserIdList(List<Long> onlineUserIdList);
+
+    CompanyUserRelation selectUserRelationByCompanyId(Long companyId);
+
     int insert(CompanyUserRelation record);
 
     MerchantCompany selectBossCompanyByUserId(Long onlineUserId);

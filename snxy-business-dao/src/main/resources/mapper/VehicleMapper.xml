@@ -170,6 +170,14 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
 
+  <!--通过司机ID查询-->
+  <select id="selectByDriverId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from vehicle
+    where driver_info_id = #{driverOnlineUserId}
+  </select>
+
   <select id="selectByKey" resultMap="BaseResultMap">
     select a.plate_number,a.vehicle_driving_license_number,b.carrying_capacity
     from entrance_fee_capacity b,vehicle a

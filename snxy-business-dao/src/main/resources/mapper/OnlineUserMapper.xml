@@ -137,6 +137,7 @@
     <include refid="Base_Column_List" />
     from online_user
     where phone = #{phone}
+    AND is_delete = 0
   </select>
 
   <!--添加onlineUser-->
@@ -180,6 +181,7 @@
     <foreach collection="onlineUserIdList" index="index" item="onlineUserId" open="(" separator="," close=")">
       #{onlineUserId}
     </foreach>
+    AND is_delete = 0
   </select>
 
   <!--修改在线用户手机号-->

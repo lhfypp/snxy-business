@@ -5,20 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CompanyVO {
-    private String companyName;
-
-    private Long companyId;
-
-    private Boolean certificationStatus;
-
-    private String headName;
-
-    private String headPhone;
-
+public class DriverConfirmationVO {
+    private Long vehicleId;
+    private Integer status;
+    private Long id;//订单id
 }

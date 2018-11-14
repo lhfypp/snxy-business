@@ -14,7 +14,6 @@ import javax.annotation.Resource;
 
 
 import org.springframework.transaction.annotation.Transactional;
-import sun.security.provider.MD5;
 
 import java.util.Date;
 import java.util.List;
@@ -31,13 +30,14 @@ public class SystemUserServiceImpl implements SystemUserService {
 
     /**
      * 更换系统用户姓名
+     *
      * @param systemUserId
      * @param name
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateName(Long systemUserId, String name) {
-        systemUserMapper.updateNameByPrimaryKey(systemUserId,name,new Date());
+        systemUserMapper.updateNameByPrimaryKey(systemUserId, name, new Date());
     }
 
     @Override
@@ -54,6 +54,7 @@ public class SystemUserServiceImpl implements SystemUserService {
 
     /**
      * 更换系统用户手机号
+     *
      * @param systemUserId
      * @param newMobile
      */
@@ -64,6 +65,7 @@ public class SystemUserServiceImpl implements SystemUserService {
 
     /**
      * 修改密码前获取验证码
+     *
      * @param mobile
      * @return
      */
@@ -73,17 +75,18 @@ public class SystemUserServiceImpl implements SystemUserService {
         //将来调用短信服务给手机号发送验证码，测试我们先后台生成6位
         String smsCode = RandomStringUtils.randomNumeric(6);
         //将验证码存到redis中，设置有效期为半小时
-        redisTemplate.opsForValue().set(mobile+"updatePWD",smsCode,30, TimeUnit.MINUTES);
+        redisTemplate.opsForValue().set(mobile + "updatePWD", smsCode, 30, TimeUnit.MINUTES);
         //根据当前手机号查出当前的密码
         String DBpwd = systemUserMapper.selectPwdByMobile(mobile);
         //因为数据库中密码是加密的，查出来要解密
         String plainPwd = MD5Util.encrypt(DBpwd);
-        System.out.print("======================="+plainPwd+"======="+DBpwd);
+        System.out.print("=======================" + plainPwd + "=======" + DBpwd);
         return smsCode;
     }
 
     /**
      * 修改密码
+     *
      * @param mobile
      * @param smsCode
      * @param password
@@ -92,18 +95,29 @@ public class SystemUserServiceImpl implements SystemUserService {
     public void updatePwd(String mobile, String smsCode, String password) {
         //从redis中取出验证码
         Object obj = redisTemplate.opsForValue().get(mobile + "updatePWD");
-        if (obj==null){
+        if (obj == null) {
             throw new BizException("验证码已过期,请重新获取");
         }
         //验证码没过期，从redis取出来和用户输入的进行比对
-       String redisSmsCode = (String)redisTemplate.opsForValue().get(mobile + "updatePWD");
-        if (smsCode.length()==0||smsCode.isEmpty()){
+        String redisSmsCode = (String) redisTemplate.opsForValue().get(mobile + "updatePWD");
+        if (smsCode.length() == 0 || smsCode.isEmpty()) {
             throw new BizException("验证码为空");
-        }else if (!redisSmsCode.equals(smsCode)){
+        } else if (!redisSmsCode.equals(smsCode)) {
             throw new BizException("验证码输入错误");
         }
         //修改密码,将明文改成密文
         String DBpwd = MD5Util.encrypt(password);
-        systemUserMapper.updatePwdByMobile(mobile,DBpwd);
+        systemUserMapper.updatePwdByMobile(mobile, DBpwd);
+    }
+
+    @Override
+    public SystemUser selectByMobile(String phone) {
+        SystemUser systemUser = systemUserMapper.selectByPhone(phone);
+        return systemUser;
+    }
+
+    @Override
+    public void updatePassword(String password, Long systemUserId) {
+        systemUserMapper.updatePassword(password, systemUserId);
     }
 }

@@ -204,5 +204,20 @@
     UPDATE system_user
     set pwd = #{password}
     where mobile = #{mobile}
+ </update>
+  <!--通过手机号查询用户-->
+  <select id="selectByPhone" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from system_user
+    where mobile =#{phone}
+  </select>
+
+  <!--设置密码-->
+  <update id="updatePassword">
+    update system_user
+    set pwd = #{password}
+    where id = #{systemUserId}
+    and is_delete = 0
   </update>
 </mapper>

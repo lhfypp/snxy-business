@@ -5,20 +5,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CompanyVO {
-    private String companyName;
-
-    private Long companyId;
-
-    private Boolean certificationStatus;
-
-    private String headName;
-
-    private String headPhone;
-
+public class ReceiverVO {
+    //收货人姓名
+    private String receiverName;
+    //收货人电话
+    private String receiverMobile;
+    //收货地址
+    private String endAddr;
 }

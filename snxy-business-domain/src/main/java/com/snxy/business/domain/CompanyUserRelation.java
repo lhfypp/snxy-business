@@ -31,4 +31,6 @@ public class CompanyUserRelation {
 
     private Byte isDelete;
 
+    private Integer isFounder;//当为0时是主负责人，当为1时不是主负责人
+
 }

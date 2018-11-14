@@ -97,4 +97,20 @@
             (#{userIdentity.onlineUserId}, #{userIdentity.identityId})
         </foreach>
     </insert>
+
+    <select id="selectByOnlineUserId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from user_identity
+        where online_user_id = #{onlineUserId}
+        and identity_id = #{identityId}
+    </select>
+
+    <!--更改用户身份-->
+    <update id="updateIdentity">
+        UPDATE user_identity
+        SET identity_id = #{identityId}
+        where online_user_id = #{onlineUserId}
+        and is_delete = 0
+    </update>
 </mapper>

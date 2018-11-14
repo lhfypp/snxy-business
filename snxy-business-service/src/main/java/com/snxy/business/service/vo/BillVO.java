@@ -5,20 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class CompanyVO {
+@AllArgsConstructor
+public class BillVO {
+    private String orderNo;
+    private String userName;
     private String companyName;
-
-    private Long companyId;
-
-    private Boolean certificationStatus;
-
-    private String headName;
-
-    private String headPhone;
-
 }

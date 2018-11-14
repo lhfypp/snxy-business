@@ -14,9 +14,14 @@ import java.util.List;
 @Service
 @Slf4j
 public class VehicleServiceImpl implements VehicleService {
-
     @Resource
     private VehicleMapper vehicleMapper;
+
+    @Override
+    public Vehicle selectByDriverId(Long driverOnlineUserId) {
+        Vehicle vehicle = vehicleMapper.selectByDriverId(driverOnlineUserId);
+        return vehicle;
+    }
 
     //保存行驶证
     @Override

@@ -35,4 +35,8 @@ public interface SystemUserMapper {
     String selectPwdByMobile(String mobile);
 
     void updatePwdByMobile(@Param("mobile")String mobile, @Param("password") String password);
+
+    SystemUser selectByPhone(String phone);
+
+    void updatePassword(@Param("password") String password, @Param("systemUserId") Long systemUserId);
 }

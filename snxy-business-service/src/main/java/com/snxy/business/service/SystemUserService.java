@@ -18,4 +18,8 @@ public interface SystemUserService {
     String updatePwdGetSmsCode(String mobile);
 
     void updatePwd(String mobile,String smsCode,String password);
+
+    SystemUser selectByMobile(String phone);
+
+    void updatePassword(String password, Long systemUserId);
 }

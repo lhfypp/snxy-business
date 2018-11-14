@@ -30,7 +30,11 @@ public interface CompanyUserRelationMapper {
 
     List<CompanyUserRelation> selectAllByCompanyId(Long companyId);
 
-    void updateByCompanyUserRelationList(List<CompanyUserRelation> companyUserRelationList);
+    void updateByCompanyUserRelationList(@Param("companyUserRelationList") List<CompanyUserRelation> companyUserRelationList);
+
+    List<CompanyUserRelation> selectUserRelationByOnlineUserIdList(@Param("onlineUserIdList") List<Long> onlineUserIdList);
+
+    CompanyUserRelation selectByCompanyId(Long companyId);
 
     MerchantCompany selectBossCompanyByUserId(@Param("onlineUserId") Long onlineUserId );
 

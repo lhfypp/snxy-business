@@ -1,13 +1,12 @@
 package com.snxy.business.service;
 
-import com.snxy.business.service.vo.ChangePrincipleVO;
-import com.snxy.business.service.vo.EmployeeVO;
-import com.snxy.business.service.vo.NewCompanyVO;
+import com.snxy.business.service.vo.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 public interface MerchantService {
-    void newCompany(NewCompanyVO newCompanyVO);
+    Long newCompany(MultipartFile file, NewCompanyVO newCompanyVO, SystemUserVO systemUserVO);
 
     void newOneEmployee(EmployeeVO employeeVO);
 
@@ -16,4 +15,12 @@ public interface MerchantService {
     List<EmployeeVO> showAllEmployee(Long companyId);
 
     void changePrinciple(List<ChangePrincipleVO> changePrincipleVOList);
+
+    List<MailVO> showMail(List<MailVO> mailVOList,Long companyId);
+
+    List<CompanyVO> companyExist(String companyName,Integer showNum);
+
+    CompanyVO showCompany(Long companyId);
+
+    void employeeAdd(Long companyId, Long onlineUserId);
 }
