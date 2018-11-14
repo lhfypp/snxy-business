@@ -192,4 +192,17 @@
     where id = #{systemUserId}
     and is_delete = 0
   </update>
+  <!--查询系统用户密码-->
+  <select id="selectPwdByMobile"  parameterType="String" resultType="String">
+    select su.pwd
+    from system_user as su
+    where mobile= #{mobile,jdbcType=BIGINT}
+  </select>
+
+  <!--修改系统用户密码-->
+  <update id="updatePwdByMobile">
+    UPDATE system_user
+    set pwd = #{password}
+    where mobile = #{mobile}
+  </update>
 </mapper>
