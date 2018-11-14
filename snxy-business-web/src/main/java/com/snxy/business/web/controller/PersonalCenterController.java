@@ -5,6 +5,7 @@ package com.snxy.business.web.controller;
 import com.snxy.business.biz.feign.FileService;
 import com.snxy.business.domain.CommonProblems;
 import com.snxy.business.domain.CustomerMessage;
+import com.snxy.business.domain.IdentityType;
 import com.snxy.business.service.*;
 import com.snxy.business.service.vo.CompanyVO;
 import com.snxy.business.service.vo.SystemUserVO;
@@ -51,6 +52,8 @@ public class PersonalCenterController {
     private SystemUserInfoService systemUserInfoService;
     @Resource
     private CustomerMessageService customerMessageService;
+   @Resource
+   private IdentityTypeService identityTypeService;
 
     //设置所属商户(搜索)
     @RequestMapping("/company/search")
@@ -181,6 +184,15 @@ public class PersonalCenterController {
     public ResultData selectAllCustomerMessage(){
         List<CustomerMessage> customerMessageList = customerMessageService.selectAllCustomerMessage();
         return ResultData.success(customerMessageList);
+    }
+
+    /**
+     * 身份标签添加
+     * @param identityTypeId
+     */
+    @RequestMapping("/identity/insert")
+    public void insertIdentity(Integer  identityTypeId ,@RequestAttribute("systemUser") SystemUserVO systemUserVO){
+          identityTypeService.insertIdentity(identityTypeId,systemUserVO.getOnlineUserId());
     }
 
 }

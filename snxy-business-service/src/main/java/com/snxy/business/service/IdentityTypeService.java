@@ -9,4 +9,6 @@ public interface IdentityTypeService {
     List<IdentityVO> selectAllIdentity();
 
     List<IdentityType> listAll(boolean b);
+
+    void insertIdentity(Integer identityTypeId,Long onlineUserId);
 }
