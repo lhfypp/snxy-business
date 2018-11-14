@@ -30,26 +30,27 @@ public class RegisterServiceImpl implements RegisterService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void chooseIdentity(Long systemUserId, String name, Integer identityId, Long onlineUserId) {
-        if (StringUtil.isBlank(name)) {
-            if (identityId==null||identityId.equals("")) {
-                throw new BizException("您还没有完善信息，请先完善信息。");
-            }
-            throw new BizException("您还没有输入姓名，请先输入姓名。");
-        } else {
-            if (identityId==null||identityId.equals("")) {
-                throw new BizException("您还没有选择身份，请先选择身份。");
-            }
-            systemUserService.updateName(systemUserId, name);
-            asyRefreshCacheUser.refreshCacheUser(systemUserId);
-            log.info("当前线程名   ："+Thread.currentThread().getName());
+    public void chooseIdentity(Long systemUserId, String name, Integer identityId, Long onlineUserId){
+        if(identityId!=5){
+            if (name!=null&&!name.equals("")) {
+                systemUserService.updateName(systemUserId, name);
 
-            onlineUserService.updateName(systemUserId, name);
-            UserIdentity userIdentity = UserIdentity.builder()
+                asyRefreshCacheUser.refreshCacheUser(systemUserId);
+                log.info("当前线程名   ："+Thread.currentThread().getName());
+                onlineUserService.updateName(systemUserId, name);
+            }else {
+                throw new BizException("您还没有输入姓名，请先输入姓名。");
+            }
+        }
+        UserIdentity userIdentity = UserIdentity.builder()
                     .identityId(identityId)
                     .onlineUserId(onlineUserId)
                     .build();
-            userIdentityService.insertIdentity(userIdentity);
+
+        UserIdentity userIdentity1 = userIdentityService.selectByOnlineUserId(userIdentity.getOnlineUserId(),userIdentity.getIdentityId());
+        if(userIdentity1!=null){
+            throw new BizException("已添加，请勿重复添加");
         }
+        userIdentityService.insertIdentity(userIdentity);
     }
 }

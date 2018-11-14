@@ -1,6 +1,9 @@
 package com.snxy.business.dao.mapper;
 
 import com.snxy.business.domain.VegetableDeliveryRelation;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface VegetableDeliveryRelationMapper {
     int deleteByPrimaryKey(Long id);
@@ -14,4 +17,6 @@ public interface VegetableDeliveryRelationMapper {
     int updateByPrimaryKeySelective(VegetableDeliveryRelation record);
 
     int updateByPrimaryKey(VegetableDeliveryRelation record);
+
+    void insertGoodsVOList(@Param("vegetableDeliveryRelationList") List<VegetableDeliveryRelation> vegetableDeliveryRelationList);
 }

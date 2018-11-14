@@ -42,4 +42,10 @@ public class SystemUserServiceImpl implements SystemUserService {
     public void updateSystemMobile(Long systemUserId, String newMobile) {
         systemUserMapper.updateSystemMobile(systemUserId, newMobile);
     }
+
+    @Override
+    public SystemUser selectByMobile(String phone) {
+        SystemUser systemUser = systemUserMapper.selectByPhone(phone);
+        return systemUser;
+    }
 }

@@ -14,4 +14,6 @@ public interface SystemUserService {
     void insertSystemUserList(List<SystemUser> systemUserList);
 //修改系统用户的手机号
     void updateSystemMobile(Long systemUserId, String newMobile);
+
+    SystemUser selectByMobile(String phone);
 }

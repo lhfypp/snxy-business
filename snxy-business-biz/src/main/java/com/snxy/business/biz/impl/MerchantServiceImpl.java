@@ -1,12 +1,9 @@
 package com.snxy.business.biz.impl;
 
 import com.snxy.business.biz.feign.FileService;
-import com.snxy.business.biz.feign.UserAgentService;
 import com.snxy.business.domain.*;
 import com.snxy.business.service.*;
-import com.snxy.business.service.vo.ChangePrincipleVO;
-import com.snxy.business.service.vo.EmployeeVO;
-import com.snxy.business.service.vo.NewCompanyVO;
+import com.snxy.business.service.vo.*;
 import com.snxy.common.exception.BizException;
 import com.snxy.common.response.ResultData;
 import com.snxy.common.util.MD5Util;
@@ -15,9 +12,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +38,7 @@ public class MerchantServiceImpl implements MerchantService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void newCompany(NewCompanyVO newCompanyVO) {
+    public Long newCompany(MultipartFile file, NewCompanyVO newCompanyVO, SystemUserVO systemUserVO) {
         //加上判断是否填写信息===姓名不能为空
         if(StringUtil.isBlank(newCompanyVO.getMerchantName())){
             throw new BizException("公司名称为空");
@@ -50,38 +47,73 @@ public class MerchantServiceImpl implements MerchantService {
         if(!StringUtil.isChinese(newCompanyVO.getMerchantName())){
             throw new BizException("请输入中文公司名");
         }
-        //判断公司名是否重复
-        List<String> nameList = merchantCompanyService.selectAllName();
-        for (int i = 0; i < nameList.size(); i++) {
-            if(newCompanyVO.equals(nameList.get(i))){
-                throw new BizException("用户名已存在");
-            }
-        }
         //判断公司名长度
         if(newCompanyVO.getMerchantName().length()>20){
             throw new BizException("用户名长度应为20位以内");
         }
+        if(newCompanyVO.getHeadName().length()>5||!StringUtil.isChinese(newCompanyVO.getHeadName())){
+            throw new BizException("请输入5位以内中文姓名");
+        }
 
-        ResultData<String> upload = fileService.upload(newCompanyVO.getFile());
+        ResultData<String> upload = fileService.upload(file);
         if (!upload.isResult()) {
             throw new BizException(upload.getMsg());
         }
         String url = upload.getData();
+
+        //需要判断社会信息码是否正确，不正确的话其他信息正常存入，信息码不存
+
         MerchantCompany merchantCompany = MerchantCompany.builder()
-                .certificationStatus((byte)0)
+                .certificationStatus((byte)2)
                 .gmtCreate(new Date())
                 .corporateCertificationUrl(url)
+                .merchantName(newCompanyVO.getMerchantName())
                 .build();
-        BeanUtils.copyProperties(newCompanyVO,merchantCompany);
+        if(newCompanyVO.getSocialInfoCode().length()==18){
+            merchantCompany.setSocialInfoCode(newCompanyVO.getSocialInfoCode());
+            merchantCompany.setCertificationStatus((byte)1);
+        }
+
         merchantCompanyService.insertCompanyMessage(merchantCompany);
+
+        //判断负责人是否为当前用户
+        if(newCompanyVO.getHeadPhone().equals(systemUserVO.getPhone())){
+            //如果是，则设置为负责人
+            userIdentityService.updateIdentityByOnlineUserId(systemUserVO.getOnlineUserId(),1);
+        }
 
         CompanyUserRelation companyUserRelation = CompanyUserRelation.builder()
                 .companyId(merchantCompany.getId())
-                .onlineUserId(newCompanyVO.getOnlineUserId())
                 .gmtCreate(new Date())
                 .isResponsible(0)
                 .build();
+
+        //判断传入的姓名手机号有没有注册
+        OnlineUser onlineUser = onlineUserService.selectByPhone(newCompanyVO.getHeadPhone());
+        if(onlineUser==null){
+            SystemUser systemUser = SystemUser.builder()
+                    .account("系统生成账号"+newCompanyVO.getHeadPhone())
+                    .chineseName(newCompanyVO.getHeadName())
+                    .mobile(newCompanyVO.getHeadPhone())
+                    .regDate(new Date())
+                    .pwd(MD5Util.encrypt("111111"))
+                    .accountStatus((byte)0)
+                    .gmtCreate(new Date())
+                    .build();
+            systemUserService.insertSystemUser(systemUser);
+
+            OnlineUser onlineUser1 = OnlineUser.builder()
+                    .userName(newCompanyVO.getHeadName())
+                    .phone(newCompanyVO.getHeadPhone())
+                    .systemUserId(systemUser.getId())
+                    .build();
+            onlineUserService.insertOnlineUser(onlineUser1);
+
+            companyUserRelation.setOnlineUserId(onlineUser1.getId());
+        }
+        companyUserRelation.setOnlineUserId(onlineUser.getId());
         companyUserRelationService.insertCompanyUserRelation(companyUserRelation);
+        return merchantCompany.getId();
     }
 
     @Override
@@ -90,7 +122,7 @@ public class MerchantServiceImpl implements MerchantService {
         OnlineUser onlineUser = onlineUserService.selectByPhone(employeeVO.getPhone());
         if(onlineUser==null){
             SystemUser systemUser = SystemUser.builder()
-                    .account("系统生成账号")
+                    .account("系统生成账号"+employeeVO.getPhone())
                     .chineseName(employeeVO.getUserName())
                     .mobile(employeeVO.getPhone())
                     .regDate(new Date())
@@ -248,6 +280,84 @@ public class MerchantServiceImpl implements MerchantService {
 
             companyUserRelationService.updateIsResponsible(companyUserRelationList);
 
+    }
+
+    @Override
+    public List<MailVO> showMail(List<MailVO> mailVOList,Long companyId) {
+        //通讯录用户手机号集合
+        List<String> phoneList = mailVOList.parallelStream().map(mailVO -> mailVO.getPhone()).collect(Collectors.toList());
+        //通讯录已注册用户集合
+        List<OnlineUser> onlineUserList = onlineUserService.selectByPhoneList(phoneList);
+        //通讯录已注册用户id集合
+        List<Long> onlineUserIdList = onlineUserList.parallelStream().map(onlineUser -> onlineUser.getId()).collect(Collectors.toList());
+        //通讯录已绑定公司用户集合
+        List<CompanyUserRelation> companyUserRelationList = companyUserRelationService.selectUserRelationByOnlineUserIdList(onlineUserIdList);
+
+        Map<Long,String> onlineUserIdNameMap = onlineUserList.parallelStream().collect(Collectors.toMap(OnlineUser::getId,OnlineUser::getUserName));
+        Map<Long,String> onlineUserIdPhoneMap = onlineUserList.parallelStream().collect(Collectors.toMap(OnlineUser::getId,OnlineUser::getPhone));
+        List<MailVO> mailVOS = companyUserRelationList.parallelStream().map(companyUserRelation -> MailVO.builder()
+                         .name(onlineUserIdNameMap.get(companyUserRelation.getOnlineUserId()))
+                         .phone(onlineUserIdPhoneMap.get(companyUserRelation.getOnlineUserId()))
+                         .responsibleType(companyUserRelation.getCompanyId().equals(companyId) ? (byte)1 : (byte)2)
+                         .build())
+                         .collect(Collectors.toList());
+
+        //通讯录已绑定公司用户id集合
+        List<Long> companyUserRelationIdList = companyUserRelationList.parallelStream().map(companyUserRelation -> companyUserRelation.getOnlineUserId()).collect(Collectors.toList());
+        //通讯录已绑定公司用户phone集合
+        List<OnlineUser> onlineUserList1 = onlineUserService.selectByOnlineUserIdList(companyUserRelationIdList);
+        List<String> onlineUserPhoneList = onlineUserList1.parallelStream().map(onlineUser -> onlineUser.getPhone()).collect(Collectors.toList());
+        //通讯录未绑定用户手机号集合
+        phoneList.removeAll(onlineUserPhoneList);
+        //所有名字手机号map
+        Map<String,String> phoneNameMap = mailVOList.parallelStream().collect(Collectors.toMap(MailVO::getPhone,MailVO::getPhone));
+        //未绑定用户的
+        List<MailVO> mailVOS1 = phoneList.parallelStream().map(s -> MailVO.builder()
+                         .name(phoneNameMap.get(s))
+                         .phone(s)
+                         .responsibleType((byte)0)
+                         .build())
+                         .collect(Collectors.toList());
+        mailVOS.addAll(mailVOS1);
+        return mailVOS;
+    }
+
+    @Override
+    public List<CompanyVO> companyExist(String companyName,Integer showNum) {
+        //判断公司名是否存在
+        List<CompanyVO> companyVOList = merchantCompanyService.selectByCompanyName(companyName);
+
+        return companyVOList.subList(0,showNum-1);
+    }
+
+    @Override
+    public CompanyVO showCompany(Long companyId) {
+        MerchantCompany merchantCompany = merchantCompanyService.selectByCompanyId(companyId);
+
+        //查询公司负责人
+        CompanyUserRelation companyUserRelation = companyUserRelationService.selectUserRelationByCompanyId(companyId);
+        OnlineUser onlineUser = onlineUserService.selectByOnlineUserId(companyUserRelation.getOnlineUserId());
+
+        CompanyVO companyVO = CompanyVO.builder()
+                .companyId(companyId)
+                .companyName(merchantCompany.getMerchantName())
+                .certificationStatus(merchantCompany.getSocialInfoCode()!=null ? true : false)
+                .headName(onlineUser.getUserName())
+                .headPhone(onlineUser.getPhone())
+                .build();
+        return companyVO;
+    }
+
+    @Override
+    public void employeeAdd(Long companyId, Long onlineUserId) {
+        CompanyUserRelation companyUserRelation = CompanyUserRelation.builder()
+                .onlineUserId(onlineUserId)
+                .companyId(companyId)
+                .isResponsible(0)
+                .gmtCreate(new Date())
+                .isFounder(0)
+                .build();
+        companyUserRelationService.insertCompanyUserRelation(companyUserRelation);
     }
 
     public void saveCompanyUserIdentity(Long onlineUserId,Long companyId){

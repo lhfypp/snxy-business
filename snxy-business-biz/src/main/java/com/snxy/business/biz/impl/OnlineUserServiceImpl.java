@@ -98,4 +98,10 @@ public class OnlineUserServiceImpl implements OnlineUserService {
 //        修改系统用户的手机号
         systemUserService.updateSystemMobile(systemUserId,newMobile);
     }
+
+    @Override
+    public OnlineUser selectByOnlineUserId(Long onlineUserId) {
+        OnlineUser onlineUser = onlineUserMapper.selectByPrimaryKey(onlineUserId);
+        return onlineUser;
+    }
 }

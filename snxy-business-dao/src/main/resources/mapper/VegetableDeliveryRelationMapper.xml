@@ -126,4 +126,18 @@
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <!--批量插入货品-->
+  <insert id="insertGoodsVOList">
+    insert into vegetable_delivery_relation
+    (delivery_order_id, entrance_fee_category_id, category_name, load_status, gmt_create)
+    values
+    <foreach collection="vegetableDeliveryRelationList" index="index" open="(" close=")" item="vegetableDeliveryRelation" separator=",">
+      (
+      #{vegetableDeliveryRelation.deliveryOrderId}, #{vegetableDeliveryRelation.entranceFeeCategoryId},
+      #{vegetableDeliveryRelation.categoryName}, #{vegetableDeliveryRelation.loadStatus},
+      #{vegetableDeliveryRelation.gmtCreate}
+      )
+    </foreach>
+  </insert>
 </mapper>

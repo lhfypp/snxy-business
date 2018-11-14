@@ -36,6 +36,7 @@ public class CompanyUserRelationServiceImpl implements CompanyUserRelationServic
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void insertCompanyRelationList(List<CompanyUserRelation> companyUserRelationList) {
         companyUserRelationMapper.insertCompanyRelationList(companyUserRelationList);
     }
@@ -47,7 +48,20 @@ public class CompanyUserRelationServiceImpl implements CompanyUserRelationServic
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void updateIsResponsible(List<CompanyUserRelation> companyUserRelationList) {
         companyUserRelationMapper.updateByCompanyUserRelationList(companyUserRelationList);
+    }
+
+    @Override
+    public List<CompanyUserRelation> selectUserRelationByOnlineUserIdList(List<Long> onlineUserIdList) {
+        List<CompanyUserRelation> companyUserRelationList = companyUserRelationMapper.selectUserRelationByOnlineUserIdList(onlineUserIdList);
+        return companyUserRelationList;
+    }
+
+    @Override
+    public CompanyUserRelation selectUserRelationByCompanyId(Long companyId) {
+        CompanyUserRelation companyUserRelation = companyUserRelationMapper.selectByCompanyId(companyId);
+        return companyUserRelation;
     }
 }

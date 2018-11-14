@@ -161,4 +161,12 @@
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <!--通过司机ID查询-->
+  <select id="selectByDriverId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from vehicle
+    where driver_info_id = #{driverOnlineUserId}
+  </select>
 </mapper>

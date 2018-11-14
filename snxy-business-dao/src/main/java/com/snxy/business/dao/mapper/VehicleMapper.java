@@ -14,4 +14,6 @@ public interface VehicleMapper {
     int updateByPrimaryKeySelective(Vehicle record);
 
     int updateByPrimaryKey(Vehicle record);
+
+    Vehicle selectByDriverId(Long driverOnlineUserId);
 }

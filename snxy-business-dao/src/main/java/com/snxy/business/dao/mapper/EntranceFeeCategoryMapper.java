@@ -2,6 +2,8 @@ package com.snxy.business.dao.mapper;
 
 import com.snxy.business.domain.EntranceFeeCategory;
 
+import java.util.List;
+
 public interface EntranceFeeCategoryMapper {
     int deleteByPrimaryKey(Long id);
 
@@ -14,4 +16,8 @@ public interface EntranceFeeCategoryMapper {
     int updateByPrimaryKeySelective(EntranceFeeCategory record);
 
     int updateByPrimaryKey(EntranceFeeCategory record);
+
+    List<EntranceFeeCategory> selectAll();
+
+    List<EntranceFeeCategory> selectByCategoryName(String categoryName);
 }

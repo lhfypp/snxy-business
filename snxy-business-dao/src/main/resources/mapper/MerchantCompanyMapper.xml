@@ -4,7 +4,6 @@
   <resultMap id="BaseResultMap" type="com.snxy.business.domain.MerchantCompany">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="merchant_name" jdbcType="VARCHAR" property="merchantName" />
-    <result column="merchant_type" jdbcType="INTEGER" property="merchantType" />
     <result column="social_info_code" jdbcType="VARCHAR" property="socialInfoCode" />
     <result column="corporate_certification_url" jdbcType="VARCHAR" property="corporateCertificationUrl" />
     <result column="certification_status" jdbcType="TINYINT" property="certificationStatus" />
@@ -13,7 +12,7 @@
     <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, merchant_name, merchant_type, social_info_code, corporate_certification_url, 
+    id, merchant_name, social_info_code, corporate_certification_url,
     certification_status, gmt_create, gmt_modified, is_delete
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -91,9 +90,6 @@
       <if test="merchantName != null">
         merchant_name = #{merchantName,jdbcType=VARCHAR},
       </if>
-      <if test="merchantType != null">
-        merchant_type = #{merchantType,jdbcType=INTEGER},
-      </if>
       <if test="socialInfoCode != null">
         social_info_code = #{socialInfoCode,jdbcType=VARCHAR},
       </if>
@@ -118,7 +114,6 @@
   <update id="updateByPrimaryKey" parameterType="com.snxy.business.domain.MerchantCompany">
     update merchant_company
     set merchant_name = #{merchantName,jdbcType=VARCHAR},
-      merchant_type = #{merchantType,jdbcType=INTEGER},
       social_info_code = #{socialInfoCode,jdbcType=VARCHAR},
       corporate_certification_url = #{corporateCertificationUrl,jdbcType=VARCHAR},
       certification_status = #{certificationStatus,jdbcType=TINYINT},
@@ -133,5 +128,13 @@
     select merchant_name
     from merchant_company
     where is_delete = 0
+  </select>
+
+  <!--查询公司名-->
+  <select id="selectByCompanyName" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    from merchant_company
+    where merchant_name LIKE concat('%',#{companyName},'%')
   </select>
 </mapper>

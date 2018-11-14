@@ -1,32 +1,16 @@
-package com.snxy.business.domain;
+package com.snxy.business.service.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class VegetableDeliveryRelation {
-    private Long id;
-
-    private Long deliveryOrderId;
-
+public class GoodsVO {
     private Long entranceFeeCategoryId;
-
     private String categoryName;
-
     private Integer loadStatus;
-
-    private Date gmtCreate;
-
-    private Date gmtModified;
-
-    private Byte isDelete;
-
-
 }

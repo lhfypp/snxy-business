@@ -18,4 +18,6 @@ public interface MerchantCompanyMapper {
     int updateByPrimaryKey(MerchantCompany record);
 
     List<String> selectAllName();
+
+    List<MerchantCompany> selectByCompanyName(String companyName);
 }

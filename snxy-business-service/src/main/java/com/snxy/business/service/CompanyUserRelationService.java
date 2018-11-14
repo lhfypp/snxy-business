@@ -17,4 +17,8 @@ public interface CompanyUserRelationService {
     List<CompanyUserRelation> selectAllByCompanyId(Long companyId);
 
     void updateIsResponsible(List<CompanyUserRelation> companyUserRelationList);
+
+    List<CompanyUserRelation> selectUserRelationByOnlineUserIdList(List<Long> onlineUserIdList);
+
+    CompanyUserRelation selectUserRelationByCompanyId(Long companyId);
 }

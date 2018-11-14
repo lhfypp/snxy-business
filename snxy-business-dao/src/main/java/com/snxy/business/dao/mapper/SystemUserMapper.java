@@ -26,4 +26,6 @@ public interface SystemUserMapper {
     void insertSystemUserList(List<SystemUser> list);
 
     void updateSystemMobile(@Param("systemUserId") Long systemUserId, @Param("mobile") String newMobile);
+
+    SystemUser selectByPhone(String phone);
 }
