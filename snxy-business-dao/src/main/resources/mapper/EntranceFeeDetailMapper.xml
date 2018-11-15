@@ -5,7 +5,7 @@
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="entrance_fee_category_id" jdbcType="BIGINT" property="entranceFeeCategoryId" />
     <result column="entrance_fee_capacity_id" jdbcType="BIGINT" property="entranceFeeCapacityId" />
-    <result column="vegetable_name" jdbcType="DECIMAL" property="vegetableName" />
+    <result column="cost" jdbcType="DECIMAL" property="cost" />
     <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
     <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
     <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
@@ -115,4 +115,11 @@
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="selectPriceById" resultType="java.math.BigDecimal">
+    select cost
+    from entrance_fee_detail
+    where entrance_fee_category_id = #{entranceFeeCategoryId}
+    and entrance_fee_capacity_id = #{entranceFeeCapacityId}
+  </select>
 </mapper>

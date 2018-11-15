@@ -23,7 +23,7 @@ public class QualitySheet {
 
     private String qrcodeUrl;
 
-    private Integer status;
+    private String status;
 
     private Integer qualified;
 
@@ -115,11 +115,11 @@ public class QualitySheet {
         this.qrcodeUrl = qrcodeUrl;
     }
 
-    public Integer getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 

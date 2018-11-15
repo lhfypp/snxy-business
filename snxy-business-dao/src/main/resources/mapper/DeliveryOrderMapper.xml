@@ -36,10 +36,10 @@
   </resultMap>
   <sql id="Base_Column_List">
     id, order_no, creator_id, creator, sender_name, sender_mobile, receiver_mobile, receiver_name, 
-    receiver_company, online_user_id, driver_name, driver_mobile, vehicle_id, driver_plate_number, 
+    receiver_company, driver_name, driver_mobile, vehicle_id, driver_plate_number,
     driver_leave_time, send_time, start_addr, end_addr, distance, est_arrival_time, actual_arrival_time, 
     load_status, location_certificate, quality_certificate, qrcode_url, is_auth_pay, 
-    info_integrity, status, gmt_create, gmt_modified, is_delete
+    info_integrity, status,  gmt_modified, is_delete
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -398,4 +398,27 @@
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="selectByCreatorKey" resultMap="BaseResultMap">
+    select
+    id, order_no, creator_id, creator, sender_name, sender_mobile, receiver_mobile, receiver_name,
+    receiver_company, driver_name, driver_mobile, vehicle_id, driver_plate_number,
+    driver_leave_time, send_time, start_addr, end_addr, distance, est_arrival_time, actual_arrival_time,
+    load_status, location_certificate, quality_certificate, qrcode_url, is_auth_pay,
+    info_integrity, status,  gmt_modified, is_delete,
+    case
+    when gmt_modified != "" or gmt_modified != null then gmt_modified
+    else gmt_create
+    end as gmt_create
+    from delivery_order
+    where receiver_company_id = #{companyId}
+    and status = #{status}
+    order by gmt_create DESC
+  </select>
+
+  <select id="selectByOrderNo" resultType="java.lang.Integer">
+    select status
+    from delivery_order
+    where order_no = #{orderNo}
+  </select>
 </mapper>

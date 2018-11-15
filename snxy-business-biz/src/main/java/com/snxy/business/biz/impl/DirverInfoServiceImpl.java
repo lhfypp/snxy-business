@@ -39,6 +39,7 @@ public class DirverInfoServiceImpl implements DirverInfoService {
                 driverPicture.setDrivingLicenseUrl(image.getFileaPath());
             }
         }
+        //查询身份证是否存在
         String idNumber = idInfoMapper.selectByidNumber(driverPicture.getIdentityNO());
         if (!idNumber.equals(driverPicture.getIdentityNO())){
             //保存驾驶证
