@@ -23,4 +23,7 @@ public interface CompanyUserRelationService {
 
     void updateIsResponsible(List<CompanyUserRelation> companyUserRelationList);
     int insert(CompanyUserRelation record);
+    Long selectCompanyRelationforId(Long userId,long companyId);
+    String searchResponsibleByComId(Long companyId);
+    String searchComIdByUseId(Long userId);
 }
