@@ -30,6 +30,11 @@ public interface CompanyUserRelationMapper {
 
     List<CompanyUserRelation> selectAllByCompanyId(Long companyId);
 
+
+    Long selectByCompanyIdAndUserId(@Param("userId") Long userId ,@Param("companyId") Long companyId);
+    String selectResponsibleBycomId(Long companyId);
+    String selectcomIdByUserId(Long userId);
+
     void updateByCompanyUserRelationList(@Param("companyUserRelationList") List<CompanyUserRelation> companyUserRelationList);
 
     List<CompanyUserRelation> selectUserRelationByOnlineUserIdList(@Param("onlineUserIdList") List<Long> onlineUserIdList);
@@ -47,4 +52,5 @@ public interface CompanyUserRelationMapper {
     String selectUserNameByOlineUserId(Long onlineUserId);
 
     String selectPhoneByOnlineUserId(Long onlineUserId);
+
 }

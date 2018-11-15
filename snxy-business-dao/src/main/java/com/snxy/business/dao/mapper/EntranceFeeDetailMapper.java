@@ -2,6 +2,8 @@ package com.snxy.business.dao.mapper;
 
 import com.snxy.business.domain.EntranceFeeDetail;
 
+import java.math.BigDecimal;
+
 public interface EntranceFeeDetailMapper {
     int deleteByPrimaryKey(Long id);
 
@@ -14,4 +16,6 @@ public interface EntranceFeeDetailMapper {
     int updateByPrimaryKeySelective(EntranceFeeDetail record);
 
     int updateByPrimaryKey(EntranceFeeDetail record);
+
+    BigDecimal selectPriceById(EntranceFeeDetail entranceFeeDetail);
 }

@@ -127,6 +127,15 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
 
+  <select id="selectVDRByOrderId" resultMap="BaseResultMap">
+select
+   <include refid="Base_Column_List"/>
+    from vegetable_delivery_relation
+       where delivery_order_id=#{orderId}
+        and is_delete=0
+  </select>
+
+
   <!--批量插入货品-->
   <insert id="insertGoodsVOList">
     insert into vegetable_delivery_relation
@@ -140,4 +149,5 @@
       )
     </foreach>
   </insert>
+
 </mapper>

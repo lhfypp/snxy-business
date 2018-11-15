@@ -10,9 +10,13 @@ public interface MerchantCompanyService {
 
     List<String> selectAllName();
 
+    String searchNameById(Long id);
+
+
     MerchantCompany selectByCompanyId(Long companyId);
 
     List<CompanyVO> selectByCompanyName(String companyName);
 
     List<MerchantCompany> selectCompanyByCompanyIdList(List<Long> companyIdList);
+
 }

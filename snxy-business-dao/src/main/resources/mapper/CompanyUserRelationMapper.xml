@@ -142,7 +142,11 @@
     <include refid="Base_Column_List" />
     from company_user_relation
     where online_user_id = #{id}
+
+
+
     AND is_delete = 0
+
   </select>
 
   <!--批量添加公司员工-->
@@ -180,6 +184,34 @@
     </foreach>
     and is_delete = 0
   </update>
+
+  
+  
+  <select id="selectByCompanyIdAndUserId" resultType="java.lang.Long">
+    select id
+      from
+       company_user_relation
+       where company_id=#{companyId}
+          and online_user_id=#{userId}
+          and is_delete = 0
+  </select>
+
+    <select id="selectResponsibleBycomId" resultType="java.lang.String">
+       select a.user_name
+          from online_user a,company_user_relation b
+          where a.id=online_user_id
+             and b.company_id=#{companyId}
+              and b.is_responsible=1
+              and is_delete = 0
+    </select>
+    <select id="selectcomIdByUserId">
+        select company_id
+           from company_user_relation
+             where
+               online_user_id=#{userId}
+               and is_delete = 0
+    </select>
+
 
   <!--通过onlineUserIdList查询所有-->
   <select id="selectUserRelationByOnlineUserIdList">

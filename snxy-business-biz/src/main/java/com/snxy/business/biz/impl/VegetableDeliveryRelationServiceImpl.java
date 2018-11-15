@@ -13,12 +13,21 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.annotation.Resource;
+import java.util.List;
+
 @Service
 @Slf4j
 public class VegetableDeliveryRelationServiceImpl implements VegetableDeliveryRelationService {
     @Resource
     private VegetableDeliveryRelationMapper vegetableDeliveryRelationMapper;
 
+    @Override
+    public List<VegetableDeliveryRelation> searchAllVDRByOrderId(Long id) {
+
+        return vegetableDeliveryRelationMapper.selectVDRByOrderId(id);
+
+    }
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void insertGoodsVOList(List<GoodsVO> goodsVOList,Long deliveryOrderId) {
@@ -31,5 +40,6 @@ public class VegetableDeliveryRelationServiceImpl implements VegetableDeliveryRe
                                       .build())
                                       .collect(Collectors.toList());
         vegetableDeliveryRelationMapper.insertGoodsVOList(vegetableDeliveryRelationList);
+
     }
 }

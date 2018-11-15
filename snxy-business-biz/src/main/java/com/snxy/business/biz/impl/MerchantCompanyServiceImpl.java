@@ -31,6 +31,11 @@ public class MerchantCompanyServiceImpl implements MerchantCompanyService {
     }
 
     @Override
+
+    public String searchNameById(Long id) {
+        return merchantCompanyMapper.selectByPrimaryKey(id).getMerchantName();
+
+    }
     public MerchantCompany selectByCompanyId(Long companyId) {
         MerchantCompany merchantCompany = merchantCompanyMapper.selectByPrimaryKey(companyId);
         return merchantCompany;
@@ -49,5 +54,6 @@ public class MerchantCompanyServiceImpl implements MerchantCompanyService {
     public List<MerchantCompany> selectCompanyByCompanyIdList(List<Long> companyIdList) {
 
         return  merchantCompanyMapper.selectCompanyByCompanyIdList(companyIdList);
+
     }
 }
