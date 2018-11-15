@@ -30,4 +30,7 @@ public interface CompanyUserRelationMapper {
     List<CompanyUserRelation> selectAllByCompanyId(Long companyId);
 
     void updateByCompanyUserRelationList(List<CompanyUserRelation> companyUserRelationList);
+    Long selectByCompanyIdAndUserId(@Param("userId") Long userId ,@Param("companyId") Long companyId);
+    String selectResponsibleBycomId(Long companyId);
+    String selectcomIdByUserId(Long userId);
 }
