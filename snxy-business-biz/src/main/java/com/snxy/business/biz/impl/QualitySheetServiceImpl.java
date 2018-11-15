@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
@@ -43,6 +44,7 @@ public class QualitySheetServiceImpl implements QualitySheetService {
     private RedisTemplate<String,Object> redisTemplate;
     //创建检测单
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public String createQualitySheet(CheckSheetVO checkSheetVO,Long userId) {
         //用手机号查出用户id
         Integer lastQualityNo = (Integer) redisTemplate.opsForValue().get("qualityNo");
@@ -197,7 +199,7 @@ public class QualitySheetServiceImpl implements QualitySheetService {
                     .build());
             GoodPartVoList=new ArrayList<>();
             // 把guarantee_deposit表is_generate_quality值为1
-            guaranteeDepositService.updateIsGenerateQuality(deliveryOrder.getId());
+           // guaranteeDepositService.updateIsGenerateQuality(deliveryOrder.getId());
         }
       //创建检测单
        if(CheckSheetWillBeVOList.size()==0){
