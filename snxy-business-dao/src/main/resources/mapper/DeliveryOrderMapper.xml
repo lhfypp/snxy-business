@@ -33,13 +33,26 @@
     <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
     <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
     <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+    <result column="receiver_company_id" jdbcType="BIGINT" property="receiverCompanyId" />
   </resultMap>
   <sql id="Base_Column_List">
     id, order_no, creator_id, creator, sender_name, sender_mobile, receiver_mobile, receiver_name, 
     receiver_company, driver_name, driver_mobile, vehicle_id, driver_plate_number,
-    driver_leave_time, send_time, start_addr, end_addr, distance, est_arrival_time, actual_arrival_time, 
+
+    id, order_no, creator_id, creator, sender_name, sender_mobile, receiver_online_user_id,
+    receiver_mobile, receiver_name, receiver_company, driver_online_user_id, driver_name,
+    driver_mobile, vehicle_id, driver_plate_number, driver_leave_time, send_time, start_addr,
+    end_addr, distance, est_arrival_time, actual_arrival_time, load_status, location_certificate,
+    quality_certificate, qrcode_url, is_auth_pay, info_integrity, status, gmt_create,
+    gmt_modified, is_delete, receiver_company_id
+
+    id, order_no, creator_id, creator, sender_name, sender_mobile, receiver_online_user_id, receiver_mobile, receiver_name,
+    receiver_company, receiver_company_id, driver_online_user_id, driver_name, driver_mobile, vehicle_id, driver_plate_number,
+    driver_leave_time, send_time, start_addr, end_addr, distance, est_arrival_time, actual_arrival_time,
     load_status, location_certificate, quality_certificate, qrcode_url, is_auth_pay, 
     info_integrity, status,  gmt_modified, is_delete
+    info_integrity, status, gmt_create, gmt_modified, is_delete
+
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -99,6 +112,9 @@
       <if test="senderMobile != null">
         sender_mobile,
       </if>
+      <if test="receiverOnlineUserId != null">
+        receiver_online_user_id,
+      </if>
       <if test="receiverMobile != null">
         receiver_mobile,
       </if>
@@ -108,8 +124,11 @@
       <if test="receiverCompany != null">
         receiver_company,
       </if>
-      <if test="onlineUserId != null">
-        online_user_id,
+      <if test="receiverCompanyId != null">
+        receiver_company_id,
+      </if>
+      <if test="driverOnlineUserId != null">
+        driver_online_user_id,
       </if>
       <if test="driverName != null">
         driver_name,
@@ -191,6 +210,9 @@
       <if test="senderMobile != null">
         #{senderMobile,jdbcType=VARCHAR},
       </if>
+      <if test="receiverOnlineUserId != null">
+        #{receiverOnlineUserId,jdbcType=BIGINT},
+      </if>
       <if test="receiverMobile != null">
         #{receiverMobile,jdbcType=VARCHAR},
       </if>
@@ -200,8 +222,11 @@
       <if test="receiverCompany != null">
         #{receiverCompany,jdbcType=VARCHAR},
       </if>
-      <if test="onlineUserId != null">
-        #{onlineUserId,jdbcType=BIGINT},
+      <if test="receiverCompanyId != null">
+        #{receiverCompanyId,jdbcType=BIGINT},
+      </if>
+      <if test="driverOnlineUserId != null">
+        #{driverOnlineUserId,jdbcType=BIGINT},
       </if>
       <if test="driverName != null">
         #{driverName,jdbcType=VARCHAR},
@@ -286,6 +311,9 @@
       <if test="senderMobile != null">
         sender_mobile = #{senderMobile,jdbcType=VARCHAR},
       </if>
+      <if test="receiverOnlineUserId != null">
+        receiver_online_user_id = #{receiver_online_user_id,jdbcType=BIGINT},
+      </if>
       <if test="receiverMobile != null">
         receiver_mobile = #{receiverMobile,jdbcType=VARCHAR},
       </if>
@@ -295,8 +323,11 @@
       <if test="receiverCompany != null">
         receiver_company = #{receiverCompany,jdbcType=VARCHAR},
       </if>
-      <if test="onlineUserId != null">
-        online_user_id = #{onlineUserId,jdbcType=BIGINT},
+      <if test="receiverCompanyId != null">
+        receiver_company_id = #{receiverCompanyId,jdbcType=BIGINT},
+      </if>
+      <if test="driverOnlineUserId != null">
+        driver_online_user_id = #{driverOnlineUserId,jdbcType=BIGINT},
       </if>
       <if test="driverName != null">
         driver_name = #{driverName,jdbcType=VARCHAR},
@@ -371,10 +402,12 @@
       creator = #{creator,jdbcType=VARCHAR},
       sender_name = #{senderName,jdbcType=VARCHAR},
       sender_mobile = #{senderMobile,jdbcType=VARCHAR},
+      receiver_online_user_id = #{receiverOnlineUserId,jdbcType=BIGINT},
       receiver_mobile = #{receiverMobile,jdbcType=VARCHAR},
       receiver_name = #{receiverName,jdbcType=VARCHAR},
       receiver_company = #{receiverCompany,jdbcType=VARCHAR},
-      online_user_id = #{onlineUserId,jdbcType=BIGINT},
+      receiver_company_id = #{receiverCompanyId,jdbcType=BIGINT},
+      driver_online_user_id = #{driverOnlineUserId,jdbcType=BIGINT},
       driver_name = #{driverName,jdbcType=VARCHAR},
       driver_mobile = #{driverMobile,jdbcType=VARCHAR},
       vehicle_id = #{vehicleId,jdbcType=BIGINT},
@@ -398,6 +431,27 @@
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <!--查询所有相关订单-->
+  <select id="selectAllByIdAndPhone" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    from delivery_order
+    WHERE sender_mobile = #{phone}
+    OR creator_id = #{onlineUserId}
+    OR receiver_online_user_id = #{onlineUserId}
+    OR driver_online_user_id = #{onlineUserId}
+    AND status IN (0,1,2,3,4)
+  </select>
+
+  <!--根据公司Id查询-->
+  <select id="selectByCompanyId" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    from delivery_order
+    where receiver_company_id = #{companyId}
+    AND status in (0,1,2,3,4)
+  </select>
 
   <select id="selectByCreatorKey" resultMap="BaseResultMap">
     select

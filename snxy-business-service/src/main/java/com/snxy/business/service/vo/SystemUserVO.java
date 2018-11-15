@@ -12,8 +12,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SystemUserVO {
+    private Long onlineUserId;
     private String token;
     private String name;
+    private String phone;
     private Long systemUserId;
     private List<IdentityVO> identityTypes;
 }

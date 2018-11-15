@@ -1,6 +1,8 @@
 package com.snxy.business.web.config;
 
 import com.alibaba.fastjson.JSONObject;
+import com.snxy.business.domain.IdentityType;
+import com.snxy.business.service.vo.IdentityVO;
 import com.snxy.business.service.vo.SystemUserVO;
 import com.snxy.common.response.ResultData;
 
@@ -17,6 +19,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 对重要页面添加openid,通过Attribute可以获取
@@ -74,8 +78,13 @@ public class SystemUserInterceptor implements HandlerInterceptor {
         return true;
     }
    private void setDebugSystemUser(HttpServletRequest request){
-        String debugUserJson="{\"token\":\"F62ECF21F6E66FB1BAE4C0BFEAA5C9ADB7C1B460DF33A4AF72024AA4DF981700D28A27C878D25ABB00F363A0EABBDA02\",\"name\":\"thomas\",\"systemUserId\":1,\"identityTypes\":[{\"systemUserId\":1,\"identityId\":1,\"isActive\":true,\"identityName\":\"代办\"},{\"systemUserId\":1,\"identityId\":2,\"isActive\":false,\"identityName\":\"商户公司\"},{\"systemUserId\":1,\"identityId\":3,\"isActive\":false,\"identityName\":\"司机\"}],\"expireTime\":1540951624593,\"account\":\"10000001\"}";
-       SystemUserVO systemUserVO = JSONObject.parseObject(debugUserJson, SystemUserVO.class);// mapper.readValue(newJson, SystemUserVO.class);
+
+       List<IdentityVO> identityVOList = new ArrayList<>();
+       IdentityVO identityVO1 = IdentityVO.builder().id(1).identityName("商户负责人").build();
+       IdentityVO identityVO2 = IdentityVO.builder().id(3).identityName("司机").build();
+       identityVOList.add(identityVO1);
+       identityVOList.add(identityVO2);
+       SystemUserVO systemUserVO = SystemUserVO.builder().phone("13999999999").systemUserId(45L).onlineUserId(30L).name("二狗子").identityTypes(identityVOList).build();// mapper.readValue(newJson, SystemUserVO.class);
 
        request.setAttribute("systemUser", systemUserVO);
    }

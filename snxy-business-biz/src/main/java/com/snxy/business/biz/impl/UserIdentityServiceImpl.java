@@ -26,4 +26,28 @@ public class UserIdentityServiceImpl implements UserIdentityService {
     public void insertIdentityList(List<UserIdentity> userIdentityList) {
         userIdentityMapper.insertIdentityList(userIdentityList);
     }
+
+    @Override
+    public UserIdentity selectByOnlineUserId(Long onlineUserId,Integer identityId) {
+        UserIdentity userIdentity = userIdentityMapper.selectByOnlineUserId(onlineUserId,identityId);
+        return userIdentity;
+    }
+
+    @Override
+    public void updateIdentityByOnlineUserId(Long onlineUserId, Integer identityId) {
+        userIdentityMapper.updateIdentity(onlineUserId,identityId);
+    }
+
+    @Override
+    public List<Integer> selectIdentityIdByOnlineUserId(Long onlineUserId) {
+       List<Integer> identityIdList =  userIdentityMapper.selectIdentityIdByOnlineUserId(onlineUserId);
+        return  identityIdList;
+    }
+
+    @Override
+    public void insertIdentityByOnlineUserId(Integer identityTypeId, Long onlineUserId) {
+        userIdentityMapper.insertIdentityByOnlineUserId(identityTypeId,onlineUserId);
+    }
+
+
 }

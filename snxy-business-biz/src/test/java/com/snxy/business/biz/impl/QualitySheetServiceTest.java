@@ -31,7 +31,7 @@ public class QualitySheetServiceTest {
         log.info(qualitySheet.getDeliveryOrderId().toString());
         log.info(qualitySheet.getIsDelete().toString());
         log.info(qualitySheet.getWeight().toString());
-        log.info(qualitySheet.getStatus());
+        log.info(qualitySheet.getStatus().toString());
     }
 
     @Test

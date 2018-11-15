@@ -1,7 +1,16 @@
 package com.snxy.business.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.Date;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class DeliveryOrder {
     private Long id;
 
@@ -15,13 +24,20 @@ public class DeliveryOrder {
 
     private String senderMobile;
 
+    private Long receiverOnlineUserId;
+
     private String receiverMobile;
 
     private String receiverName;
 
     private String receiverCompany;
 
-    private Long onlineUserId;
+    private Long receiverCompanyId;
+
+
+
+
+    private Long driverOnlineUserId;
 
     private String driverName;
 
@@ -58,12 +74,15 @@ public class DeliveryOrder {
     private Integer infoIntegrity;
 
     private Integer status;
+    //取消0，已接单1，装货完成2，运输中3，检测中4，合格关闭5，不合格关闭6 -- 被遣离
 
     private Date gmtCreate;
 
     private Date gmtModified;
 
     private Byte isDelete;
+
+
 
     public Long getId() {
         return id;
@@ -113,6 +132,14 @@ public class DeliveryOrder {
         this.senderMobile = senderMobile;
     }
 
+    public Long getReceiverOnlineUserId() {
+        return receiverOnlineUserId;
+    }
+
+    public void setReceiverOnlineUserId(Long receiverOnlineUserId) {
+        this.receiverOnlineUserId = receiverOnlineUserId;
+    }
+
     public String getReceiverMobile() {
         return receiverMobile;
     }
@@ -137,12 +164,12 @@ public class DeliveryOrder {
         this.receiverCompany = receiverCompany;
     }
 
-    public Long getOnlineUserId() {
-        return onlineUserId;
+    public Long getDriverOnlineUserId() {
+        return driverOnlineUserId;
     }
 
-    public void setOnlineUserId(Long onlineUserId) {
-        this.onlineUserId = onlineUserId;
+    public void setDriverOnlineUserId(Long driverOnlineUserId) {
+        this.driverOnlineUserId = driverOnlineUserId;
     }
 
     public String getDriverName() {
@@ -312,4 +339,15 @@ public class DeliveryOrder {
     public void setIsDelete(Byte isDelete) {
         this.isDelete = isDelete;
     }
+
+    public Long getReceiverCompanyId() {
+        return receiverCompanyId;
+    }
+
+    public void setReceiverCompanyId(Long receiverCompanyId) {
+        this.receiverCompanyId = receiverCompanyId;
+    }
+
+
+
 }

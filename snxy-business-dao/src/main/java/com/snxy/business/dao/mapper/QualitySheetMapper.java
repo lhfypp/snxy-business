@@ -12,7 +12,7 @@ public interface QualitySheetMapper {
 
     int insertSelective(QualitySheet record);
 
-    QualitySheet selectByPrimaryKey(Long id,String code);
+    QualitySheet selectByPrimaryKey(Long id);
 
     int updateByPrimaryKeySelective(QualitySheet record);
 
@@ -21,4 +21,10 @@ public interface QualitySheetMapper {
     QualitySheet selectByOrderId(Long deliveryOrderId);
 
     List<QualitySheet> selectByCompanyId(@Param("companyId") Long companyId);
+    List<QualitySheet> selectQualitySheetList(@Param("useId") Long useId,@Param("searchName") String searchName);
+    List<QualitySheet> selectAllQualitySheetList(@Param("useId") Long useId, @Param("searchName") String searchName);
+    List<QualitySheet> selectAllQualitySheetListPart(@Param("useId") Long useId, @Param("searchName") String searchName);
+
+    int deleteQualitySheetById(String  qualitySheetId);
+
 }

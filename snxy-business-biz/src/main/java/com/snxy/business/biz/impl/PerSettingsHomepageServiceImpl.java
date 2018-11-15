@@ -35,15 +35,20 @@ public class PerSettingsHomepageServiceImpl implements PerSettingsHomepageServic
         List<CompanyPartInfo> companyPartInfoList=MerchantCompanyMapper.selectAllComInfoByComName(companyName);
 
        for(CompanyPartInfo companyPartInfo:companyPartInfoList){
-          // CompanyVO companyVO=new CompanyVO();
-          // BeanUtils.copyProperties(companyPartInfo,companyVO);
-          // CompanyVOList.add(companyVO);
+           CompanyVO companyVO=new CompanyVO();
+           BeanUtils.copyProperties(companyPartInfo,companyVO);
+           CompanyVOList.add(companyVO);
        }
         return CompanyVOList;
     }
     //选择加入商户
     @Override
     public String saveJoinTheMerchants(long userId, long companyId)   {
+        //查询数据库有没有数据
+        Long companyUserRelationId=companyUserRelationService.selectCompanyRelationforId(userId,companyId);
+        if(companyUserRelationId!=null){
+            throw new BizException("加入商户成功,不要重复提交!");
+        }
         Date now =new Date();
         //把该用户信息存入company_user_relation表
         CompanyUserRelation CompanyUserRelation=null;

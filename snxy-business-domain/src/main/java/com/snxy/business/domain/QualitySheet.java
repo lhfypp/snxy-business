@@ -1,7 +1,13 @@
 package com.snxy.business.domain;
 
-import java.util.Date;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
+import java.util.Date;
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class QualitySheet {
     private Long id;
 
@@ -23,7 +29,7 @@ public class QualitySheet {
 
     private String qrcodeUrl;
 
-    private String status;
+    private Integer status;
 
     private Integer qualified;
 
@@ -34,6 +40,15 @@ public class QualitySheet {
     private Date gmtModified;
 
     private Byte isDelete;
+    private Long useId;
+
+    public Long getUseId() {
+        return useId;
+    }
+
+    public void setUseId(Long useId) {
+        this.useId = useId;
+    }
 
     public Long getId() {
         return id;
@@ -115,11 +130,11 @@ public class QualitySheet {
         this.qrcodeUrl = qrcodeUrl;
     }
 
-    public String getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 

@@ -97,4 +97,57 @@
             (#{userIdentity.onlineUserId}, #{userIdentity.identityId})
         </foreach>
     </insert>
+
+    <select id="selectByOnlineUserId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from user_identity
+        where online_user_id = #{onlineUserId}
+        and identity_id = #{identityId}
+    </select>
+
+    <!--更改用户身份-->
+    <update id="updateIdentity">
+        UPDATE user_identity
+        SET identity_id = #{identityId}
+        where online_user_id = #{onlineUserId}
+        and is_delete = 0
+    </update>
+
+    <!--查询当前用户身份-->
+    <select id="selectIdentityIdByOnlineUserId" resultType="Integer">
+        SELECT
+        ui.identity_id
+        from user_identity as ui
+        where online_user_id = #{onlineUserId}
+    </select>
+
+    <!--添加用户身份-->
+    <!--<insert id="insertIdentityByOnlineUserId" parameterType="com.snxy.business.domain.UserIdentity">
+       INSERT into user_identity(online_user_id,identity_id)
+       VALUES(#{onlineUserId,jdbcType=TINYINT},#{identityId,jdbcType=INTEGER}) where online_user_id=#{onlineUserId}
+    </insert>-->
+
+    <insert id="insertIdentityByOnlineUserId" parameterType="com.snxy.business.domain.UserIdentity">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into user_identity
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="onlineUserId != null">
+                online_user_id,
+            </if>
+            <if test="identityTypeId != null">
+                identity_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="onlineUserId != null">
+                #{onlineUserId,jdbcType=TINYINT},
+            </if>
+            <if test="identityTypeId != null">
+                #{identityTypeId,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
 </mapper>

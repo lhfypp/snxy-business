@@ -21,4 +21,9 @@ public interface DeliveryOrderMapper {
     List<DeliveryOrder> selectByCreatorKey(@Param("companyId") Long companyId,@Param("status") Long status);
 
     int selectByOrderNo(String orderNo);
+
+    List<DeliveryOrder> selectAllByIdAndPhone(@Param("onlineUserId") Long onlineUserId, @Param("phone") String phone);
+
+    List<DeliveryOrder> selectByCompanyId(Long companyId);
+
 }

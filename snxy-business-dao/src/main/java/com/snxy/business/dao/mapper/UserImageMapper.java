@@ -17,4 +17,6 @@ public interface UserImageMapper {
     int updateByPrimaryKey(Long record);
 
     void updateImageById(@Param("systemUserId") Long systemUserId, @Param("url")String url);
+
+    String selectImageBySystemUserId(Long systemUserId);
 }

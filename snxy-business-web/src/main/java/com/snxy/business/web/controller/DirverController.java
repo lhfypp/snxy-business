@@ -9,9 +9,14 @@ import com.snxy.business.service.EntranceFeeCapacityService;
 import com.snxy.business.service.VehicleService;
 import com.snxy.business.service.vo.DriverLicenseVO;
 import com.snxy.business.service.vo.IdCardInfoVO;
+
+import com.snxy.business.service.vo.SystemUserVO;
+
 import com.snxy.business.service.vo.VehicleLicenseVO;
+
 import com.snxy.common.response.ResultData;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -69,6 +74,15 @@ class DirverController {
         ResultData<IdCardInfoVO> idCardInfoVO = filePicService.idcardBack(file);
         return ResultData.success(idCardInfoVO);
     }
+
+    // 司机获取车辆信息
+    @RequestMapping("vehicleInfo/search")
+    public ResultData getVhicleInfoForDriver(@RequestAttribute(value = "systemUser",required = false) SystemUserVO systemUserVO){
+    long driverId=1;
+    return ResultData.success(dirverInfoService.searchVehicleInfo(driverId));
+    }
+
+
     //驾驶证上传识别
     @RequestMapping("/file/driving")
     public ResultData drivingFront(MultipartFile file){
@@ -81,4 +95,5 @@ class DirverController {
         ResultData<VehicleLicenseVO> vehicleLicenseVO = filePicService.vehicFront(file);
         return ResultData.success(vehicleLicenseVO);
     }
+
 }

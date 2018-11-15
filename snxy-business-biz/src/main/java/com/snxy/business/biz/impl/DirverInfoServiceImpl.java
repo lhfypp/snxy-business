@@ -2,16 +2,21 @@ package com.snxy.business.biz.impl;
 
 import com.snxy.business.dao.mapper.DirverInfoMapper;
 import com.snxy.business.dao.mapper.IdInfoMapper;
-import com.snxy.business.domain.DirverInfo;
-import com.snxy.business.domain.DriverPicture;
-import com.snxy.business.domain.IdInfo;
-import com.snxy.business.domain.Image;
+import com.snxy.business.domain.*;
+
 import com.snxy.business.service.DirverInfoService;
+import com.snxy.business.service.vo.VehicleInfoVO;
+
+import com.snxy.business.service.CompanyUserRelationService;
+
+import com.snxy.business.service.MerchantCompanyService;
 import com.snxy.common.exception.BizException;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -23,6 +28,10 @@ public class DirverInfoServiceImpl implements DirverInfoService {
     private DirverInfoMapper dirverInfoMapper;
     @Resource
     private IdInfoMapper idInfoMapper;
+    @Resource
+    private CompanyUserRelationService companyUserRelationService;
+    @Resource
+    private MerchantCompanyService merchantCompanyService;
 
     //保存司机驾驶证  身份证
     @Override
@@ -61,4 +70,37 @@ public class DirverInfoServiceImpl implements DirverInfoService {
             throw new BizException("您已注册，请登录");
         }
     }
+
+
+    @Override
+    public List<VehicleInfoVO> searchVehicleInfo(long driverId) {
+        List<VehicleInfoVO> vehicleInfoVOList=new ArrayList<>();
+        //查询出司机对应的车辆信息
+        List<VhiclePartInfo> VhiclePartInfoList=dirverInfoMapper.searchVhicleInfo(driverId);
+        VhiclePartInfoList.forEach((vhiclePartInfo)->vehicleInfoVOList.add(VehicleInfoVO.builder()
+                .vehicleId(vhiclePartInfo.getVehicleId())
+                .carPlateNO(vhiclePartInfo.getCarPlateNO())
+                .build()));
+        return vehicleInfoVOList;
+    }
+
+    /**
+     * 查询司机所属我的公司信息
+     * @param id
+     * @return
+     */
+    @Override
+    public List<MerchantCompany> selectDriverOfCompanyById(Long id) {
+        //查出在线id
+        Long onlineUserId = dirverInfoMapper.selectOnlineUserIdById(id);
+        //通过司机onlineUserId查询company_user_relation中onlineUserId
+       List<Long> companyIdList = companyUserRelationService.selectCompanyIdByOnlineUserId(onlineUserId);
+       //根据companyIdList批量查询公司信息
+       List<MerchantCompany> merchantCompanyList =  merchantCompanyService.selectCompanyByCompanyIdList(companyIdList);
+
+        return merchantCompanyList;
+    }
+
+
+
 }
