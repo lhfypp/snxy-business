@@ -22,4 +22,7 @@ public interface SystemUserService {
     void updatePassword(String password, Long systemUserId);
 
     void updatePersonalMobile(Long systemUserId, String newMobile,String password, String smsCode);
+
+    void updateRegisterPWD(Long systemUserId, String newPwd);
+
 }

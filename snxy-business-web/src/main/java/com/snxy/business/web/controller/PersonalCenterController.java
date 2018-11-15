@@ -202,6 +202,7 @@ public class PersonalCenterController {
     public void updatePersonalPassWord(@RequestAttribute("systemUser") SystemUserVO systemUserVO,String oldPwd,String newPwd){
         systemUserService.updatePersonalPassWord(oldPwd,newPwd,systemUserVO.getSystemUserId());
     }
+
     /**
      * 修改手机号
      * @param systemUserVO

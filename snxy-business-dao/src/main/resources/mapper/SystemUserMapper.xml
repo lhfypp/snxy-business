@@ -233,4 +233,11 @@
     and is_delete = 0
   </update>
 
+  <!--注册忘记密码设置密码-->
+  <update id="updateRegisterPWD">
+    update system_user
+    set pwd = #{newPwd}
+    where id = #{systemUserId}
+    and is_delete = 0
+  </update>
 </mapper>

@@ -116,5 +116,10 @@ public class SystemUserServiceImpl implements SystemUserService {
          systemUserMapper.updatePersonalMobile(systemUserId,newMobile);
     }
 
+    @Override
+    public void updateRegisterPWD(Long systemUserId, String newPwd) {
+        systemUserMapper.updateRegisterPWD(systemUserId,newPwd);
+    }
+
 
 }

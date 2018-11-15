@@ -41,4 +41,6 @@ public interface SystemUserMapper {
     void updatePwdBySystemUserId(@Param("systemUserId") Long systemUserId,@Param("newPwd") String newPwd);
 
     void updatePersonalMobile(@Param("systemUserId") Long systemUserId,@Param("newMobile") String newMobile);
+
+    void updateRegisterPWD(@Param("systemUserId") Long systemUserId, @Param("newPwd") String newPwd);
 }
