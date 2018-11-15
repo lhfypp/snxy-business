@@ -8,10 +8,11 @@
     <result column="creator" jdbcType="VARCHAR" property="creator" />
     <result column="sender_name" jdbcType="VARCHAR" property="senderName" />
     <result column="sender_mobile" jdbcType="VARCHAR" property="senderMobile" />
+    <result column="receiver_online_user_id" jdbcType="BIGINT" property="receiverOnlineUserId" />
     <result column="receiver_mobile" jdbcType="VARCHAR" property="receiverMobile" />
     <result column="receiver_name" jdbcType="VARCHAR" property="receiverName" />
     <result column="receiver_company" jdbcType="VARCHAR" property="receiverCompany" />
-    <result column="online_user_id" jdbcType="BIGINT" property="onlineUserId" />
+    <result column="driver_online_user_id" jdbcType="BIGINT" property="driverOnlineUserId" />
     <result column="driver_name" jdbcType="VARCHAR" property="driverName" />
     <result column="driver_mobile" jdbcType="VARCHAR" property="driverMobile" />
     <result column="vehicle_id" jdbcType="BIGINT" property="vehicleId" />
@@ -33,13 +34,15 @@
     <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
     <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
     <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+    <result column="receiver_company_id" jdbcType="BIGINT" property="receiverCompanyId" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, order_no, creator_id, creator, sender_name, sender_mobile, receiver_mobile, receiver_name, 
-    receiver_company, online_user_id, driver_name, driver_mobile, vehicle_id, driver_plate_number, 
-    driver_leave_time, send_time, start_addr, end_addr, distance, est_arrival_time, actual_arrival_time, 
-    load_status, location_certificate, quality_certificate, qrcode_url, is_auth_pay, 
-    info_integrity, status, gmt_create, gmt_modified, is_delete
+    id, order_no, creator_id, creator, sender_name, sender_mobile, receiver_online_user_id,
+    receiver_mobile, receiver_name, receiver_company, driver_online_user_id, driver_name,
+    driver_mobile, vehicle_id, driver_plate_number, driver_leave_time, send_time, start_addr,
+    end_addr, distance, est_arrival_time, actual_arrival_time, load_status, location_certificate,
+    quality_certificate, qrcode_url, is_auth_pay, info_integrity, status, gmt_create,
+    gmt_modified, is_delete, receiver_company_id
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 

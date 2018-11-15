@@ -115,4 +115,20 @@
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <!-- 查询司机部分车辆信息 start-->
+  <resultMap id="searchVhicleInfoMap" type="com.snxy.business.domain.VhiclePartInfo">
+    <result column="plate_number" jdbcType="VARCHAR" property="carPlateNO" />
+    <result column="id" jdbcType="BIGINT" property="vehicleId" />
+  </resultMap>
+  <sql id="searchVhicleInfoSql">
+    select a.id as id,a.plate_number as plate_number
+  </sql>
+  <select id="searchVhicleInfo" resultMap="searchVhicleInfoMap">
+    <include refid="searchVhicleInfoSql"/>
+     from vehicle a ,dirver_info b
+         where a.driver_info_id=b.id
+            and b.online_user_id=#{driverId}
+            and a.is_delete=0
+  </select>
+  <!-- 查询司机部分车辆信息 end -->
 </mapper>
