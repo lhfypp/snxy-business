@@ -27,7 +27,6 @@ public class SystemUserServiceImpl implements SystemUserService {
     @Resource
     private RedisTemplate redisTemplate;
 
-
     /**
      * 更换系统用户姓名
      *
@@ -63,53 +62,6 @@ public class SystemUserServiceImpl implements SystemUserService {
         systemUserMapper.updateSystemMobile(systemUserId, newMobile);
     }
 
-    /**
-     * 修改密码前获取验证码
-     *
-     * @param mobile
-     * @return
-     */
-    @Override
-    public String updatePwdGetSmsCode(String mobile) {
-
-        //将来调用短信服务给手机号发送验证码，测试我们先后台生成6位
-        String smsCode = RandomStringUtils.randomNumeric(6);
-        //将验证码存到redis中，设置有效期为半小时
-        redisTemplate.opsForValue().set(mobile + "updatePWD", smsCode, 30, TimeUnit.MINUTES);
-        //根据当前手机号查出当前的密码
-        String DBpwd = systemUserMapper.selectPwdByMobile(mobile);
-        //因为数据库中密码是加密的，查出来要解密
-        String plainPwd = MD5Util.encrypt(DBpwd);
-        System.out.print("=======================" + plainPwd + "=======" + DBpwd);
-        return smsCode;
-    }
-
-    /**
-     * 修改密码
-     *
-     * @param mobile
-     * @param smsCode
-     * @param password
-     */
-    @Override
-    public void updatePwd(String mobile, String smsCode, String password) {
-        //从redis中取出验证码
-        Object obj = redisTemplate.opsForValue().get(mobile + "updatePWD");
-        if (obj == null) {
-            throw new BizException("验证码已过期,请重新获取");
-        }
-        //验证码没过期，从redis取出来和用户输入的进行比对
-        String redisSmsCode = (String) redisTemplate.opsForValue().get(mobile + "updatePWD");
-        if (smsCode.length() == 0 || smsCode.isEmpty()) {
-            throw new BizException("验证码为空");
-        } else if (!redisSmsCode.equals(smsCode)) {
-            throw new BizException("验证码输入错误");
-        }
-        //修改密码,将明文改成密文
-        String DBpwd = MD5Util.encrypt(password);
-        systemUserMapper.updatePwdByMobile(mobile, DBpwd);
-    }
-
     @Override
     public SystemUser selectByMobile(String phone) {
         SystemUser systemUser = systemUserMapper.selectByPhone(phone);
@@ -117,7 +69,52 @@ public class SystemUserServiceImpl implements SystemUserService {
     }
 
     @Override
-    public void updatePassword(String password, Long systemUserId) {
-        systemUserMapper.updatePassword(password, systemUserId);
+    @Transactional(rollbackFor = Exception.class)
+    public void updatePersonalPassWord(String oldPwd, String newPwd, Long systemUserId) {
+        //根据systemUserId查询当前用户保存在数据库中密码
+        String DBPwd = systemUserMapper.selectPwdBySystemUserId(systemUserId);
+        if (DBPwd==null){
+            throw new BizException("当前用户没有设置密码，请先设置");
+        }else if (!DBPwd.equals(MD5Util.encrypt(oldPwd))){
+            throw new BizException("对不起，您输入的旧密码有误，请重新输入");
+        }
+        //旧密码和数据库密码一致后，可以修改密码，要将新密码加密再修改
+        systemUserMapper.updatePwdBySystemUserId(systemUserId,MD5Util.encrypt(newPwd));
     }
+
+    @Override
+    public void updatePassword(String password, Long systemUserId) {
+        systemUserMapper.updatePassword(password,systemUserId);
+    }
+
+    @Override
+    public void updatePersonalMobile(Long systemUserId, String newMobile,String password, String smsCode) {
+        //第一步要判断用户输入的密码是否正确，这是防止数据库信息被恶意修改
+        String DBPwd = systemUserMapper.selectPwdBySystemUserId(systemUserId);
+        if (DBPwd==null){
+            throw new BizException("当前用户没有设置密码，请先设置");
+        }else if (!DBPwd.equals(MD5Util.encrypt(password))){
+            throw new BizException("对不起，您输入的旧密码有误，请重新输入");
+        }
+        //给手机发送验证码，调用短信服务 TODO
+        String code = RandomStringUtils.randomNumeric(6);
+        //将验证码存入redis中，设置有效期为30分钟
+        redisTemplate.opsForValue().set(newMobile,smsCode,30, TimeUnit.MINUTES);
+        //判断验证码是否过期
+        Object obj = redisTemplate.opsForValue().get(newMobile);
+        if (obj==null){
+            throw new BizException("验证码已过期，重新获取");
+        }
+        //如果没过期，就从redis中获取
+        String code1 = (String)redisTemplate.opsForValue().get(newMobile);
+        if (smsCode.length() == 0 || smsCode.isEmpty()) {
+            throw new BizException("验证码为空");
+        } else if (!code1.equals(smsCode)) {
+            throw new BizException("验证码输入错误");
+        }
+        //验证码正确后可以修改手机号
+         systemUserMapper.updatePersonalMobile(systemUserId,newMobile);
+    }
+
+
 }

@@ -175,7 +175,6 @@ public class PersonalCenterController {
         String mobile = systemUserInfoService.selectMobileBySystemUserId(systemUserId);
         return ResultData.success(mobile);
     }
-
     /**
      * 问题留言
      * @return
@@ -185,7 +184,6 @@ public class PersonalCenterController {
         List<CustomerMessage> customerMessageList = customerMessageService.selectAllCustomerMessage();
         return ResultData.success(customerMessageList);
     }
-
     /**
      * 身份标签添加
      * @param identityTypeId
@@ -193,6 +191,25 @@ public class PersonalCenterController {
     @RequestMapping("/identity/insert")
     public void insertIdentity(Integer  identityTypeId ,@RequestAttribute("systemUser") SystemUserVO systemUserVO){
           identityTypeService.insertIdentity(identityTypeId,systemUserVO.getOnlineUserId());
+    }
+    /**
+     * 修改密码
+     * @param systemUserVO
+     * @param oldPwd
+     * @param newPwd
+     */
+    @RequestMapping("/password/update")
+    public void updatePersonalPassWord(@RequestAttribute("systemUser") SystemUserVO systemUserVO,String oldPwd,String newPwd){
+        systemUserService.updatePersonalPassWord(oldPwd,newPwd,systemUserVO.getSystemUserId());
+    }
+    /**
+     * 修改手机号
+     * @param systemUserVO
+     * @param newMobile
+     */
+    @RequestMapping("/mobile/update")
+    public void updatePersonalMobile(@RequestAttribute("systemUser") SystemUserVO systemUserVO,String newMobile ,String password ,String smsCode){
+        systemUserService.updatePersonalMobile(systemUserVO.getSystemUserId(),newMobile,password ,smsCode);
     }
 
 }

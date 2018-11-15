@@ -27,27 +27,16 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class OnlineUserServiceImpl implements OnlineUserService {
     @Resource
-
-
     private OnlineUserMapper onlineUserMapper;
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
     @Resource
     private SystemUserService systemUserService;
 
-  /*
-     * 更换在线用户姓名
-
-     * @param systemUserId
-     * @param name
-     */
     @Transactional(rollbackFor = Exception.class)
     public void updateName(Long systemUserId, String name) {
         onlineUserMapper.updateNameBySystemUserId(systemUserId, name);
     }
-
-
-
 
     @Override
     public OnlineUser selectByPhone(String phone) {
@@ -78,12 +67,6 @@ public class OnlineUserServiceImpl implements OnlineUserService {
         return onlineUserList;
     }
 
-    /**
-     * 修改手机号前获取手机验证码
-     *
-     * @param oldMobile
-     * @return
-     */
     @Override
     public String getSmsCode(String oldMobile) {
 
@@ -96,14 +79,6 @@ public class OnlineUserServiceImpl implements OnlineUserService {
         return smsCode;
     }
 
-    /**
-     * 更换手机号
-     *
-     * @param systemUserId
-     * @param oldMobile
-     * @param newMobile
-     * @param smsCode
-     */
     @Override
     public void updateOnlineMobile(Long systemUserId, String oldMobile, String newMobile, String smsCode) {
 
@@ -141,12 +116,6 @@ public class OnlineUserServiceImpl implements OnlineUserService {
         return onlineUserId;
     }
 
-
-    /**
-     * 通过系统id查询在线用户id
-     * @param systemUserId
-     * @return
-     */
     @Override
     public Long selectOnlineUserIdBySystemUserId(Long systemUserId) {
         return onlineUserMapper.selectOnlineUserIdBySystemUserId(systemUserId);

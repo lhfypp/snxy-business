@@ -23,9 +23,8 @@ public interface OnlineUserService {
 
     List<OnlineUser> selectByOnlineUserIdList(List<Long> onlineUserIdlist);
 
-//    更换手机号前获取验证码
     String  getSmsCode(String oldMobile);
-//    更换在线用户手机号
+
     void updateOnlineMobile(Long systemUserId ,String oldMobile,String newMobile,String smsCode);
 
     OnlineUser selectByOnlineUserId(Long onlineUserId);
