@@ -27,4 +27,10 @@ public class MerchantCompanyServiceImpl implements MerchantCompanyService {
         List<String> nameList = merchantCompanyMapper.selectAllName();
         return nameList;
     }
+
+    @Override
+    public String searchNameById(Long id) {
+       return merchantCompanyMapper.selectByPrimaryKey(id).getMerchantName();
+
+    }
 }

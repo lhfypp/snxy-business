@@ -29,6 +29,9 @@ public class CompanyUserRelationServiceImpl implements CompanyUserRelationServic
         return companyUserRelationMapper.insert(record);
 
     }
+
+
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void insertCompanyUserRelation(CompanyUserRelation companyUserRelation) {
@@ -62,5 +65,21 @@ public class CompanyUserRelationServiceImpl implements CompanyUserRelationServic
     public void updateIsResponsible(List<CompanyUserRelation> companyUserRelationList) {
         companyUserRelationMapper.updateByCompanyUserRelationList(companyUserRelationList);
 
+    }
+
+    @Override
+    public Long selectCompanyRelationforId(Long userId, long companyId) {
+        return companyUserRelationMapper.selectByCompanyIdAndUserId(userId,companyId);
+    }
+
+    @Override
+    public String searchResponsibleByComId(Long companyId) {
+
+        return companyUserRelationMapper.selectResponsibleBycomId(companyId);
+    }
+
+    @Override
+    public String searchComIdByUseId(Long userId) {
+        return null;
     }
 }

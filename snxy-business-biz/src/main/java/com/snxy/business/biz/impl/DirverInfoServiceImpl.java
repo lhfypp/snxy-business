@@ -2,15 +2,14 @@ package com.snxy.business.biz.impl;
 
 import com.snxy.business.dao.mapper.DirverInfoMapper;
 import com.snxy.business.dao.mapper.IdInfoMapper;
-import com.snxy.business.domain.DirverInfo;
-import com.snxy.business.domain.DriverPicture;
-import com.snxy.business.domain.IdInfo;
-import com.snxy.business.domain.Image;
+import com.snxy.business.domain.*;
 import com.snxy.business.service.DirverInfoService;
+import com.snxy.business.service.vo.VehicleInfoVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -53,5 +52,17 @@ public class DirverInfoServiceImpl implements DirverInfoService {
         idInfo.setIdBackUrl(driverPicture.getIdBackUrl());
         idInfo.setGmtCreate(driverPicture.getGmtCreate());
         idInfoMapper.insert(idInfo);
+    }
+
+    @Override
+    public List<VehicleInfoVO> searchVehicleInfo(long driverId) {
+        List<VehicleInfoVO> vehicleInfoVOList=new ArrayList<>();
+        //查询出司机对应的车辆信息
+        List<VhiclePartInfo> VhiclePartInfoList=dirverInfoMapper.searchVhicleInfo(driverId);
+        VhiclePartInfoList.forEach((vhiclePartInfo)->vehicleInfoVOList.add(VehicleInfoVO.builder()
+                .vehicleId(vhiclePartInfo.getVehicleId())
+                .carPlateNO(vhiclePartInfo.getCarPlateNO())
+                .build()));
+        return vehicleInfoVOList;
     }
 }
