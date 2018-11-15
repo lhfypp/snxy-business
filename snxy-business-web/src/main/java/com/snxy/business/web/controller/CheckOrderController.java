@@ -54,4 +54,5 @@ public class CheckOrderController {
         qualitySheetService.deleteQualitySheetById(qualitySheetId);
      return ResultData.success("删除检测单成功");
     }
+    // 扫码支付
 }
