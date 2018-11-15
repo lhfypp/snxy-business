@@ -288,4 +288,26 @@
      where id=#{qualitySheetId}
            and user_id!=null
   </update>
+
+  <select id="selectByOrderId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from quality_sheet
+    where delivery_order_id = #{deliveryOrderId}
+  </select>
+
+  <select id="selectByCompanyId" resultMap="BaseResultMap">
+    select
+    qs.id, qs.code, qs.delivery_order_id, qs.weight, qs.vegetable_category_id, qs.category_name, qs.vehicle_plate_number,
+    qs.production_location, qs.check_time, qs.qrcode_url, qs.status, qs.qualified, qs.remark,
+    qs.gmt_modified, qs.is_delete,
+    case
+    when qs.gmt_modified != "" or qs.gmt_modified != null then qs.gmt_modified
+    else qs.gmt_create
+    end as gmt_create
+    from quality_sheet qs,delivery_order deo
+    where deo.receiver_company_id = #{companyId}
+    and deo.id = qs.delivery_order_id
+    order by qs.gmt_create DESC
+  </select>
 </mapper>

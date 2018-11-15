@@ -10,13 +10,31 @@ public class EntranceFeeDetail {
 
     private Long entranceFeeCapacityId;
 
-    private BigDecimal vegetableName;
+    private BigDecimal cost;
 
     private Date gmtCreate;
 
     private Date gmtModified;
 
     private Byte isDelete;
+
+    private Long status;
+
+    public BigDecimal getCost() {
+        return cost;
+    }
+
+    public void setCost(BigDecimal cost) {
+        this.cost = cost;
+    }
+
+    public Long getStatus() {
+        return status;
+    }
+
+    public void setStatus(Long status) {
+        this.status = status;
+    }
 
     public Long getId() {
         return id;
@@ -43,11 +61,11 @@ public class EntranceFeeDetail {
     }
 
     public BigDecimal getVegetableName() {
-        return vegetableName;
+        return cost;
     }
 
     public void setVegetableName(BigDecimal vegetableName) {
-        this.vegetableName = vegetableName;
+        this.cost = vegetableName;
     }
 
     public Date getGmtCreate() {

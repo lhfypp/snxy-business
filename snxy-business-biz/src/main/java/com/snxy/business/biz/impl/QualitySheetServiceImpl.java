@@ -1,5 +1,12 @@
 package com.snxy.business.biz.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.snxy.business.dao.mapper.CompanyUserRelationMapper;
+import com.snxy.business.dao.mapper.QualitySheetMapper;
+import com.snxy.business.domain.CompanyUserRelation;
+import com.snxy.business.domain.QualitySheet;
+import com.snxy.business.service.QualitySheetService;
+import com.snxy.common.util.PageInfo;
 
 
 import com.github.pagehelper.PageHelper;
@@ -20,6 +27,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
+
+import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,8 +38,11 @@ import java.util.List;
 @Service
 @Slf4j
 public class QualitySheetServiceImpl implements QualitySheetService {
+
     @Resource
     private QualitySheetMapper qualitySheetMapper;
+    @Resource
+    private CompanyUserRelationMapper companyUserRelationMapper;
     @Resource
     private GuaranteeDepositService guaranteeDepositService;
     @Resource
@@ -42,6 +55,29 @@ public class QualitySheetServiceImpl implements QualitySheetService {
     private MerchantCompanyService merchantCompanyService;
     @Resource
     private RedisTemplate<String,Object> redisTemplate;
+
+    //检测单详情
+    @Override
+    public QualitySheet qualitySheetByOrderId(Long deliveryOrderId) {
+        QualitySheet qualitySheet = qualitySheetMapper.selectByOrderId(deliveryOrderId);
+        return qualitySheet;
+    }
+
+    //查看质量检测单
+    @Override
+    public PageInfo<QualitySheet> qualitySheetList(Long onlineUserId) {
+        //获取公司id
+        CompanyUserRelation companyUserRelation = companyUserRelationMapper.selectByOnlineUserId(onlineUserId);
+        Long companyId = companyUserRelation.getCompanyId();
+        //查看质量检测单
+        PageHelper.startPage(1,10);
+        List<QualitySheet> qualitySheetList = qualitySheetMapper.selectByCompanyId(companyId);
+        PageInfo<QualitySheet> qualitySheetPageInfo = new PageInfo<>();
+        qualitySheetPageInfo.setData(qualitySheetList);
+        return qualitySheetPageInfo;
+    }
+
+
     //创建检测单
     @Override
     @Transactional(rollbackFor = Exception.class)

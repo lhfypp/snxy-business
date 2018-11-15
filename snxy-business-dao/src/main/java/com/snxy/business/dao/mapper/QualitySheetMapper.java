@@ -17,6 +17,10 @@ public interface QualitySheetMapper {
     int updateByPrimaryKeySelective(QualitySheet record);
 
     int updateByPrimaryKey(QualitySheet record);
+
+    QualitySheet selectByOrderId(Long deliveryOrderId);
+
+    List<QualitySheet> selectByCompanyId(@Param("companyId") Long companyId);
     List<QualitySheet> selectQualitySheetList(@Param("useId") Long useId,@Param("searchName") String searchName);
     List<QualitySheet> selectAllQualitySheetList(@Param("useId") Long useId, @Param("searchName") String searchName);
     List<QualitySheet> selectAllQualitySheetListPart(@Param("useId") Long useId, @Param("searchName") String searchName);
