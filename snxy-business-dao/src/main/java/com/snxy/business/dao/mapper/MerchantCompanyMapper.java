@@ -8,7 +8,6 @@ import org.apache.ibatis.annotations.Param;
 
 
 
-import com.snxy.business.domain.MerchantCompany;
 
 import java.util.List;
 
@@ -30,4 +29,6 @@ public interface MerchantCompanyMapper {
 
     List<String> selectAllName();
 
+    List<MerchantCompany> selectByCompanyName(String companyName);
+    List<MerchantCompany> selectCompanyByCompanyIdList(@Param("companyIdList") List<Long> companyIdList);
 }

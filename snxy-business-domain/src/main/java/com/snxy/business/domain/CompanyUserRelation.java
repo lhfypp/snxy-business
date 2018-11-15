@@ -13,7 +13,6 @@ import lombok.Data;
 
 
 @Data
-
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -31,5 +30,7 @@ public class CompanyUserRelation {
     private Date gmtModifed;
 
     private Byte isDelete;
+
+    private Integer isFounder;//当为0时是主负责人，当为1时不是主负责人
 
 }

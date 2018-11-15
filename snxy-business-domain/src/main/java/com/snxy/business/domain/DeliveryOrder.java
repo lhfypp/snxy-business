@@ -1,7 +1,16 @@
 package com.snxy.business.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.Date;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class DeliveryOrder {
     private Long id;
 
@@ -22,6 +31,11 @@ public class DeliveryOrder {
     private String receiverName;
 
     private String receiverCompany;
+
+    private Long receiverCompanyId;
+
+
+
 
     private Long driverOnlineUserId;
 
@@ -60,6 +74,7 @@ public class DeliveryOrder {
     private Integer infoIntegrity;
 
     private Integer status;
+    //取消0，已接单1，装货完成2，运输中3，检测中4，合格关闭5，不合格关闭6 -- 被遣离
 
     private Date gmtCreate;
 
@@ -67,7 +82,7 @@ public class DeliveryOrder {
 
     private Byte isDelete;
 
-    private Long receiverCompanyId;
+
 
     public Long getId() {
         return id;
@@ -332,4 +347,7 @@ public class DeliveryOrder {
     public void setReceiverCompanyId(Long receiverCompanyId) {
         this.receiverCompanyId = receiverCompanyId;
     }
+
+
+
 }

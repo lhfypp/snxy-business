@@ -1,12 +1,13 @@
 package com.snxy.business.service;
 
 import com.snxy.business.domain.Vehicle;
-
 import java.util.List;
 
 public interface VehicleService {
+    Vehicle selectByDriverId(Long driverOnlineUserId);
 
-    void saveVehicle(Vehicle vehicle);
+    String saveVehicle(Vehicle vehicle);
 
     List<Vehicle> vehicleList(Long dirverInfoId);
+
 }

@@ -12,6 +12,14 @@ public interface SystemUserService {
     void insertSystemUser(SystemUser systemUser);
 
     void insertSystemUserList(List<SystemUser> systemUserList);
-//修改系统用户的手机号
+
     void updateSystemMobile(Long systemUserId, String newMobile);
+
+    String updatePwdGetSmsCode(String mobile);
+
+    void updatePwd(String mobile,String smsCode,String password);
+
+    SystemUser selectByMobile(String phone);
+
+    void updatePassword(String password, Long systemUserId);
 }

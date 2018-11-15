@@ -9,9 +9,10 @@
     <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
     <result column="gmt_modifed" jdbcType="TIMESTAMP" property="gmtModifed" />
     <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+    <result column="is_founder" jdbcType="INTEGER" property="isFounder" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, company_id, online_user_id, is_responsible, gmt_create, gmt_modifed, is_delete
+    id, company_id, online_user_id, is_responsible, gmt_create, gmt_modifed, is_delete, is_founder
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -141,7 +142,11 @@
     <include refid="Base_Column_List" />
     from company_user_relation
     where online_user_id = #{id}
-      and is_delete = 0
+
+
+
+    AND is_delete = 0
+
   </select>
 
   <!--批量添加公司员工-->
@@ -175,9 +180,11 @@
         is_responsible = #{item.isResponsible},
         gmt_modifed = #{item.gmtModifed}
       </set>
-      where online_user_id = ${item.onlineUserId}
+      where online_user_id = #{item.onlineUserId}
     </foreach>
+    and is_delete = 0
   </update>
+
   
   
   <select id="selectByCompanyIdAndUserId" resultType="java.lang.Long">
@@ -204,4 +211,88 @@
                online_user_id=#{userId}
                and is_delete = 0
     </select>
+
+
+  <!--通过onlineUserIdList查询所有-->
+  <select id="selectUserRelationByOnlineUserIdList">
+    SELECT
+    <include refid="Base_Column_List" />
+    from company_user_relation
+    where online_user_id IN
+    <foreach collection="onlineUserIdList" item="onlineUserId" open="(" separator="," close=")" index="index">
+      #{onlineUserId}
+    </foreach>
+    AND is_delete = 0
+  </select>
+
+  <!--通过公司id找主负责人-->
+  <select id="selectByCompanyId" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    from company_user_relation
+    where company_id = #{companyId}
+    AND is_founder = 1
+    AND is_delete = 0
+  </select>
+
+  <!--查询商户公司信息，不用is_resposible加以限制，有可能当前用户既是负责人也是司机-->
+  <select id="selectBossCompanyByUserId"  resultMap="MerchantCompany">
+   SELECT mc.merchant_name,mc.social_info_code,mc.corporate_certification_url
+   from company_user_relation as cur
+   inner JOIN merchant_company as mc
+   on cur.company_id=mc.id
+   where   cur.online_user_id=#{onlineUserId}
+   and cur.is_delete = 0
+  </select>
+
+  <!--查询员工所属公司信息-->
+   <select id="selectEmployCompanyByUserId"  resultMap="MerchantCompany">
+   SELECT mc.merchant_name,mc.social_info_code,mc.corporate_certification_url
+   from company_user_relation as cur
+   inner JOIN merchant_company as mc
+   on cur.company_id=mc.id
+   where   cur.online_user_id=#{onlineUserId}
+   and cur.is_delete = 0
+  </select>
+  <resultMap type="com.snxy.business.domain.MerchantCompany" id="MerchantCompany">
+      <result property="merchantName" column="merchant_name"/>
+      <result property="socialInfoCode" column="social_info_code"/>
+      <result property="corporateCertificationUrl" column="corporate_certification_url"/>
+  </resultMap>
+
+  <!--根据司机onlineUserId查询companyId-->
+  <select id="selectCompanyIdByOnlineUserId" resultType="java.lang.Long">
+     select cur.company_id
+     from company_user_relation as cur
+     where cur.online_user_id=#{onlineUserId}
+     and cur.is_delete = 0
+  </select>
+  <!--商户负责人删除员工-->
+  <delete id="deleteCompanyUserRelationByOnlineUserId" >
+    delete from company_user_relation
+    where online_user_id = #{onlineUserId,jdbcType=BIGINT}
+    and is_responsible=0
+  </delete>
+
+
+  <!--根据onlineUserId在company_user_relation和online_user关联查询userName-->
+  <select id="selectUserNameByOlineUserId" resultType="String">
+     SELECT ou.user_name
+    from company_user_relation as cur
+    INNER JOIN online_user as ou
+    on cur.online_user_id=ou.id
+    where online_user_id=#{onlineUserId,jdbcType=BIGINT}
+     and cur.is_delete = 0
+  </select>
+
+  <!--根据onlineUserId在company_user_relation和online_user关联查询phone-->
+  <select id="selectPhoneByOnlineUserId" resultType="String">
+     SELECT ou.phone
+    from company_user_relation as cur
+    INNER JOIN online_user as ou
+    on cur.online_user_id=ou.id
+    where online_user_id=#{onlineUserId,jdbcType=BIGINT}
+     and cur.is_delete = 0
+  </select>
+
 </mapper>

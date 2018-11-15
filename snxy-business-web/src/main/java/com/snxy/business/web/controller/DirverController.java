@@ -7,9 +7,13 @@ import com.snxy.business.domain.Vehicle;
 import com.snxy.business.service.DirverInfoService;
 import com.snxy.business.service.EntranceFeeCapacityService;
 import com.snxy.business.service.VehicleService;
+import com.snxy.business.service.vo.DriverLicenseVO;
 import com.snxy.business.service.vo.IdCardInfoVO;
+
 import com.snxy.business.service.vo.SystemUserVO;
-import com.snxy.common.exception.BizException;
+
+import com.snxy.business.service.vo.VehicleLicenseVO;
+
 import com.snxy.common.response.ResultData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestAttribute;
@@ -34,17 +38,17 @@ class DirverController {
     @Resource
     private FilePicService filePicService;
 
-    //司机信息  身份证  驾驶证
+    //司机信息  身份证  驾驶证保存
     @RequestMapping("/basicInfo/new")
     public ResultData saveDriver(DriverPicture driverPicture) {
         dirverInfoService.saveDriverInfo(driverPicture);
-        return ResultData.success("保存成功");
+        return ResultData.success("");
     }
     //车辆行驶证保存
     @RequestMapping("/vehicle/new")
     public ResultData saveVehicle(Vehicle vehicle){
-        vehicleService.saveVehicle(vehicle);
-        return ResultData.success("保存成功");
+        String result = vehicleService.saveVehicle(vehicle);
+        return ResultData.success(result);
     }
     //车类型列表
     @RequestMapping("/carType/list")
@@ -60,21 +64,36 @@ class DirverController {
     }
     //身份证正面上传识别
     @RequestMapping("/file/picture/front")
-    public ResultData fileFront(MultipartFile idFrontUrl){
-       ResultData<IdCardInfoVO> idCardInfoVO = filePicService.idcardFront(idFrontUrl);
+    public ResultData fileFront(MultipartFile file){
+       ResultData<IdCardInfoVO> idCardInfoVO = filePicService.idcardFront(file);
         return ResultData.success(idCardInfoVO);
     }
     //身份证反面上传识别
     @RequestMapping("/file/picture/back")
-    public ResultData fileBack(MultipartFile idBackUrl){
-        ResultData<IdCardInfoVO> idCardInfoVO = filePicService.idcardBack(idBackUrl);
+    public ResultData fileBack(MultipartFile file){
+        ResultData<IdCardInfoVO> idCardInfoVO = filePicService.idcardBack(file);
         return ResultData.success(idCardInfoVO);
     }
+
     // 司机获取车辆信息
     @RequestMapping("vehicleInfo/search")
     public ResultData getVhicleInfoForDriver(@RequestAttribute(value = "systemUser",required = false) SystemUserVO systemUserVO){
     long driverId=1;
     return ResultData.success(dirverInfoService.searchVehicleInfo(driverId));
+    }
+
+
+    //驾驶证上传识别
+    @RequestMapping("/file/driving")
+    public ResultData drivingFront(MultipartFile file){
+        ResultData<DriverLicenseVO> driverLicenseVO = filePicService.drivingFront(file);
+        return ResultData.success(driverLicenseVO);
+    }
+    //行驶证上传识别
+    @RequestMapping("/file/vehicle")
+    public ResultData vehicleFront(MultipartFile file) {
+        ResultData<VehicleLicenseVO> vehicleLicenseVO = filePicService.vehicFront(file);
+        return ResultData.success(vehicleLicenseVO);
     }
 
 }

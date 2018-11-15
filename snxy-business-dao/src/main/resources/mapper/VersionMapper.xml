@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.snxy.business.dao.mapper.VersionMapper">
+  <resultMap id="BaseResultMap" type="com.snxy.business.domain.Version">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="version_num" jdbcType="VARCHAR" property="versionNum" />
+    <result column="release_time" jdbcType="DATE" property="releaseTime" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="system_user_id" jdbcType="BIGINT" property="systemUserId" />
+    <result column="oprate_name" jdbcType="VARCHAR" property="oprateName" />
+    <result column="gmt_create" jdbcType="DATE" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="DATE" property="gmtModified" />
+    <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, version_num, release_time, url, system_user_id, oprate_name, gmt_create, gmt_modified, 
+    is_delete
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from version
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from version
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.snxy.business.domain.Version">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into version (version_num, release_time, url, 
+      system_user_id, oprate_name, gmt_create, 
+      gmt_modified, is_delete)
+    values (#{versionNum,jdbcType=VARCHAR}, #{releaseTime,jdbcType=DATE}, #{url,jdbcType=VARCHAR}, 
+      #{systemUserId,jdbcType=BIGINT}, #{oprateName,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=DATE}, 
+      #{gmtModified,jdbcType=DATE}, #{isDelete,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.snxy.business.domain.Version">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into version
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="versionNum != null">
+        version_num,
+      </if>
+      <if test="releaseTime != null">
+        release_time,
+      </if>
+      <if test="url != null">
+        url,
+      </if>
+      <if test="systemUserId != null">
+        system_user_id,
+      </if>
+      <if test="oprateName != null">
+        oprate_name,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="versionNum != null">
+        #{versionNum,jdbcType=VARCHAR},
+      </if>
+      <if test="releaseTime != null">
+        #{releaseTime,jdbcType=DATE},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="systemUserId != null">
+        #{systemUserId,jdbcType=BIGINT},
+      </if>
+      <if test="oprateName != null">
+        #{oprateName,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=DATE},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=DATE},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.snxy.business.domain.Version">
+    update version
+    <set>
+      <if test="versionNum != null">
+        version_num = #{versionNum,jdbcType=VARCHAR},
+      </if>
+      <if test="releaseTime != null">
+        release_time = #{releaseTime,jdbcType=DATE},
+      </if>
+      <if test="url != null">
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="systemUserId != null">
+        system_user_id = #{systemUserId,jdbcType=BIGINT},
+      </if>
+      <if test="oprateName != null">
+        oprate_name = #{oprateName,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=DATE},
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified = #{gmtModified,jdbcType=DATE},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.snxy.business.domain.Version">
+    update version
+    set version_num = #{versionNum,jdbcType=VARCHAR},
+      release_time = #{releaseTime,jdbcType=DATE},
+      url = #{url,jdbcType=VARCHAR},
+      system_user_id = #{systemUserId,jdbcType=BIGINT},
+      oprate_name = #{oprateName,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=DATE},
+      gmt_modified = #{gmtModified,jdbcType=DATE},
+      is_delete = #{isDelete,jdbcType=TINYINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+<!--版本发布-->
+  <insert id="insertRelease" parameterType="com.snxy.business.domain.Version">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into version (version_num, url,
+    system_user_id)
+    values (#{versionNum,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR},
+    #{systemUserId,jdbcType=BIGINT})
+  </insert>
+
+<!--查询版本在文件服务器上地址-->
+  <select id="selectUrlBySystemUserId" parameterType="java.lang.Long" resultType="String">
+    select
+    v.url
+    from version as v
+    where system_user_id = #{systemUserId,jdbcType=BIGINT}
+  </select>
+</mapper>

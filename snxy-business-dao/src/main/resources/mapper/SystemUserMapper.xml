@@ -17,7 +17,7 @@
     id, account, mobile, chinese_name, pwd, reg_date, account_status, gmt_create, gmt_modified, 
     is_delete
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey"  resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from system_user
@@ -189,6 +189,34 @@
   <update id="updateSystemMobile">
     UPDATE system_user
     set mobile = #{mobile}
+    where id = #{systemUserId}
+    and is_delete = 0
+  </update>
+  <!--查询系统用户密码-->
+  <select id="selectPwdByMobile"  parameterType="String" resultType="String">
+    select su.pwd
+    from system_user as su
+    where mobile= #{mobile,jdbcType=BIGINT}
+  </select>
+
+  <!--修改系统用户密码-->
+  <update id="updatePwdByMobile">
+    UPDATE system_user
+    set pwd = #{password}
+    where mobile = #{mobile}
+ </update>
+  <!--通过手机号查询用户-->
+  <select id="selectByPhone" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from system_user
+    where mobile =#{phone}
+  </select>
+
+  <!--设置密码-->
+  <update id="updatePassword">
+    update system_user
+    set pwd = #{password}
     where id = #{systemUserId}
     and is_delete = 0
   </update>
