@@ -4,6 +4,15 @@ import java.util.Date;
 
 public class VegetableDeliveryRelation {
     private Long id;
+    private String weight;
+
+    public String getWeight() {
+        return weight;
+    }
+
+    public void setWeight(String weight) {
+        this.weight = weight;
+    }
 
     private Long deliveryOrderId;
 

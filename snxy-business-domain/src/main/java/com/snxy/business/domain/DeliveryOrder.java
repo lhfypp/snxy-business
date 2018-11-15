@@ -15,13 +15,15 @@ public class DeliveryOrder {
 
     private String senderMobile;
 
+    private Long receiverOnlineUserId;
+
     private String receiverMobile;
 
     private String receiverName;
 
     private String receiverCompany;
 
-    private Long onlineUserId;
+    private Long driverOnlineUserId;
 
     private String driverName;
 
@@ -64,6 +66,8 @@ public class DeliveryOrder {
     private Date gmtModified;
 
     private Byte isDelete;
+
+    private Long receiverCompanyId;
 
     public Long getId() {
         return id;
@@ -113,6 +117,14 @@ public class DeliveryOrder {
         this.senderMobile = senderMobile;
     }
 
+    public Long getReceiverOnlineUserId() {
+        return receiverOnlineUserId;
+    }
+
+    public void setReceiverOnlineUserId(Long receiverOnlineUserId) {
+        this.receiverOnlineUserId = receiverOnlineUserId;
+    }
+
     public String getReceiverMobile() {
         return receiverMobile;
     }
@@ -137,12 +149,12 @@ public class DeliveryOrder {
         this.receiverCompany = receiverCompany;
     }
 
-    public Long getOnlineUserId() {
-        return onlineUserId;
+    public Long getDriverOnlineUserId() {
+        return driverOnlineUserId;
     }
 
-    public void setOnlineUserId(Long onlineUserId) {
-        this.onlineUserId = onlineUserId;
+    public void setDriverOnlineUserId(Long driverOnlineUserId) {
+        this.driverOnlineUserId = driverOnlineUserId;
     }
 
     public String getDriverName() {
@@ -311,5 +323,13 @@ public class DeliveryOrder {
 
     public void setIsDelete(Byte isDelete) {
         this.isDelete = isDelete;
+    }
+
+    public Long getReceiverCompanyId() {
+        return receiverCompanyId;
+    }
+
+    public void setReceiverCompanyId(Long receiverCompanyId) {
+        this.receiverCompanyId = receiverCompanyId;
     }
 }
