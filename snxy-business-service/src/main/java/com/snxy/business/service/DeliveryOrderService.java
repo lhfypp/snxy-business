@@ -6,21 +6,15 @@ import com.snxy.common.util.PageInfo;
 
 import java.util.List;
 
-import com.snxy.business.domain.DeliveryOrder;
-
-
-
-
-
 import com.snxy.business.service.vo.*;
 
 public interface DeliveryOrderService {
+//    BillVO createOrderNo(Long onlineUserId);
     PageInfo<DeliveryOrder> selectByCreatorId(Long onlineUserId, Long status);
 
     String selectByOrderNo(String orderNo);
 
     String chargeCount(EntranceFeeDetail entranceFeeDetail);
-    BillVO createOrderNo(Long onlineUserId);
 
     void saveDeliveryOrder(SystemUserVO systemUserVO, DeliveryOrderVo deliveryOrderVo);
 
@@ -30,6 +24,7 @@ public interface DeliveryOrderService {
 
     DeliveryOrder showOrderDetails(Long deliveryOrderId);
 
+    List<DeliveryOrder> selectByCompanyId(Long companyId);
     DeliveryOrder searchDeliveryOrderById(Long id);
 }
 

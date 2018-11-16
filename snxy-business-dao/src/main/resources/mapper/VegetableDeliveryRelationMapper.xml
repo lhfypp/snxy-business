@@ -149,4 +149,23 @@
       )
     </foreach>
   </insert>
+
+  <!--订单id集合查询所有货品-->
+  <select id="selectByDeliveryOrderIdList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from vegetable_delivery_relation
+    where delivery_order_id in
+    <foreach collection="deliveryOrderIdList" item="deliveryOrderId" open="(" close=")" index="index" separator=",">
+      #{deliveryOrderId}
+    </foreach>
+  </select>
+
+  <!--根据订单号查询货品-->
+  <select id="selectGoodsByDeliveryOrderId" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    from vegetable_delivery_relation
+    where delivery_order_id = #{deliveryOrderId}
+  </select>
 </mapper>

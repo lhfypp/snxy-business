@@ -30,6 +30,15 @@ public class MerchantController {
     }
 
     /*
+    * 公司信用代码图片识别
+    * */
+    @RequestMapping("/company/social/distinguish")
+    public ResultData distinguishSocial(MultipartFile file){
+        SocialVO socialVO = merchantService.distinguishSocial(file);
+        return ResultData.success(socialVO);
+    }
+
+    /*
     * 判断公司信息是否已经存在,输入姓名查找公司
     * */
     @RequestMapping("/company/exist")
@@ -56,6 +65,13 @@ public class MerchantController {
         return ResultData.success("");
     }
 
+
+
+
+
+    /*
+    * 没了
+    * */
     /*
     * 添加员工
     * */

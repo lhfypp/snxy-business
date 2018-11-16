@@ -23,4 +23,7 @@ public interface VegetableDeliveryRelationMapper {
 
     void insertGoodsVOList(@Param("vegetableDeliveryRelationList") List<VegetableDeliveryRelation> vegetableDeliveryRelationList);
 
+    List<VegetableDeliveryRelation> selectByDeliveryOrderIdList(@Param("deliveryOrderIdList") List<Long> deliveryOrderIdList);
+
+    List<VegetableDeliveryRelation> selectGoodsByDeliveryOrderId(Long deliveryOrderId);
 }
