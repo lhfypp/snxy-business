@@ -1,6 +1,7 @@
 package com.snxy.business.biz.feign;
 
 import com.snxy.business.biz.config.FeignMultipartSupportConfig;
+import com.snxy.business.service.vo.BusinessLicenseVO;
 import com.snxy.business.service.vo.DriverLicenseVO;
 import com.snxy.business.service.vo.IdCardInfoVO;
 import com.snxy.business.service.vo.VehicleLicenseVO;
@@ -31,4 +32,8 @@ public interface FilePicService {
     //上传识别行驶证
     @RequestMapping(value = "/ocr/vehicleLicense")
     ResultData<VehicleLicenseVO> vehicFront(@RequestPart("file") MultipartFile vehicleDrivingLicenseFrontUrl);
+
+    //上传识别公司信用图片
+    @RequestMapping(value = "/ocr/businessLicense")
+    ResultData<BusinessLicenseVO> businessFront(@RequestPart("file") MultipartFile corporateCertificationUrl);
 }

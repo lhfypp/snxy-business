@@ -28,7 +28,7 @@ public class UserIdentityServiceImpl implements UserIdentityService {
     }
 
     @Override
-    public UserIdentity selectByOnlineUserId(Long onlineUserId,Integer identityId) {
+    public UserIdentity selectByOnlineUserId(Long onlineUserId, Integer identityId) {
         UserIdentity userIdentity = userIdentityMapper.selectByOnlineUserId(onlineUserId,identityId);
         return userIdentity;
     }
@@ -36,5 +36,11 @@ public class UserIdentityServiceImpl implements UserIdentityService {
     @Override
     public void updateIdentityByOnlineUserId(Long onlineUserId, Integer identityId) {
         userIdentityMapper.updateIdentity(onlineUserId,identityId);
+    }
+
+    @Override
+    public List<UserIdentity> selectListByOnlineUserId(Long onlineUserId) {
+        List<UserIdentity> userIdentityList = userIdentityMapper.selectListByOnlineUserId(onlineUserId);
+        return userIdentityList;
     }
 }

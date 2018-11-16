@@ -1,5 +1,6 @@
 package com.snxy.business.biz.impl;
 
+import com.snxy.business.biz.feign.FilePicService;
 import com.snxy.business.biz.feign.FileService;
 
 import com.snxy.business.domain.*;
@@ -35,6 +36,8 @@ public class MerchantServiceImpl implements MerchantService {
     private UserIdentityService userIdentityService;
     @Resource
     private FileService fileService;
+    @Resource
+    private FilePicService filePicService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -326,8 +329,11 @@ public class MerchantServiceImpl implements MerchantService {
     public List<CompanyVO> companyExist(String companyName,Integer showNum) {
         //判断公司名是否存在
         List<CompanyVO> companyVOList = merchantCompanyService.selectByCompanyName(companyName);
+        if(companyVOList.size()>showNum){
+            return companyVOList.subList(0,showNum);
+        }
 
-        return companyVOList.subList(0,showNum-1);
+        return companyVOList;
     }
 
     @Override
@@ -358,6 +364,20 @@ public class MerchantServiceImpl implements MerchantService {
                 .isFounder(0)
                 .build();
         companyUserRelationService.insertCompanyUserRelation(companyUserRelation);
+    }
+
+    @Override
+    public SocialVO distinguishSocial(MultipartFile file) {
+        ResultData<BusinessLicenseVO> businessLicenseVOResultData = filePicService.businessFront(file);
+        SocialVO socialVO = new SocialVO();
+        socialVO.setIsTrue((byte)1);
+        if (!businessLicenseVOResultData.isResult()) {
+            socialVO.setIsTrue((byte)0);
+        }
+        BusinessLicenseVO data = businessLicenseVOResultData.getData();
+        socialVO.setSocialCreditCode(data.getSocialCreditCode());
+
+        return socialVO;
     }
 
     public void saveCompanyUserIdentity(Long onlineUserId,Long companyId){

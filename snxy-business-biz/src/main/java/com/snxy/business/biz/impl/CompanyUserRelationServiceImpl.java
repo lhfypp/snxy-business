@@ -103,6 +103,12 @@ public class CompanyUserRelationServiceImpl implements CompanyUserRelationServic
         return personalVO;
     }
 
+    @Override
+    public CompanyUserRelation selectByOnlineUserId(Long onlineUserId) {
+        CompanyUserRelation companyUserRelation = companyUserRelationMapper.selectByOnlineUserId(onlineUserId);
+        return companyUserRelation;
+    }
+
 
     @Override
     @Transactional(rollbackFor = Exception.class)

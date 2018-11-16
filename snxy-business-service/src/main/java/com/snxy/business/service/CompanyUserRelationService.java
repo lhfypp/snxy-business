@@ -37,6 +37,5 @@ public interface CompanyUserRelationService {
     PersonalVO selectPersonalByOnlineUserId(Long systemUserId);
 
 
-
-
+    CompanyUserRelation selectByOnlineUserId(Long onlineUserId);
 }

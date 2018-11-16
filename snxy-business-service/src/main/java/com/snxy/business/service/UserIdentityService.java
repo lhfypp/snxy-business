@@ -10,7 +10,9 @@ public interface UserIdentityService
 
     void insertIdentityList(List<UserIdentity> userIdentityList);
 
-    UserIdentity selectByOnlineUserId(Long onlineUserId,Integer identityId);
+    UserIdentity selectByOnlineUserId(Long onlineUserId, Integer identityId);
 
     void updateIdentityByOnlineUserId(Long onlineUserId, Integer identityId);
+
+    List<UserIdentity> selectListByOnlineUserId(Long onlineUserId);
 }

@@ -113,4 +113,12 @@
         where online_user_id = #{onlineUserId}
         and is_delete = 0
     </update>
+
+    <!--查询身份集合-->
+    <select id="selectListByOnlineUserId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from user_identity
+        where online_user_id = #{onlineUserId}
+    </select>
 </mapper>

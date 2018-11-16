@@ -13,6 +13,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class HomePageOrderVO {
     private DeliveryOrder deliveryOrder;
-    private Vehicle vehicle;
     private Integer code;//1司机确认发货 2商户确认订单
+    private String goodsName;
 }
