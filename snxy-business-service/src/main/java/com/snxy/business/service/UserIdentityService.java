@@ -15,4 +15,7 @@ public interface UserIdentityService
     void updateIdentityByOnlineUserId(Long onlineUserId, Integer identityId);
 
     List<UserIdentity> selectListByOnlineUserId(Long onlineUserId);
+    List<Integer> selectIdentityIdByOnlineUserId(Long onlineUserId);
+
+    void insertIdentityByOnlineUserId(Integer identityTypeId, Long onlineUserId);
 }

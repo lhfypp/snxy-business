@@ -4,16 +4,16 @@
   <resultMap id="BaseResultMap" type="com.snxy.business.domain.VegetableDeliveryRelation">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="delivery_order_id" jdbcType="BIGINT" property="deliveryOrderId" />
-    <result column="entrance_fee_category_id" jdbcType="BIGINT" property="entranceFeeCategoryId" />
-    <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
+    <result column="vegetable_id" jdbcType="BIGINT" property="vegetableId" />
+    <result column="vegetable_name" jdbcType="VARCHAR" property="vegetableName" />
     <result column="load_status" jdbcType="INTEGER" property="loadStatus" />
     <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
     <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
     <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, delivery_order_id, entrance_fee_category_id, category_name, load_status, gmt_create, 
-    gmt_modified, is_delete
+    id, delivery_order_id, vegetable_id, vegetable_name, load_status, gmt_create, gmt_modified, 
+    is_delete
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -29,12 +29,12 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into vegetable_delivery_relation (delivery_order_id, entrance_fee_category_id, 
-      category_name, load_status, gmt_create, 
-      gmt_modified, is_delete)
-    values (#{deliveryOrderId,jdbcType=BIGINT}, #{entranceFeeCategoryId,jdbcType=BIGINT}, 
-      #{categoryName,jdbcType=VARCHAR}, #{loadStatus,jdbcType=INTEGER}, #{gmtCreate,jdbcType=TIMESTAMP}, 
-      #{gmtModified,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=TINYINT})
+    insert into vegetable_delivery_relation (delivery_order_id, vegetable_id, vegetable_name, 
+      load_status, gmt_create, gmt_modified, 
+      is_delete)
+    values (#{deliveryOrderId,jdbcType=BIGINT}, #{vegetableId,jdbcType=BIGINT}, #{vegetableName,jdbcType=VARCHAR}, 
+      #{loadStatus,jdbcType=INTEGER}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, 
+      #{isDelete,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.snxy.business.domain.VegetableDeliveryRelation">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -45,11 +45,11 @@
       <if test="deliveryOrderId != null">
         delivery_order_id,
       </if>
-      <if test="entranceFeeCategoryId != null">
-        entrance_fee_category_id,
+      <if test="vegetableId != null">
+        vegetable_id,
       </if>
-      <if test="categoryName != null">
-        category_name,
+      <if test="vegetableName != null">
+        vegetable_name,
       </if>
       <if test="loadStatus != null">
         load_status,
@@ -68,11 +68,11 @@
       <if test="deliveryOrderId != null">
         #{deliveryOrderId,jdbcType=BIGINT},
       </if>
-      <if test="entranceFeeCategoryId != null">
-        #{entranceFeeCategoryId,jdbcType=BIGINT},
+      <if test="vegetableId != null">
+        #{vegetableId,jdbcType=BIGINT},
       </if>
-      <if test="categoryName != null">
-        #{categoryName,jdbcType=VARCHAR},
+      <if test="vegetableName != null">
+        #{vegetableName,jdbcType=VARCHAR},
       </if>
       <if test="loadStatus != null">
         #{loadStatus,jdbcType=INTEGER},
@@ -94,11 +94,11 @@
       <if test="deliveryOrderId != null">
         delivery_order_id = #{deliveryOrderId,jdbcType=BIGINT},
       </if>
-      <if test="entranceFeeCategoryId != null">
-        entrance_fee_category_id = #{entranceFeeCategoryId,jdbcType=BIGINT},
+      <if test="vegetableId != null">
+        vegetable_id = #{vegetableId,jdbcType=BIGINT},
       </if>
-      <if test="categoryName != null">
-        category_name = #{categoryName,jdbcType=VARCHAR},
+      <if test="vegetableName != null">
+        vegetable_name = #{vegetableName,jdbcType=VARCHAR},
       </if>
       <if test="loadStatus != null">
         load_status = #{loadStatus,jdbcType=INTEGER},
@@ -118,8 +118,8 @@
   <update id="updateByPrimaryKey" parameterType="com.snxy.business.domain.VegetableDeliveryRelation">
     update vegetable_delivery_relation
     set delivery_order_id = #{deliveryOrderId,jdbcType=BIGINT},
-      entrance_fee_category_id = #{entranceFeeCategoryId,jdbcType=BIGINT},
-      category_name = #{categoryName,jdbcType=VARCHAR},
+      vegetable_id = #{vegetableId,jdbcType=BIGINT},
+      vegetable_name = #{vegetableName,jdbcType=VARCHAR},
       load_status = #{loadStatus,jdbcType=INTEGER},
       gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
       gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
@@ -127,15 +127,24 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
 
+  <select id="selectVDRByOrderId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from vegetable_delivery_relation
+    where delivery_order_id=#{orderId}
+    and is_delete=0
+  </select>
+
+
   <!--批量插入货品-->
   <insert id="insertGoodsVOList">
     insert into vegetable_delivery_relation
-    (delivery_order_id, entrance_fee_category_id, category_name, load_status, gmt_create)
+    (delivery_order_id, vegetable_id, vegetable_name, load_status, gmt_create)
     values
     <foreach collection="vegetableDeliveryRelationList" index="index" open="(" close=")" item="vegetableDeliveryRelation" separator=",">
       (
-      #{vegetableDeliveryRelation.deliveryOrderId}, #{vegetableDeliveryRelation.entranceFeeCategoryId},
-      #{vegetableDeliveryRelation.categoryName}, #{vegetableDeliveryRelation.loadStatus},
+      #{vegetableDeliveryRelation.deliveryOrderId}, #{vegetableDeliveryRelation.vegetableId},
+      #{vegetableDeliveryRelation.vegetableName}, #{vegetableDeliveryRelation.loadStatus},
       #{vegetableDeliveryRelation.gmtCreate}
       )
     </foreach>

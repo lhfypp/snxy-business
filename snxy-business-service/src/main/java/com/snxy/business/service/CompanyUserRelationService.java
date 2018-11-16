@@ -26,6 +26,11 @@ public interface CompanyUserRelationService {
 
     int insert(CompanyUserRelation record);
 
+    Long selectCompanyRelationforId(Long userId,long companyId);
+    String searchResponsibleByComId(Long companyId);
+    String searchComIdByUseId(Long userId);
+
+
     MerchantCompany selectBossCompanyByUserId(Long onlineUserId);
 
     void deleteCompanyUserRelationByOnlineUserId(Long onlineUserId);

@@ -29,4 +29,8 @@ public interface UserIdentityMapper {
     void updateIdentity(@Param("onlineUserId") Long onlineUserId, @Param("identityId") Integer identityId);
 
     List<UserIdentity> selectListByOnlineUserId(Long onlineUserId);
+
+    List<Integer> selectIdentityIdByOnlineUserId(Long onlineUserId);
+
+    void insertIdentityByOnlineUserId(@Param("identityTypeId")Integer identityTypeId,@Param("onlineUserId") Long onlineUserId);
 }

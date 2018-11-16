@@ -7,9 +7,8 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.Date;
-
-@Data
 @Builder
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class VegetableDeliveryRelation {
@@ -32,7 +31,5 @@ public class VegetableDeliveryRelation {
     private BigDecimal vegetablePrice;
 
     private BigDecimal vegetableWeight;
-
-
 
 }

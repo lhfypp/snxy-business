@@ -38,6 +38,8 @@ public class CompanyUserRelationServiceImpl implements CompanyUserRelationServic
 
     }
 
+
+
     /**
      * 根据在线id查询商户我的公司信息
      * @param onlineUserId
@@ -110,6 +112,7 @@ public class CompanyUserRelationServiceImpl implements CompanyUserRelationServic
     }
 
 
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void insertCompanyUserRelation(CompanyUserRelation companyUserRelation) {
@@ -148,6 +151,21 @@ public class CompanyUserRelationServiceImpl implements CompanyUserRelationServic
     }
 
     @Override
+
+    public Long selectCompanyRelationforId(Long userId, long companyId) {
+        return companyUserRelationMapper.selectByCompanyIdAndUserId(userId,companyId);
+    }
+
+    @Override
+    public String searchResponsibleByComId(Long companyId) {
+
+        return companyUserRelationMapper.selectResponsibleBycomId(companyId);
+    }
+
+    @Override
+    public String searchComIdByUseId(Long userId) {
+        return null;
+    }
     public List<CompanyUserRelation> selectUserRelationByOnlineUserIdList(List<Long> onlineUserIdList) {
         List<CompanyUserRelation> companyUserRelationList = companyUserRelationMapper.selectUserRelationByOnlineUserIdList(onlineUserIdList);
         return companyUserRelationList;
@@ -157,5 +175,6 @@ public class CompanyUserRelationServiceImpl implements CompanyUserRelationServic
     public CompanyUserRelation selectUserRelationByCompanyId(Long companyId) {
         CompanyUserRelation companyUserRelation = companyUserRelationMapper.selectByCompanyId(companyId);
         return companyUserRelation;
+
     }
 }

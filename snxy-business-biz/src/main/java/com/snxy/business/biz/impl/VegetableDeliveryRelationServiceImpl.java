@@ -29,6 +29,12 @@ public class VegetableDeliveryRelationServiceImpl implements VegetableDeliveryRe
     private VegetableService vegetableService;
 
     @Override
+    public List<VegetableDeliveryRelation> searchAllVDRByOrderId(Long id) {
+
+        return vegetableDeliveryRelationMapper.selectVDRByOrderId(id);
+
+    }
+    @Override
     @Transactional(rollbackFor = Exception.class)
     public void insertGoodsVOList(List<GoodsVO> goodsVOList,Long deliveryOrderId) {
         List<VegetableDeliveryRelation> vegetableDeliveryRelationList = goodsVOList.parallelStream().map(s -> VegetableDeliveryRelation.builder()
@@ -42,6 +48,7 @@ public class VegetableDeliveryRelationServiceImpl implements VegetableDeliveryRe
                                       .build())
                                       .collect(Collectors.toList());
         vegetableDeliveryRelationMapper.insertGoodsVOList(vegetableDeliveryRelationList);
+
     }
 
     @Override

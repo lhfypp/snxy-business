@@ -201,10 +201,42 @@
     where mobile =#{phone}
   </select>
 
+  <!--通过systemUserId查询密码-->
+  <select id="selectPwdBySystemUserId" resultType="String">
+    select
+     su.pwd
+    from system_user as su
+    where id =#{systemUserId}
+  </select>
+
   <!--设置密码-->
   <update id="updatePassword">
     update system_user
     set pwd = #{password}
+    where id = #{systemUserId}
+    and is_delete = 0
+  </update>
+
+  <!--修改个人中心密码-->
+  <update id="updatePwdBySystemUserId">
+    update system_user
+    set pwd = #{newPwd}
+    where id = #{systemUserId}
+    and is_delete = 0
+  </update>
+
+  <!--修改个人中心手机号-->
+  <update id="updatePersonalMobile">
+    update system_user
+    set mobile = #{newMobile}
+    where id = #{systemUserId}
+    and is_delete = 0
+  </update>
+
+  <!--注册忘记密码设置密码-->
+  <update id="updateRegisterPWD">
+    update system_user
+    set pwd = #{newPwd}
     where id = #{systemUserId}
     and is_delete = 0
   </update>

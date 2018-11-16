@@ -4,6 +4,10 @@
   <resultMap id="BaseResultMap" type="com.snxy.business.domain.MerchantCompany">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="merchant_name" jdbcType="VARCHAR" property="merchantName" />
+
+
+
+
     <result column="social_info_code" jdbcType="VARCHAR" property="socialInfoCode" />
     <result column="corporate_certification_url" jdbcType="VARCHAR" property="corporateCertificationUrl" />
     <result column="certification_status" jdbcType="TINYINT" property="certificationStatus" />
@@ -12,7 +16,11 @@
     <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
   </resultMap>
   <sql id="Base_Column_List">
+
+    id, merchant_name,  social_info_code, corporate_certification_url,
+
     id, merchant_name, social_info_code, corporate_certification_url,
+
     certification_status, gmt_create, gmt_modified, is_delete
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
@@ -140,7 +148,8 @@
          and b.onlline_user_id=c.id
          and b.is_responsible=1
          and a.merchant_name like concat('%',#{companyName,jdbcType=VARCHAR},'%')
-
+         and a.is_delete=0
+         and b.is_delete=0
   </select>
   <!--查询所有公司名-->
   <select id="selectAllName">

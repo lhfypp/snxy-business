@@ -27,8 +27,6 @@ public interface OnlineUserMapper {
 
     long selectIdBySystemUserID(String SystemUserId);
 
-
-
     void updateNameBySystemUserId(@Param("systemUserId") Long systemUserId, @Param("name") String name);
 
     OnlineUser selectByPhone(String phone);

@@ -1,6 +1,6 @@
 package com.snxy.business.biz.impl;
 
-import com.snxy.business.dao.mapper.OnlineUserMapper;
+
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,5 +42,7 @@ public class PerformanceTest {
         System.out.println("运行时间:" + (endTime - startTime) + "ms");
 
     }
+    @Test
+    public void test3(){}
 
 }
