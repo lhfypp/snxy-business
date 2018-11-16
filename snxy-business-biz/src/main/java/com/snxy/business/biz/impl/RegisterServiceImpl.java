@@ -1,6 +1,7 @@
 package com.snxy.business.biz.impl;
 
 import com.snxy.business.biz.asy.AsyRefreshCacheUser;
+import com.snxy.business.biz.feign.SmsService;
 import com.snxy.business.biz.feign.UserAgentService;
 import com.snxy.business.domain.UserIdentity;
 import com.snxy.business.service.OnlineUserService;
@@ -8,6 +9,7 @@ import com.snxy.business.service.RegisterService;
 import com.snxy.business.service.SystemUserService;
 import com.snxy.business.service.UserIdentityService;
 import com.snxy.common.exception.BizException;
+import com.snxy.common.response.ResultData;
 import com.snxy.common.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -32,6 +34,8 @@ public class RegisterServiceImpl implements RegisterService {
     private AsyRefreshCacheUser asyRefreshCacheUser;
     @Resource
     private RedisTemplate redisTemplate;
+    @Resource
+    private SmsService smsService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -85,9 +89,10 @@ public class RegisterServiceImpl implements RegisterService {
     @Override
     public String getSmsCode(String mobile) {
         //给当前手机号发送验证码 TODO
-        String smsCode = RandomStringUtils.randomNumeric(6);
+       String smsCode = RandomStringUtils.randomNumeric(6);
+        smsService.sendSmsCode(mobile, smsCode, 1L);
         //将验证码存到redis中，设置有效期为30分钟
-        redisTemplate.opsForValue().set(mobile,smsCode,30, TimeUnit.MINUTES);
+        redisTemplate.opsForValue().set(mobile,smsCode,20, TimeUnit.MINUTES);
         return smsCode;
     }
 }

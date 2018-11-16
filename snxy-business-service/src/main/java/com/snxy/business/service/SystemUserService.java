@@ -26,4 +26,6 @@ public interface SystemUserService {
     void updateRegisterPWD(Long systemUserId, String newPwd);
 
     void isTruePwd(Long systemUserId,String password);
+
+    String getSmsCode(String newMobile);
 }

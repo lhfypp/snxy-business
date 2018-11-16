@@ -3,6 +3,7 @@ package com.snxy.business.web.controller;
 
 
 import com.snxy.business.biz.feign.FileService;
+import com.snxy.business.biz.feign.SmsService;
 import com.snxy.business.domain.CommonProblems;
 import com.snxy.business.domain.CustomerMessage;
 import com.snxy.business.domain.IdentityType;
@@ -11,6 +12,7 @@ import com.snxy.business.service.vo.CompanyVO;
 import com.snxy.business.service.vo.SystemUserVO;
 import com.snxy.common.response.ResultData;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestAttribute;
@@ -54,6 +56,7 @@ public class PersonalCenterController {
     private CustomerMessageService customerMessageService;
    @Resource
    private IdentityTypeService identityTypeService;
+
 
     //设置所属商户(搜索)
     @RequestMapping("/company/search")
@@ -212,10 +215,20 @@ public class PersonalCenterController {
      * @return
      */
     @RequestMapping("/getPassword")
-    public void isTruePwd(@RequestAttribute("systemUser") SystemUserVO systemUserVO,String password){
+    public ResultData isTruePwd(@RequestAttribute("systemUser") SystemUserVO systemUserVO,String password){
         Long systemUserId = systemUserVO.getSystemUserId();
         System.out.print("==============================="+systemUserId);
          systemUserService.isTruePwd(systemUserVO.getSystemUserId(),password);
+         return ResultData.success(true);
+    }
+    /**
+     * 修改手机号获取验证码
+     * @param newMobile
+     */
+    @RequestMapping("/smsCode/show")
+    public ResultData getPersonalCode(String newMobile){
+       String smsCode =  systemUserService.getSmsCode(newMobile);
+        return ResultData.success(smsCode);
     }
     /**
      * 修改手机号
