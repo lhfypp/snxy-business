@@ -213,6 +213,8 @@ public class PersonalCenterController {
      */
     @RequestMapping("/getPassword")
     public void isTruePwd(@RequestAttribute("systemUser") SystemUserVO systemUserVO,String password){
+        Long systemUserId = systemUserVO.getSystemUserId();
+        System.out.print("==============================="+systemUserId);
          systemUserService.isTruePwd(systemUserVO.getSystemUserId(),password);
     }
     /**
