@@ -3,6 +3,7 @@
 <mapper namespace="com.snxy.business.dao.mapper.OutFeeOrderMapper">
   <resultMap id="BaseResultMap" type="com.snxy.business.domain.OutFeeOrder">
     <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="staff_id" jdbcType="BIGINT" property="staffId" />
     <result column="out_fee_no" jdbcType="VARCHAR" property="outFeeNo" />
     <result column="entrance_fee_capacity_id" jdbcType="BIGINT" property="entranceFeeCapacityId" />
     <result column="driver_plate_number" jdbcType="VARCHAR" property="driverPlateNumber" />
@@ -14,8 +15,8 @@
     <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, out_fee_no, entrance_fee_capacity_id, driver_plate_number, out_fee, load_status, 
-    status, gmt_create, gmt_modified, is_delete
+    id, staff_id, out_fee_no, entrance_fee_capacity_id, driver_plate_number, out_fee, 
+    load_status, status, gmt_create, gmt_modified, is_delete
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -31,14 +32,14 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into out_fee_order (out_fee_no, entrance_fee_capacity_id, driver_plate_number, 
-      out_fee, load_status, status, 
-      gmt_create, gmt_modified, is_delete
-      )
-    values (#{outFeeNo,jdbcType=VARCHAR}, #{entranceFeeCapacityId,jdbcType=BIGINT}, #{driverPlateNumber,jdbcType=VARCHAR}, 
-      #{outFee,jdbcType=DECIMAL}, #{loadStatus,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
-      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=TINYINT}
-      )
+    insert into out_fee_order (staff_id, out_fee_no, entrance_fee_capacity_id, 
+      driver_plate_number, out_fee, load_status, 
+      status, gmt_create, gmt_modified, 
+      is_delete)
+    values (#{staffId,jdbcType=BIGINT}, #{outFeeNo,jdbcType=VARCHAR}, #{entranceFeeCapacityId,jdbcType=BIGINT}, 
+      #{driverPlateNumber,jdbcType=VARCHAR}, #{outFee,jdbcType=DECIMAL}, #{loadStatus,jdbcType=INTEGER}, 
+      #{status,jdbcType=INTEGER}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, 
+      #{isDelete,jdbcType=TINYINT})
   </insert>
   <insert id="insertSelective" parameterType="com.snxy.business.domain.OutFeeOrder">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -46,6 +47,9 @@
     </selectKey>
     insert into out_fee_order
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="staffId != null">
+        staff_id,
+      </if>
       <if test="outFeeNo != null">
         out_fee_no,
       </if>
@@ -75,6 +79,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="staffId != null">
+        #{staffId,jdbcType=BIGINT},
+      </if>
       <if test="outFeeNo != null">
         #{outFeeNo,jdbcType=VARCHAR},
       </if>
@@ -107,6 +114,9 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.snxy.business.domain.OutFeeOrder">
     update out_fee_order
     <set>
+      <if test="staffId != null">
+        staff_id = #{staffId,jdbcType=BIGINT},
+      </if>
       <if test="outFeeNo != null">
         out_fee_no = #{outFeeNo,jdbcType=VARCHAR},
       </if>
@@ -139,7 +149,8 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="com.snxy.business.domain.OutFeeOrder">
     update out_fee_order
-    set out_fee_no = #{outFeeNo,jdbcType=VARCHAR},
+    set staff_id = #{staffId,jdbcType=BIGINT},
+      out_fee_no = #{outFeeNo,jdbcType=VARCHAR},
       entrance_fee_capacity_id = #{entranceFeeCapacityId,jdbcType=BIGINT},
       driver_plate_number = #{driverPlateNumber,jdbcType=VARCHAR},
       out_fee = #{outFee,jdbcType=DECIMAL},

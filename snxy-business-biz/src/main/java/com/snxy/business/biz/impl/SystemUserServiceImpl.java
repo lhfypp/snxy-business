@@ -14,6 +14,7 @@ import javax.annotation.Resource;
 
 
 import org.springframework.transaction.annotation.Transactional;
+import sun.security.provider.MD5;
 
 import java.util.Date;
 import java.util.List;
@@ -88,16 +89,11 @@ public class SystemUserServiceImpl implements SystemUserService {
     }
 
     @Override
-    public void updatePersonalMobile(Long systemUserId, String newMobile,String password, String smsCode) {
-        //第一步要判断用户输入的密码是否正确，这是防止数据库信息被恶意修改
-        String DBPwd = systemUserMapper.selectPwdBySystemUserId(systemUserId);
-        if (DBPwd==null){
-            throw new BizException("当前用户没有设置密码，请先设置");
-        }else if (!DBPwd.equals(MD5Util.encrypt(password))){
-            throw new BizException("对不起，您输入的旧密码有误，请重新输入");
-        }
+    public void updatePersonalMobile(Long systemUserId, String newMobile, String smsCode) {
+
         //给手机发送验证码，调用短信服务 TODO
         String code = RandomStringUtils.randomNumeric(6);
+        System.out.print("=============="+code+"============");
         //将验证码存入redis中，设置有效期为30分钟
         redisTemplate.opsForValue().set(newMobile,smsCode,30, TimeUnit.MINUTES);
         //判断验证码是否过期
@@ -119,6 +115,17 @@ public class SystemUserServiceImpl implements SystemUserService {
     @Override
     public void updateRegisterPWD(Long systemUserId, String newPwd) {
         systemUserMapper.updateRegisterPWD(systemUserId,newPwd);
+    }
+
+    @Override
+    public void isTruePwd(Long systemUserId ,String password) {
+        String DBpwd = systemUserMapper.selectPwdBySystemUserId(systemUserId);
+        //与用户传入的密码比对，正确就修改手机号，否则就提示错误
+        if (DBpwd==null){
+            throw new BizException("对不起，你还没设置密码哦");
+        }else if (! DBpwd.equals(MD5Util.encrypt(password))){
+            throw new BizException("您输入的密码错误，请再次输入");
+        }
     }
 
 

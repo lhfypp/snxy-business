@@ -200,17 +200,29 @@ public class PersonalCenterController {
      */
     @RequestMapping("/password/update")
     public void updatePersonalPassWord(@RequestAttribute("systemUser") SystemUserVO systemUserVO,String oldPwd,String newPwd){
+        Long systemUserId = systemUserVO.getSystemUserId();
+        System.out.print("==============================="+systemUserId);
         systemUserService.updatePersonalPassWord(oldPwd,newPwd,systemUserVO.getSystemUserId());
     }
 
+    /**
+     * 修改手机号前校验密码
+     * @param systemUserVO
+     * @param password
+     * @return
+     */
+    @RequestMapping("/getPassword")
+    public void isTruePwd(@RequestAttribute("systemUser") SystemUserVO systemUserVO,String password){
+         systemUserService.isTruePwd(systemUserVO.getSystemUserId(),password);
+    }
     /**
      * 修改手机号
      * @param systemUserVO
      * @param newMobile
      */
     @RequestMapping("/mobile/update")
-    public void updatePersonalMobile(@RequestAttribute("systemUser") SystemUserVO systemUserVO,String newMobile ,String password ,String smsCode){
-        systemUserService.updatePersonalMobile(systemUserVO.getSystemUserId(),newMobile,password ,smsCode);
+    public void updatePersonalMobile(@RequestAttribute("systemUser") SystemUserVO systemUserVO,String newMobile,String smsCode){
+        systemUserService.updatePersonalMobile(systemUserVO.getSystemUserId(),newMobile,smsCode);
     }
 
 }

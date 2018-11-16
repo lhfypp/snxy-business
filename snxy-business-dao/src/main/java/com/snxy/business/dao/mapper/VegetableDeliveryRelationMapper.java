@@ -5,8 +5,6 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
-import java.util.List;
-
 public interface VegetableDeliveryRelationMapper {
     int deleteByPrimaryKey(Long id);
 

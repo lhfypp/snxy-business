@@ -6,6 +6,8 @@ import java.util.Date;
 public class OutFeeOrder {
     private Long id;
 
+    private Long staffId;
+
     private String outFeeNo;
 
     private Long entranceFeeCapacityId;
@@ -30,6 +32,14 @@ public class OutFeeOrder {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getStaffId() {
+        return staffId;
+    }
+
+    public void setStaffId(Long staffId) {
+        this.staffId = staffId;
     }
 
     public String getOutFeeNo() {

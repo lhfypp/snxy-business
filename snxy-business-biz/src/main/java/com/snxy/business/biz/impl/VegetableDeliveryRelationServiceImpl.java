@@ -13,9 +13,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.annotation.Resource;
-import java.util.List;
-
 @Service
 @Slf4j
 public class VegetableDeliveryRelationServiceImpl implements VegetableDeliveryRelationService {
@@ -33,8 +30,8 @@ public class VegetableDeliveryRelationServiceImpl implements VegetableDeliveryRe
     public void insertGoodsVOList(List<GoodsVO> goodsVOList,Long deliveryOrderId) {
         List<VegetableDeliveryRelation> vegetableDeliveryRelationList = goodsVOList.parallelStream().map(s -> VegetableDeliveryRelation.builder()
                                       .deliveryOrderId(deliveryOrderId)
-                                      .categoryName(s.getCategoryName())
-                                      .entranceFeeCategoryId(s.getEntranceFeeCategoryId())
+                                      .vegetableName(s.getCategoryName())
+                                      .vegetableId(s.getEntranceFeeCategoryId())
                                       .gmtCreate(new Date())
                                       .loadStatus(s.getLoadStatus())
                                       .build())
