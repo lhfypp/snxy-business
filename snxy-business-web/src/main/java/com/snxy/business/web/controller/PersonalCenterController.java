@@ -3,16 +3,13 @@ package com.snxy.business.web.controller;
 
 
 import com.snxy.business.biz.feign.FileService;
-import com.snxy.business.biz.feign.SmsService;
 import com.snxy.business.domain.CommonProblems;
-import com.snxy.business.domain.CustomerMessage;
-import com.snxy.business.domain.IdentityType;
 import com.snxy.business.service.*;
 import com.snxy.business.service.vo.CompanyVO;
+import com.snxy.business.service.vo.CustomerVO;
 import com.snxy.business.service.vo.SystemUserVO;
 import com.snxy.common.response.ResultData;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestAttribute;
@@ -51,11 +48,11 @@ public class PersonalCenterController {
     @Resource
     private CommonProblemsService commonProblemsService;
     @Resource
-    private SystemUserInfoService systemUserInfoService;
-    @Resource
     private CustomerMessageService customerMessageService;
-   @Resource
-   private IdentityTypeService identityTypeService;
+    @Resource
+    private IdentityTypeService identityTypeService;
+    @Resource
+    private PersonalCenterService personalCenterService;
 
 
     //设置所属商户(搜索)
@@ -149,15 +146,7 @@ public class PersonalCenterController {
     public void release(Long systemUserId, String versionNum, MultipartFile file){
         versionService.release(systemUserId,versionNum,file);
     }
-    /**
-     * 常见问题列表
-     * @return
-     */
-    @RequestMapping("/commonProblem/list")
-    public ResultData selectAllCommonProblems(){
-        List<CommonProblems> commonProblemsList = commonProblemsService.selectAllCommonProblems();
-        return  ResultData.success(commonProblemsList);
-    }
+
     /**
      * 问题详情
      * @param id
@@ -168,24 +157,16 @@ public class PersonalCenterController {
         CommonProblems commonProblems = commonProblemsService.selectCommonProblemsById(id);
         return  ResultData.success(commonProblems);
     }
+
     /**
-     * 查询客服电话
-     * @param systemUserId
+     * 我的客服
+     * @param systemUserVO
      * @return
      */
-    @RequestMapping("/mobile/show")
-    public ResultData selectMobileBySystemUserId(Long systemUserId){
-        String mobile = systemUserInfoService.selectMobileBySystemUserId(systemUserId);
-        return ResultData.success(mobile);
-    }
-    /**
-     * 问题留言
-     * @return
-     */
-    @RequestMapping("/customerMessage/show")
-    public ResultData selectAllCustomerMessage(){
-        List<CustomerMessage> customerMessageList = customerMessageService.selectAllCustomerMessage();
-        return ResultData.success(customerMessageList);
+    @RequestMapping("/myCustomer/show")
+    public ResultData myCustomer(@RequestAttribute("systemUser") SystemUserVO systemUserVO){
+        CustomerVO customerVO = personalCenterService.myCustomer(systemUserVO.getSystemUserId());
+        return ResultData.success(customerVO);
     }
     /**
      * 身份标签添加
