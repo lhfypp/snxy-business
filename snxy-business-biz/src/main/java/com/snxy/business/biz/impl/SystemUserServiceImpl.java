@@ -1,5 +1,6 @@
 package com.snxy.business.biz.impl;
 
+import com.snxy.business.biz.feign.SmsService;
 import com.snxy.business.dao.mapper.SystemUserMapper;
 import com.snxy.business.domain.SystemUser;
 import com.snxy.business.service.SystemUserService;
@@ -14,7 +15,6 @@ import javax.annotation.Resource;
 
 
 import org.springframework.transaction.annotation.Transactional;
-import sun.security.provider.MD5;
 
 import java.util.Date;
 import java.util.List;
@@ -27,6 +27,8 @@ public class SystemUserServiceImpl implements SystemUserService {
     private SystemUserMapper systemUserMapper;
     @Resource
     private RedisTemplate redisTemplate;
+    @Resource
+    private SmsService smsService;
 
     /**
      * 更换系统用户姓名
@@ -91,11 +93,6 @@ public class SystemUserServiceImpl implements SystemUserService {
     @Override
     public void updatePersonalMobile(Long systemUserId, String newMobile, String smsCode) {
 
-        //给手机发送验证码，调用短信服务 TODO
-        String code = RandomStringUtils.randomNumeric(6);
-        System.out.print("=============="+code+"============");
-        //将验证码存入redis中，设置有效期为30分钟
-        redisTemplate.opsForValue().set(newMobile,smsCode,30, TimeUnit.MINUTES);
         //判断验证码是否过期
         Object obj = redisTemplate.opsForValue().get(newMobile);
         if (obj==null){
@@ -126,6 +123,14 @@ public class SystemUserServiceImpl implements SystemUserService {
         }else if (! DBpwd.equals(MD5Util.encrypt(password))){
             throw new BizException("您输入的密码错误，请再次输入");
         }
+    }
+
+    @Override
+    public String getSmsCode(String newMobile) {
+        String smsCode = RandomStringUtils.randomNumeric(6);
+        smsService.sendSmsCode(newMobile,smsCode,1L);
+        redisTemplate.opsForValue().set(newMobile,smsCode,20,TimeUnit.MINUTES);
+        return smsCode;
     }
 
 

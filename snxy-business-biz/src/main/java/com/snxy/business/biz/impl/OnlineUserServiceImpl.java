@@ -1,5 +1,6 @@
 package com.snxy.business.biz.impl;
 
+import com.snxy.business.biz.feign.SmsService;
 import com.snxy.business.dao.mapper.OnlineUserMapper;
 
 import com.snxy.business.service.OnlineUserService;
@@ -32,6 +33,8 @@ public class OnlineUserServiceImpl implements OnlineUserService {
     private RedisTemplate<String, Object> redisTemplate;
     @Resource
     private SystemUserService systemUserService;
+    @Resource
+    private SmsService smsService;
 
     @Transactional(rollbackFor = Exception.class)
     public void updateName(Long systemUserId, String name) {
@@ -69,13 +72,11 @@ public class OnlineUserServiceImpl implements OnlineUserService {
 
     @Override
     public String getSmsCode(String oldMobile) {
-
-//        随机生成6位数验证码
+      //这里将来会调用短信服务给用户发送验证码 TODO
         String smsCode = RandomStringUtils.randomNumeric(6);
-//        将验证码保存到redis中，并设置有效期
-        redisTemplate.opsForValue().set(oldMobile + "updateMobile", smsCode, 60, TimeUnit.MINUTES);
-//        这里将来会调用短信服务给用户发送验证码 TODO
-
+        smsService.sendSmsCode(oldMobile,smsCode,1L);
+        //将验证码保存到redis中，并设置有效期
+        redisTemplate.opsForValue().set(oldMobile, smsCode, 60, TimeUnit.MINUTES);
         return smsCode;
     }
 
