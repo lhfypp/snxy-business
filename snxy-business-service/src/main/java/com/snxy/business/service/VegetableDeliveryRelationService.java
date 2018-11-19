@@ -18,4 +18,6 @@ public interface VegetableDeliveryRelationService {
     List<Goods> selectByDeliveryId(SystemUserVO systemUserVO);
 
     List<VegetableDeliveryRelation> selectGoodsByDeliveryId(Long deliveryOrderId);
+
+    List<VegetableDeliveryRelation> selectAll();
 }

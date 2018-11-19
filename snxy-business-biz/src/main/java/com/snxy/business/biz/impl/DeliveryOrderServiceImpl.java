@@ -28,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.math.BigDecimal;
 
@@ -60,7 +61,11 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
     @Resource
     private UserIdentityService userIdentityService;
     @Resource
-    private FileService fileService;
+    private VehicleService vehicleService;
+    @Resource
+    private EntryFeeService entryFeeService;
+    @Resource
+    private GuaranteeDepositService guaranteeDepositService;
 
     //商户负责人查看在途订单列表
     @Override
@@ -391,9 +396,66 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
     }
 
     @Override
-    public DeliveryOrder showOrderDetails(Long deliveryOrderId) {
+    public DeliveryOrderMessageVO showOrderDetails(Long deliveryOrderId) {
         DeliveryOrder deliveryOrder = deliveryOrderMapper.selectByPrimaryKey(deliveryOrderId);
-        return deliveryOrder;
+        Vehicle vehicle = vehicleService.selectByCarNo(deliveryOrder.getDriverPlateNumber());
+        DriverVO driverVO = DriverVO.builder()
+                .driverMobile(deliveryOrder.getDriverMobile())
+                .driverName(deliveryOrder.getDriverName())
+                .carPlateNo(deliveryOrder.getDriverPlateNumber())
+                .build();
+        ReceiverVO receiverVO = ReceiverVO.builder()
+                .receiverMobile(deliveryOrder.getReceiverMobile())
+                .receiverName(deliveryOrder.getReceiverName())
+                .endAddr(deliveryOrder.getEndAddr())
+                .build();
+        SenderVO senderVO = SenderVO.builder()
+                .senderMobile(deliveryOrder.getSenderMobile())
+                .senderName(deliveryOrder.getSenderName())
+                .startAddr(deliveryOrder.getStartAddr())
+                .build();
+        EntryFee entryFee = entryFeeService.selectByDeliveryOrderId(deliveryOrder.getId());
+        List<VegetableDeliveryRelation> vegetableDeliveryRelationList = vegetableDeliveryRelationService.selectGoodsByDeliveryId(deliveryOrder.getId());
+        List<GoodsVO> goodsVOList = vegetableDeliveryRelationList.parallelStream().map(s -> GoodsVO.builder()
+                                          .loadStatus(s.getLoadStatus())
+                                          .vegetableId(s.getVegetableId())
+                                          .vegetableName(s.getVegetableName())
+                                          .vegetablePrice(s.getVegetablePrice())
+                                          .vegetableWeight(s.getVegetableWeight())
+                                          .build())
+                                          .collect(Collectors.toList());
+        List<VegetableCertificate> vegetableCertificateList = vegetableCertificateService.selectByDeliveryOrderId(deliveryOrderId);
+        List<ValicatePictureUrlVO> valicatePictureUrlVOList = vegetableCertificateList.parallelStream().map(s -> ValicatePictureUrlVO.builder()
+                                                  .certificateType(s.getCertificateType())
+                                                  .url(s.getUrl())
+                                                  .build())
+                                                  .collect(Collectors.toList());
+        GuaranteeDeposit guaranteeDeposit = guaranteeDepositService.selectByDeliveryOrderId(deliveryOrder.getId());
+
+        DeliveryOrderMessageVO deliveryOrderMessageVO = DeliveryOrderMessageVO.builder()
+                .orderNo(deliveryOrder.getOrderNo())
+                .creator(deliveryOrder.getCreator())
+                .creator(deliveryOrder.getCreator())
+                .tonnage(vehicle.getTonnage())
+                .driverVO(driverVO)
+                .receiverVO(receiverVO)
+                .senderVO(senderVO)
+                .actualFee(entryFee.getActualFee())
+                .deposit(guaranteeDeposit.getGuaranteeDeposit())
+                .estFee(entryFee.getEstFee())
+                .goodsVOS(goodsVOList)
+                .receiverCompany(deliveryOrder.getReceiverCompany())
+                .valicatePictureVOS(valicatePictureUrlVOList)
+                .loadStatus(deliveryOrder.getLoadStatus())
+                .build();
+        if(deliveryOrder.getQualityCertificate()==0){
+            BigDecimal price = new BigDecimal(20);
+            deliveryOrderMessageVO.setCheckFee(price);
+            deliveryOrderMessageVO.setTotalFee(price.add(new BigDecimal(200)).add(entryFee.getEstFee()));
+        }else {
+            deliveryOrderMessageVO.setTotalFee(entryFee.getEstFee().add(new BigDecimal(200)));
+        }
+        return deliveryOrderMessageVO;
     }
 
     @Override
@@ -510,6 +572,61 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
 
 }
 
+    @Override
+    public PageInfo<HomePageOrderVO> showOrderList(SystemUserVO systemUserVO, Integer pageNum, Integer pageSize, Integer status) {
+        List<IdentityVO> identityTypes = systemUserVO.getIdentityTypes();
+        List<Integer> identityIdList = identityTypes.parallelStream().map(IdentityVO::getId).collect(Collectors.toList());
+        //负责人身份查询出的集合
+        List<DeliveryOrder> responsibleDeliverOrders = new ArrayList<>();
+        //非负责人查询出的集合
+        List<DeliveryOrder> otherRoleDeliveryOrders ;
+        //所有订单货品关系集合
+        List<VegetableDeliveryRelation> vegetableDeliveryRelationList = vegetableDeliveryRelationService.selectAll();
+        Map<Long,String> orderIdNameMap = vegetableDeliveryRelationList.parallelStream().collect(Collectors.toMap(VegetableDeliveryRelation::getDeliveryOrderId,VegetableDeliveryRelation::getVegetableName));
+        //返回的集合
+        List<HomePageOrderVO> homePageOrderVOList = new ArrayList<>();
+        // 查询订单
+        if(identityIdList.contains(IdentityTypeEnum.Head.getIdentityTypeId())){
+            //以负责人身份查询订单
+            CompanyUserRelation companyUserRelation = companyUserRelationService.selectCompanyUserRelation(systemUserVO.getOnlineUserId());
+            responsibleDeliverOrders = deliveryOrderMapper.selectByCompanyId(companyUserRelation.getCompanyId());
+            homePageOrderVOList = responsibleDeliverOrders.parallelStream().map(s -> HomePageOrderVO.builder()
+                                           .deliveryOrder(s)
+                                           .goodsName(orderIdNameMap.get(s.getId()))
+                                           .build())
+                                           .collect(Collectors.toList());
+            homePageOrderVOList.forEach(s -> {
+                    addCode(s,identityIdList);
+            });
+            PageHelper.startPage(pageNum,pageSize);
+            PageInfo<HomePageOrderVO> homePageOrderVOPageInfo = new PageInfo<>();
+            homePageOrderVOPageInfo.setData(homePageOrderVOList);
+            return homePageOrderVOPageInfo;
+        }
+        // 以非负责人身份查询
+        otherRoleDeliveryOrders = deliveryOrderMapper.selectAllByIdAndPhone(systemUserVO.getOnlineUserId(),systemUserVO.getPhone());
+        if(identityIdList.contains(IdentityTypeEnum.Driver.getIdentityTypeId())){
+            //如果是司机
+            homePageOrderVOList = otherRoleDeliveryOrders.parallelStream().map(s -> HomePageOrderVO.builder()
+                    .deliveryOrder(s)
+                    .goodsName(orderIdNameMap.get(s.getId()))
+                    .build())
+                    .collect(Collectors.toList());
+            homePageOrderVOList.forEach(s -> {
+                addCode(s,identityIdList);
+            });
+            PageHelper.startPage(pageNum,pageSize);
+            PageInfo<HomePageOrderVO> homePageOrderVOPageInfo = new PageInfo<>();
+            homePageOrderVOPageInfo.setData(homePageOrderVOList);
+            return homePageOrderVOPageInfo;
+        }
+
+        PageHelper.startPage(pageNum,pageSize);
+        PageInfo<HomePageOrderVO> homePageOrderVOPageInfo = new PageInfo<>();
+        homePageOrderVOPageInfo.setData(homePageOrderVOList);
+        return homePageOrderVOPageInfo;
+    }
+
     //计算收费
     @Override
     public String chargeCount(EntranceFeeDetail entranceFeeDetail) {
@@ -529,5 +646,33 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
             }
             return cost;
         }
+    }
+
+    //根据身份和订单状态判断返回code
+    public HomePageOrderVO addCode(HomePageOrderVO homePageOrderVO,List<Integer> identityVOList){
+        //如果是商户负责人查看
+        if(identityVOList.contains(IdentityTypeEnum.Head.getIdentityTypeId())){
+            //如果身份有司机
+            if(identityVOList.contains(IdentityTypeEnum.Driver.getIdentityTypeId())){
+                //如果订单状态为待司机确认
+                if(homePageOrderVO.getDeliveryOrder().getStatus()==0){
+                    homePageOrderVO.setCode(1);
+                }
+            }else {
+                //如果不是司机
+                if(homePageOrderVO.getDeliveryOrder().getStatus()==1){
+                    homePageOrderVO.setCode(2);
+                }
+            }
+        }else {
+            //如果不是负责人，是司机
+            if(identityVOList.contains(IdentityTypeEnum.Driver.getIdentityTypeId())){
+                //如果订单状态为待司机确认
+                if(homePageOrderVO.getDeliveryOrder().getStatus()==0){
+                    homePageOrderVO.setCode(1);
+                }
+            }
+        }
+        return homePageOrderVO;
     }
 }

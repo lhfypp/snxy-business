@@ -22,9 +22,11 @@ public interface DeliveryOrderService {
 
     void confirmationOrder(SystemUserVO systemUserVO, DriverConfirmationVO driverConfirmationVO);
 
-    DeliveryOrder showOrderDetails(Long deliveryOrderId);
+    DeliveryOrderMessageVO showOrderDetails(Long deliveryOrderId);
 
     List<DeliveryOrder> selectByCompanyId(Long companyId);
     DeliveryOrder searchDeliveryOrderById(Long id);
+
+    PageInfo<HomePageOrderVO> showOrderList(SystemUserVO systemUserVO, Integer pageNum, Integer pageSize, Integer status);
 }
 

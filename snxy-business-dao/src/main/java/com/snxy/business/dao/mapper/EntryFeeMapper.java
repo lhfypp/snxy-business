@@ -14,4 +14,6 @@ public interface EntryFeeMapper {
     int updateByPrimaryKeySelective(EntryFee record);
 
     int updateByPrimaryKey(EntryFee record);
+
+    EntryFee selectByDeliveryOrderId(Long deliveryOrderId);
 }

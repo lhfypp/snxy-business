@@ -9,7 +9,7 @@ import java.util.List;
 public interface VegetableService {
     List<Vegetable> selectAll();
 
-    PageInfo<Goods> selectAllGoodsByCategoryId(Long vegetableCategoryId);
+    PageInfo<Goods> selectAllGoodsByCategoryId(Long vegetableCategoryId,Integer pageNum,Integer pageSize);
 
     List<Goods> selectByVegetableName(String vegetableName);
 }

@@ -22,7 +22,8 @@ public interface VehicleMapper {
 
     int updateByPrimaryKey(Vehicle record);
 
-    Vehicle selectByDriverId(Long driverOnlineUserId);
+    List<Vehicle> selectByDriverId(Long driverOnlineUserId);
     List<Vehicle> selectByKey(Long dirverInfoId);
 
+    Vehicle selectByCarNo(String driverPlateNumber);
 }

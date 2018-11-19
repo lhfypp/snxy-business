@@ -14,4 +14,6 @@ public class DriverVO {
     private String driverName;
     //联系电话
     private String driverMobile;
+    //车牌号
+    private String carPlateNo;
 }

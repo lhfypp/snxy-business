@@ -179,4 +179,12 @@
               status=1
               and is_delete=0
   </select>
+
+  <select id="selectByDeliveryOrderId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from guarantee_deposit
+    where delivery_order_id = #{id}
+    and is_delete = 0
+  </select>
 </mapper>

@@ -342,7 +342,10 @@ public class MerchantServiceImpl implements MerchantService {
 
         //查询公司负责人
         CompanyUserRelation companyUserRelation = companyUserRelationService.selectUserRelationByCompanyId(companyId);
-        OnlineUser onlineUser = onlineUserService.selectByOnlineUserId(companyUserRelation.getOnlineUserId());
+        OnlineUser onlineUser = new OnlineUser();
+        if (companyUserRelation!=null) {
+            onlineUser = onlineUserService.selectByOnlineUserId(companyUserRelation.getOnlineUserId());
+        }
 
         CompanyVO companyVO = CompanyVO.builder()
                 .companyId(companyId)
@@ -368,13 +371,13 @@ public class MerchantServiceImpl implements MerchantService {
 
     @Override
     public SocialVO distinguishSocial(MultipartFile file) {
-        ResultData<BusinessLicenseVO> businessLicenseVOResultData = filePicService.businessFront(file);
+        ResultData<BusinessLicenseVO> resultData = filePicService.businessFront(file);
         SocialVO socialVO = new SocialVO();
         socialVO.setIsTrue((byte)1);
-        if (!businessLicenseVOResultData.isResult()) {
+        if (!resultData.isResult()) {
             socialVO.setIsTrue((byte)0);
         }
-        BusinessLicenseVO data = businessLicenseVOResultData.getData();
+        BusinessLicenseVO data = resultData.getData();
         socialVO.setSocialCreditCode(data.getSocialCreditCode());
 
         return socialVO;

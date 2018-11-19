@@ -18,4 +18,6 @@ public interface GuaranteeDepositMapper {
     int updateByPrimaryKey(GuaranteeDeposit record);
     List<Long> selectOrderId();
     int updateIsGenerateQuality(Long orderId);
+
+    GuaranteeDeposit selectByDeliveryOrderId(Long id);
 }

@@ -10,7 +10,7 @@ import com.snxy.business.service.QualitySheetService;
 import com.snxy.common.util.PageInfo;
 
 
-import com.snxy.business.biz.Util.JudgIdentityUtil;
+import com.snxy.business.biz.util.JudgIdentityUtil;
 import com.snxy.business.domain.DeliveryOrder;
 import com.snxy.business.service.*;
 import com.snxy.business.service.vo.*;

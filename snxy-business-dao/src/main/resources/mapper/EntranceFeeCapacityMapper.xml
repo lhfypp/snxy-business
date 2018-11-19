@@ -106,4 +106,12 @@
     select id,carrying_capacity
     from entrance_fee_capacity
   </select>
+
+  <!--查询所有载重类型-->
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from entrance_fee_capacity
+    where is_delete = 0
+  </select>
 </mapper>

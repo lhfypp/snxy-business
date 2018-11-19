@@ -168,4 +168,11 @@
     from vegetable_delivery_relation
     where delivery_order_id = #{deliveryOrderId}
   </select>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from vegetable_delivery_relation
+    where is_delete = 0
+  </select>
 </mapper>

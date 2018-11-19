@@ -26,4 +26,6 @@ public interface VegetableDeliveryRelationMapper {
     List<VegetableDeliveryRelation> selectByDeliveryOrderIdList(@Param("deliveryOrderIdList") List<Long> deliveryOrderIdList);
 
     List<VegetableDeliveryRelation> selectGoodsByDeliveryOrderId(Long deliveryOrderId);
+
+    List<VegetableDeliveryRelation> selectAll();
 }

@@ -19,4 +19,6 @@ public interface VegetableCertificateMapper {
     int updateByPrimaryKey(VegetableCertificate record);
 
     void insertCertificateList(@Param("vegetableCertificateList") List<VegetableCertificate> vegetableCertificateList);
+
+    List<VegetableCertificate> selectByDeliveryOrderId(Long deliveryOrderId);
 }

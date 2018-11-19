@@ -176,6 +176,7 @@
     <include refid="Base_Column_List" />
     from vehicle
     where driver_info_id = #{driverOnlineUserId}
+    and is_delete = 0
   </select>
 
   <select id="selectByKey" resultMap="BaseResultMap">
@@ -183,5 +184,13 @@
     from entrance_fee_capacity b,vehicle a
     where driver_info_id = #{dirverInfoId}
     and a.entrance_fee_capacity_id = b.id
+  </select>
+
+  <select id="selectByCarNo" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from vehicle
+    where plate_number = #{driverPlateNumber}
+    and is_delete = 0
   </select>
 </mapper>

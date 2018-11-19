@@ -53,4 +53,6 @@ public interface CompanyUserRelationMapper {
 
     String selectPhoneByOnlineUserId(Long onlineUserId);
 
+    CompanyUserRelation selectCompanyByCompanyId(Long companyId);
+
 }

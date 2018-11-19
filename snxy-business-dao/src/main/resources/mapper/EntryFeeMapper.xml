@@ -172,4 +172,12 @@
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="selectByDeliveryOrderId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from entry_fee
+    where delivery_order_id = #{deliveryOrderId}
+    and is_delete = 0
+  </select>
 </mapper>

@@ -1,6 +1,7 @@
 package com.snxy.business.biz.impl;
 
 import com.snxy.business.dao.mapper.GuaranteeDepositMapper;
+import com.snxy.business.domain.GuaranteeDeposit;
 import com.snxy.business.service.GuaranteeDepositService;
 import com.snxy.common.exception.BizException;
 import lombok.extern.slf4j.Slf4j;
@@ -28,5 +29,11 @@ public class GuaranteeDepositServiceImpl implements GuaranteeDepositService {
             throw new BizException("更新是否生成待检测单失败");
         }
         return 1;
+    }
+
+    @Override
+    public GuaranteeDeposit selectByDeliveryOrderId(Long id) {
+        GuaranteeDeposit guaranteeDeposit = guaranteeDepositMapper.selectByDeliveryOrderId(id);
+        return guaranteeDeposit;
     }
 }

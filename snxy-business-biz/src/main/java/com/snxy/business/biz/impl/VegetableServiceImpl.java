@@ -28,7 +28,7 @@ public class VegetableServiceImpl implements VegetableService {
     }
 
     @Override
-    public PageInfo<Goods> selectAllGoodsByCategoryId(Long vegetableCategoryId) {
+    public PageInfo<Goods> selectAllGoodsByCategoryId(Long vegetableCategoryId,Integer pageNum,Integer pageSize) {
         List<Vegetable> vegetableList = vegetableMapper.selectByCategoryId(vegetableCategoryId);
         List<Goods> goodsList = vegetableList.parallelStream().map(s -> Goods.builder()
                                      .goodsImg(s.getImageUrl())
@@ -36,7 +36,7 @@ public class VegetableServiceImpl implements VegetableService {
                                      .goodsId(s.getId())
                                      .build())
                                      .collect(Collectors.toList());
-        PageHelper.startPage(1,5);
+        PageHelper.startPage(pageNum,pageSize);
         PageInfo<Goods> goodsPageInfo = new PageInfo<>();
         goodsPageInfo.setData(goodsList);
 

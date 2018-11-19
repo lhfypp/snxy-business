@@ -21,4 +21,10 @@ public class EntranceFeeCapacityServiceImpl implements EntranceFeeCapacityServic
         List<EntranceFeeCapacity> entranceFeeCapacityList = entranceFeeCapacityMapper.selectcarList();
         return entranceFeeCapacityList;
     }
+
+    @Override
+    public List<EntranceFeeCapacity> selectAll() {
+        List<EntranceFeeCapacity> entranceFeeCapacities = entranceFeeCapacityMapper.selectAll();
+        return entranceFeeCapacities;
+    }
 }

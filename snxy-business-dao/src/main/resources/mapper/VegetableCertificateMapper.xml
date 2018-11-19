@@ -206,4 +206,12 @@
       </trim>
     </foreach>
   </insert>
+
+  <select id="selectByDeliveryOrderId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from vegetable_certificate
+    where delivery_order_id = #{deliveryOrderId}
+    and is_delete = 0
+  </select>
 </mapper>
