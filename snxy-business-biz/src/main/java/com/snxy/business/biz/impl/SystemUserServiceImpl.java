@@ -139,5 +139,11 @@ public class SystemUserServiceImpl implements SystemUserService {
         return systemUserList;
     }
 
+    @Override
+    public SystemUser selectAccount(Long systemUserId) {
+
+        return systemUserMapper.selectAccount(systemUserId);
+    }
+
 
 }

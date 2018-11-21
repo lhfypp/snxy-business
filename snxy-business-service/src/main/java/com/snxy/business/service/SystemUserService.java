@@ -30,4 +30,6 @@ public interface SystemUserService {
     String getSmsCode(String newMobile);
 
     List<SystemUser> selectByMobileList(List<String> phoneList);
+
+    SystemUser selectAccount(Long systemUserId);
 }

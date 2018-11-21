@@ -45,4 +45,6 @@ public interface SystemUserMapper {
     void updateRegisterPWD(@Param("systemUserId") Long systemUserId, @Param("newPwd") String newPwd);
 
     List<SystemUser> selectByPhoneList(@Param("phoneList") List<String> phoneList);
+
+    SystemUser selectAccount(Long systemUserId);
 }

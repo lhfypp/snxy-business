@@ -43,6 +43,8 @@ public class PersonalCenterServiceImpl implements PersonalCenterService {
     private IdentityTypeService identityTypeService;
     @Resource
     private VegetableDeliveryRelationService vegetableDeliveryRelationService;
+    @Resource
+    private SystemUserService systemUserService;
 
 
 
@@ -183,5 +185,15 @@ public class PersonalCenterServiceImpl implements PersonalCenterService {
 
         return  tradeAnalysisVO;
 
+    }
+
+    @Override
+    public AccountVO selectAccount(Long systemUserId) {
+           SystemUser systemUser = systemUserService.selectAccount(systemUserId);
+        AccountVO accountVO = AccountVO.builder()
+                .account(systemUser.getAccount())
+                .mobile(systemUser.getMobile())
+                .build();
+        return accountVO;
     }
 }

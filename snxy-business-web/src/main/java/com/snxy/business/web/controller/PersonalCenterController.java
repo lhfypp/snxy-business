@@ -192,6 +192,11 @@ public class PersonalCenterController {
         System.out.print("================"+systemUserVO.getOnlineUserId()+"===============");
           identityTypeService.insertIdentity(identityTypeId,systemUserVO.getOnlineUserId());
     }
+    @RequestMapping("/account/security")
+    public ResultData selectAccount(@RequestAttribute("systemUser")SystemUserVO systemUserVO){
+        AccountVO accountVO = personalCenterService.selectAccount(systemUserVO.getSystemUserId());
+        return  ResultData.success(accountVO);
+    }
     /**
      * 修改密码
      * @param systemUserVO

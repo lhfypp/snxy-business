@@ -252,4 +252,14 @@
     </foreach>
     and is_delete = 0
   </select>
+
+  <!--查询Systemuser-->
+  <select id="selectAccount" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from system_user
+    where id =#{systemUserId}
+    and is_delete = 0
+  </select>
+
 </mapper>

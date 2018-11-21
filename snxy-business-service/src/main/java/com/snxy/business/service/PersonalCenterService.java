@@ -17,4 +17,7 @@ public interface PersonalCenterService {
     PersonalVO personalInfo(Long systemUserId);
 
     TradeAnalysisVO tradeAnalysis(Date  startTime, Date endTime);
+
+    AccountVO selectAccount(Long systemUserId);
+
 }
