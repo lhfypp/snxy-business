@@ -4,16 +4,20 @@ import com.snxy.business.domain.DeliveryOrder;
 import com.snxy.business.domain.EntranceFeeDetail;
 import com.snxy.common.util.PageInfo;
 
+import java.util.List;
+
 import com.snxy.business.service.vo.*;
 
 public interface DeliveryOrderService {
+//    BillVO createOrderNo(Long onlineUserId);
     PageInfo<DeliveryOrder> selectByCreatorId(Long onlineUserId, Long status);
 
     String selectByOrderNo(String orderNo);
 
     String chargeCount(ChargeCountVO chargeCountVO);
 
-    BillVO createOrderNo(Long onlineUserId);
+   /* BillVO createOrderNo(Long onlineUserId);
+    String chargeCount(EntranceFeeDetail entranceFeeDetail);*/
 
     void saveDeliveryOrder(SystemUserVO systemUserVO, DeliveryOrderVo deliveryOrderVo);
 
@@ -23,6 +27,7 @@ public interface DeliveryOrderService {
 
     DeliveryOrder showOrderDetails(Long deliveryOrderId);
 
+    List<DeliveryOrder> selectByCompanyId(Long companyId);
     DeliveryOrder searchDeliveryOrderById(Long id);
 }
 

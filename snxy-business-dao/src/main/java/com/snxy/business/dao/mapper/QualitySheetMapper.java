@@ -29,5 +29,6 @@ public interface QualitySheetMapper {
     List<QualitySheet> selectAllQualitySheetListPart(@Param("useId") Long useId, @Param("searchName") String searchName);
 
     int deleteQualitySheetById(String  qualitySheetId);
-
+    List<QualitySheet> selectReportByCompanyId(@Param("companyId") Long companyId);
+    List<QualitySheet> selectReportAllQualitySheetList (@Param("useId") Long useId);
 }

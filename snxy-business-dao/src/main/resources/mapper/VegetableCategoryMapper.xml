@@ -114,4 +114,12 @@
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <!--查询所有类-->
+  <select id="selectAllCategory" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    from vegetable_category
+    where is_delete = 0
+  </select>
 </mapper>

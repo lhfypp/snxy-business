@@ -40,14 +40,14 @@ public class QualitySheet {
     private Date gmtModified;
 
     private Byte isDelete;
-    private Long useId;
+    private Long userId;
 
-    public Long getUseId() {
-        return useId;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUseId(Long useId) {
-        this.useId = useId;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public Long getId() {

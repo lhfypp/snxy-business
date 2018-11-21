@@ -2,6 +2,8 @@ package com.snxy.business.dao.mapper;
 
 import com.snxy.business.domain.Vegetable;
 
+import java.util.List;
+
 public interface VegetableMapper {
     int deleteByPrimaryKey(Long id);
 
@@ -16,4 +18,9 @@ public interface VegetableMapper {
     int updateByPrimaryKey(Vegetable record);
 
     Long selectByVegetableId(Long entranceFeeCategoryId);
+    List<Vegetable> selectAll();
+
+    List<Vegetable> selectByCategoryId(Long vegetableCategoryId);
+
+    List<Vegetable> selectByVegetableName(String vegetableName);
 }

@@ -132,4 +132,30 @@
     from vegetable
     where id = #{entranceFeeCategoryId}
 </select>
+
+  <!--查询所有菜品-->
+  <select id="selectAll" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    from vegetable
+    where is_delete = 0
+  </select>
+
+  <!--根据大类id查询-->
+  <select id="selectByCategoryId" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    from vegetable
+    where vegetable_category_id = #{vegetableCategoryId}
+    and is_delete = 0
+  </select>
+
+  <!--根据名称模糊查询-->
+  <select id="selectByVegetableName" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from vegetable
+    where vegetable_name LIKE concat('%',#{vegetableName},'%')
+    AND is_delete = 0
+  </select>
 </mapper>

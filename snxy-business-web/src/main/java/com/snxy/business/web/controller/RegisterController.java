@@ -30,7 +30,26 @@ public class RegisterController {
         registerService.newPassword(password,systemUserVO.getSystemUserId());
         return ResultData.success("");
     }
+    /**
+     * 注册-忘记密码-获取验证码
+     * @param mobile
+     * @return
+     */
+    @RequestMapping("/getSmsCode")
+    public ResultData getSmsCode(String mobile){
+        String smsCode = registerService.getSmsCode(mobile);
+        return ResultData.success(smsCode);
+    }
+    /**
+     * 注册-忘记密码-修改密码
+     * @param systemUserVO
+     * @param mobile
+     */
+    @RequestMapping("/password/update")
+    public void updateRegisterPWD(@RequestAttribute("systemUser")SystemUserVO systemUserVO,String mobile,String smsCode,String newPwd){
 
+        registerService.updateRegisterPWD(systemUserVO.getSystemUserId(),mobile,smsCode,newPwd);
+    }
     /*
      * 注册获取身份列表(前台显示列表)W
      * */

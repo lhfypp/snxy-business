@@ -32,11 +32,15 @@ public interface SystemUserMapper {
 
     void updateSystemMobile(@Param("systemUserId") Long systemUserId, @Param("mobile") String newMobile);
 
-    String selectPwdByMobile(String mobile);
-
-    void updatePwdByMobile(@Param("mobile")String mobile, @Param("password") String password);
-
     SystemUser selectByPhone(String phone);
 
-    void updatePassword(@Param("password") String password, @Param("systemUserId") Long systemUserId);
+    String selectPwdBySystemUserId(Long systemUserId);
+
+    void updatePassword(String password, Long systemUserId);
+
+    void updatePwdBySystemUserId(@Param("systemUserId") Long systemUserId,@Param("newPwd") String newPwd);
+
+    void updatePersonalMobile(@Param("systemUserId") Long systemUserId,@Param("newMobile") String newMobile);
+
+    void updateRegisterPWD(@Param("systemUserId") Long systemUserId, @Param("newPwd") String newPwd);
 }

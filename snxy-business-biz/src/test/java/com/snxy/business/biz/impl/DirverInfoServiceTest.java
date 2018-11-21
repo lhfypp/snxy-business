@@ -54,7 +54,7 @@ public class DirverInfoServiceTest {
         log.info("entranceFeeCapacityList:"+entranceFeeCapacityList.size());
     }
 
-    @Test
+   /* @Test
     public void saveVehicleTest(){
         Vehicle vehicle = new Vehicle();
         vehicle.setOnlineUserId(2L);
@@ -65,7 +65,7 @@ public class DirverInfoServiceTest {
         vehicle.setEntranceFeeCapacityId(5L);
         this.vehicleService.saveVehicle(vehicle);
     }
-
+*/
     @Test
     public void VehicleListTest(){
         List<Vehicle> vehicleList = vehicleService.vehicleList(1L);

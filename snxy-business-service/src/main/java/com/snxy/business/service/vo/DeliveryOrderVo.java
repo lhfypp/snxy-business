@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 import java.util.List;
@@ -27,9 +28,12 @@ public class DeliveryOrderVo {
     private Date sendTime;
     //发货公司(下单人公司)
     private String receiverCompany;
-    //产地证明,检测证明图片
-    private List<ValicatePictureVO> certificates;
-    //货品信息
-    private List<GoodsVO> goodsVOList;
-
+    //是否有产地证明
+    private Boolean hasLocationCertificate;
+    //是否有质检单
+    private Boolean hasQualityCertificate;
+    //货品
+    private GoodsVO[] goodsVOS;
+    //产地证明，质检单
+    private MultipartFile[] file;
 }

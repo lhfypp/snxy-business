@@ -1,5 +1,6 @@
 package com.snxy.business.biz.impl;
 
+import com.snxy.business.biz.feign.SmsService;
 import com.snxy.business.dao.mapper.OnlineUserMapper;
 
 import com.snxy.business.service.OnlineUserService;
@@ -27,27 +28,18 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class OnlineUserServiceImpl implements OnlineUserService {
     @Resource
-
-
     private OnlineUserMapper onlineUserMapper;
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
     @Resource
     private SystemUserService systemUserService;
+    @Resource
+    private SmsService smsService;
 
-  /*
-     * 更换在线用户姓名
-
-     * @param systemUserId
-     * @param name
-     */
     @Transactional(rollbackFor = Exception.class)
     public void updateName(Long systemUserId, String name) {
         onlineUserMapper.updateNameBySystemUserId(systemUserId, name);
     }
-
-
-
 
     @Override
     public OnlineUser selectByPhone(String phone) {
@@ -78,32 +70,16 @@ public class OnlineUserServiceImpl implements OnlineUserService {
         return onlineUserList;
     }
 
-    /**
-     * 修改手机号前获取手机验证码
-     *
-     * @param oldMobile
-     * @return
-     */
     @Override
     public String getSmsCode(String oldMobile) {
-
-//        随机生成6位数验证码
+      //这里将来会调用短信服务给用户发送验证码 TODO
         String smsCode = RandomStringUtils.randomNumeric(6);
-//        将验证码保存到redis中，并设置有效期
-        redisTemplate.opsForValue().set(oldMobile + "updateMobile", smsCode, 60, TimeUnit.MINUTES);
-//        这里将来会调用短信服务给用户发送验证码 TODO
-
+        smsService.sendSmsCode(oldMobile,smsCode,1L);
+        //将验证码保存到redis中，并设置有效期
+        redisTemplate.opsForValue().set(oldMobile, smsCode, 60, TimeUnit.MINUTES);
         return smsCode;
     }
 
-    /**
-     * 更换手机号
-     *
-     * @param systemUserId
-     * @param oldMobile
-     * @param newMobile
-     * @param smsCode
-     */
     @Override
     public void updateOnlineMobile(Long systemUserId, String oldMobile, String newMobile, String smsCode) {
 
@@ -141,12 +117,6 @@ public class OnlineUserServiceImpl implements OnlineUserService {
         return onlineUserId;
     }
 
-
-    /**
-     * 通过系统id查询在线用户id
-     * @param systemUserId
-     * @return
-     */
     @Override
     public Long selectOnlineUserIdBySystemUserId(Long systemUserId) {
         return onlineUserMapper.selectOnlineUserIdBySystemUserId(systemUserId);
