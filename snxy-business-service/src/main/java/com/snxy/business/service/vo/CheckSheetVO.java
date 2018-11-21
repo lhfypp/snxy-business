@@ -30,5 +30,6 @@ public class CheckSheetVO {
     private String goodName;//商品名称
     private String weight;//重量,可以为空
     private String userId;//用户id
+    private Integer contactPhone;//联系人手机号
     //缴费人姓名，手机号?
 }
