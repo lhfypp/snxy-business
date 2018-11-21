@@ -1,6 +1,5 @@
 package com.snxy.business.biz.impl;
 
-import com.snxy.business.domain.DriverPicture;
 import com.snxy.business.domain.EntranceFeeCapacity;
 import com.snxy.business.domain.Image;
 import com.snxy.business.domain.Vehicle;
@@ -29,7 +28,7 @@ public class DirverInfoServiceTest {
     @Resource
     private VehicleService vehicleService;
 
-    @Test
+  /*  @Test
     public void saveDriverInfoTest(){
 
         List<Image> imageList = new ArrayList<>();
@@ -48,7 +47,7 @@ public class DirverInfoServiceTest {
 
         this.dirverInfoService.saveDriverInfo(driverPicture);
     }
-
+*/
     @Test
     public void catTypeList(){
         List<EntranceFeeCapacity> entranceFeeCapacityList = this.entranceFeeCapacityService.carTypeList();

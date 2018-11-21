@@ -1,10 +1,12 @@
 package com.snxy.business.domain;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.Date;
 
 @Data
+@Builder
 public class Vehicle {
     private Long id;
 
@@ -16,9 +18,7 @@ public class Vehicle {
 
     private String vehicleDrivingLicenseNumber;
 
-    private String vehicleDrivingLicenseFrontUrl;
-
-    private String vehicleDrivingLicenseBackUrl;
+    private String vehicleDrivingLicenseUrl;
 
     private String tonnage;
 
@@ -72,20 +72,12 @@ public class Vehicle {
         this.vehicleDrivingLicenseNumber = vehicleDrivingLicenseNumber;
     }
 
-    public String getVehicleDrivingLicenseFrontUrl() {
-        return vehicleDrivingLicenseFrontUrl;
+    public String getVehicleDrivingLicenseUrl() {
+        return vehicleDrivingLicenseUrl;
     }
 
-    public void setVehicleDrivingLicenseFrontUrl(String vehicleDrivingLicenseFrontUrl) {
-        this.vehicleDrivingLicenseFrontUrl = vehicleDrivingLicenseFrontUrl;
-    }
-
-    public String getVehicleDrivingLicenseBackUrl() {
-        return vehicleDrivingLicenseBackUrl;
-    }
-
-    public void setVehicleDrivingLicenseBackUrl(String vehicleDrivingLicenseBackUrl) {
-        this.vehicleDrivingLicenseBackUrl = vehicleDrivingLicenseBackUrl;
+    public void setVehicleDrivingLicenseUrl(String vehicleDrivingLicenseUrl) {
+        this.vehicleDrivingLicenseUrl = vehicleDrivingLicenseUrl;
     }
 
     public String getTonnage() {

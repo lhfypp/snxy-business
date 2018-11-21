@@ -1,6 +1,10 @@
 package com.snxy.business.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
 
 public class Image {
     private String fileaPath;

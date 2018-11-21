@@ -6,11 +6,8 @@ import com.snxy.business.service.vo.IdCardInfoVO;
 import com.snxy.business.service.vo.VehicleLicenseVO;
 import com.snxy.common.response.ResultData;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.awt.*;
 
 @FeignClient(name = "snxy-ocr",fallbackFactory = FilePicServiceFallBack.class,
         configuration = FeignMultipartSupportConfig.class)
@@ -31,4 +28,5 @@ public interface FilePicService {
     //上传识别行驶证
     @RequestMapping(value = "/ocr/vehicleLicense")
     ResultData<VehicleLicenseVO> vehicFront(@RequestPart("file") MultipartFile vehicleDrivingLicenseFrontUrl);
+
 }

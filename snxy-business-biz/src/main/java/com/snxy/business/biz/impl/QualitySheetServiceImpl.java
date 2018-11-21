@@ -41,8 +41,6 @@ public class QualitySheetServiceImpl implements QualitySheetService {
     @Resource
     private QualitySheetMapper qualitySheetMapper;
     @Resource
-    private CompanyUserRelationMapper companyUserRelationMapper;
-    @Resource
     private GuaranteeDepositService guaranteeDepositService;
     @Resource
     private DeliveryOrderService deliveryOrderService;
@@ -66,8 +64,7 @@ public class QualitySheetServiceImpl implements QualitySheetService {
     @Override
     public PageInfo<QualitySheet> qualitySheetList(Long onlineUserId) {
         //获取公司id
-        CompanyUserRelation companyUserRelation = companyUserRelationMapper.selectByOnlineUserId(onlineUserId);
-        Long companyId = companyUserRelation.getCompanyId();
+        String  companyId = CompanyUserRelationService.searchComIdByUseId(onlineUserId);
         //查看质量检测单
         PageHelper.startPage(1,10);
         List<QualitySheet> qualitySheetList = qualitySheetMapper.selectByCompanyId(companyId);
@@ -75,7 +72,6 @@ public class QualitySheetServiceImpl implements QualitySheetService {
         qualitySheetPageInfo.setData(qualitySheetList);
         return qualitySheetPageInfo;
     }
-
 
     //创建检测单
     @Override
@@ -196,7 +192,7 @@ public class QualitySheetServiceImpl implements QualitySheetService {
         return 1;
     }
 
-    //创建待检测单，每隔 5分钟(是否写在支付接口中?)
+  /*  //创建待检测单，每隔 5分钟(是否写在支付接口中?)
     @Scheduled(cron = "0 0/5 * * * *  ")
     public String createQualitySheet() {
         log.info("创建待检测单开始");
@@ -218,7 +214,7 @@ public class QualitySheetServiceImpl implements QualitySheetService {
                GoodPartVoList.add( GoodPartVo
                        .builder()
                        .weight(null)//载重
-                       .goodName(vegetableDeliveryRelation.getCategoryName())
+                       .goodName(vegetableDeliveryRelation.getVegetableName())
                        .build());
             }
             CheckSheetWillBeVOList.add(CheckSheetWillBeVO
@@ -261,10 +257,8 @@ public class QualitySheetServiceImpl implements QualitySheetService {
             }
         }
 
-
-
         log.info("创建待检测单成功");
       return null;
-    }
+    }*/
 
 }

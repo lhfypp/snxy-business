@@ -4,14 +4,6 @@ import com.snxy.business.domain.DeliveryOrder;
 import com.snxy.business.domain.EntranceFeeDetail;
 import com.snxy.common.util.PageInfo;
 
-import java.util.List;
-
-import com.snxy.business.domain.DeliveryOrder;
-
-
-
-
-
 import com.snxy.business.service.vo.*;
 
 public interface DeliveryOrderService {
@@ -19,7 +11,8 @@ public interface DeliveryOrderService {
 
     String selectByOrderNo(String orderNo);
 
-    String chargeCount(EntranceFeeDetail entranceFeeDetail);
+    String chargeCount(ChargeCountVO chargeCountVO);
+
     BillVO createOrderNo(Long onlineUserId);
 
     void saveDeliveryOrder(SystemUserVO systemUserVO, DeliveryOrderVo deliveryOrderVo);

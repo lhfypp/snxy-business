@@ -10,8 +10,8 @@ import java.util.List;
 
 public interface VegetableDeliveryRelationService {
 
-    List<VegetableDeliveryRelation> searchAllVDRByOrderId(Long id);
+    //List<VegetableDeliveryRelation> searchAllVDRByOrderId(Long id);
 
-    void insertGoodsVOList(List<GoodsVO> goodsVOList,Long deliveryOrderId);
+    /*void insertGoodsVOList(List<GoodsVO> goodsVOList,Long deliveryOrderId);*/
 
 }

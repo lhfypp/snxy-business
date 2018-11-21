@@ -1,15 +1,11 @@
 package com.snxy.business.biz.impl;
 
 import com.github.pagehelper.PageHelper;
-import com.snxy.business.dao.mapper.CompanyUserRelationMapper;
-import com.snxy.business.dao.mapper.DeliveryOrderMapper;
-import com.snxy.business.dao.mapper.EntranceFeeDetailMapper;
+import com.snxy.business.dao.mapper.*;
 import com.snxy.business.domain.CompanyUserRelation;
 import com.snxy.business.domain.DeliveryOrder;
-import com.snxy.business.domain.EntranceFeeDetail;
 
 import com.snxy.business.dao.mapper.DeliveryOrderMapper;
-import com.snxy.business.domain.DeliveryOrder;
 import com.snxy.business.service.DeliveryOrderService;
 import com.snxy.common.util.PageInfo;
 
@@ -31,11 +27,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
-
-import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.List;
 
 @Service
 @Slf4j
@@ -47,6 +39,22 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
     private CompanyUserRelationMapper companyUserRelationMapper;
     @Resource
     private EntranceFeeDetailMapper entranceFeeDetailMapper;
+    @Resource
+    private VegetableMapper vegetableMapper;
+    @Resource
+    private RedisTemplate redisTemplate;
+    @Resource
+    private OnlineUserService onlineUserService;
+    @Resource
+    private CompanyUserRelationService companyUserRelationService;
+    @Resource
+    private MerchantCompanyService merchantCompanyService;
+    @Resource
+    private SystemUserService systemUserService;
+    @Resource
+    private VegetableCertificateService vegetableCertificateService;
+    @Resource
+    private OrderLogService orderLogService;
 
     //商户负责人查看在途订单列表
     @Override
@@ -61,7 +69,6 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
         deliveryOrderPageInfo.setData(deliveryOrderList);
         return deliveryOrderPageInfo;
     }
-
     //订单节点信息
     @Override
     public String selectByOrderNo(String orderNo) {
@@ -99,21 +106,6 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
       }
         return statu;
     }
-    private RedisTemplate redisTemplate;
-    @Resource
-    private OnlineUserService onlineUserService;
-    @Resource
-    private CompanyUserRelationService companyUserRelationService;
-    @Resource
-    private MerchantCompanyService merchantCompanyService;
-    @Resource
-    private SystemUserService systemUserService;
-    @Resource
-    private VegetableCertificateService vegetableCertificateService;
-    @Resource
-    private VegetableDeliveryRelationService vegetableDeliveryRelationService;
-    @Resource
-    private OrderLogService orderLogService;
 
     @Override
     public BillVO createOrderNo(Long onlineUserId) {
@@ -169,7 +161,7 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
 
         //货品信息保存
         List<GoodsVO> goodsVOList = deliveryOrderVo.getGoodsVOList();
-        vegetableDeliveryRelationService.insertGoodsVOList(goodsVOList,deliveryOrder.getId());
+        //vegetableDeliveryRelationService.insertGoodsVOList(goodsVOList,deliveryOrder.getId());
 
         //远程调用自动计算进门费用接口，计算出预计的进门费用插入entryfree表
 
@@ -265,7 +257,6 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
         if(responsibleDeliverOrders.isEmpty()){
             //没有未处理订单 怎么处理
 
-
         }else{
             returnDeliveryOrder = this.getUrgentDeliverOrder(responsibleUrgentDeliveryOrders);
             homePageOrderVO = HomePageOrderVO.builder()
@@ -343,10 +334,6 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
         return deliveryOrders.get(0);
     }
 
-
-
-
-
     //创建订单号
     public String getOrderNo() {
         Integer lastOrderNo = (Integer) redisTemplate.opsForValue().get("orderNo");
@@ -378,7 +365,6 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
                 .operationDesc(message)
                 .build();
         return orderLog;
-
     }
     @Override
     public DeliveryOrder searchDeliveryOrderById(Long id) {
@@ -388,20 +374,26 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
 
     //计算收费
     @Override
-    public String chargeCount(EntranceFeeDetail entranceFeeDetail) {
+    public String chargeCount(ChargeCountVO chargeCountVO) {
+        //查询菜品大类
+        Long entranceFeeCategoryId = vegetableMapper.selectByVegetableId(chargeCountVO.getEntranceFeeCategoryId());
+        //价格
         String cost  ="";
         BigDecimal num = new BigDecimal("0.5");
-        BigDecimal num2 = new BigDecimal("3");
-        BigDecimal price = entranceFeeDetailMapper.selectPriceById(entranceFeeDetail);
+        BigDecimal num2 = new BigDecimal("4");
+        BigDecimal num3 = new BigDecimal("0.75");
+        BigDecimal price = entranceFeeDetailMapper.selectPriceById(chargeCountVO.getEntranceFeeCapacityId(),entranceFeeCategoryId);
         if (price.equals(null)){
             return "价格不存在";
         }else {
-            if (1 == entranceFeeDetail.getStatus()){
+            if (1 == chargeCountVO.getLoadStatus()){
                 cost = "当前收费为："+price;
-            }else if (2 == entranceFeeDetail.getStatus()){
+            }else if (2 == chargeCountVO.getLoadStatus()){
                 cost = "当前收费为："+price.multiply(num);
-            }else if (3 == entranceFeeDetail.getStatus()){
+            }else if (3 == chargeCountVO.getLoadStatus()){
                 cost = "当前收费为："+price.divide(num2,2,BigDecimal.ROUND_HALF_UP);
+            }else if (4 == chargeCountVO.getLoadStatus()){
+                cost = "当前收费为："+price.multiply(num3);
             }
             return cost;
         }
