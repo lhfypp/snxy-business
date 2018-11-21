@@ -40,15 +40,22 @@ public class QualitySheet {
     private Date gmtModified;
 
     private Byte isDelete;
+
+    private Integer checkFee;
+
+    private Integer isPay;
+
     private Long userId;
 
-    public Long getUserId() {
-        return userId;
-    }
+    private Long detectionSystemId;
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
+    private Date payTime;
+
+    private Date refundTime;
+
+    private Integer payMethod;
+
+    private Integer contactPhone;
 
     public Long getId() {
         return id;
@@ -176,5 +183,69 @@ public class QualitySheet {
 
     public void setIsDelete(Byte isDelete) {
         this.isDelete = isDelete;
+    }
+
+    public Integer getCheckFee() {
+        return checkFee;
+    }
+
+    public void setCheckFee(Integer checkFee) {
+        this.checkFee = checkFee;
+    }
+
+    public Integer getIsPay() {
+        return isPay;
+    }
+
+    public void setIsPay(Integer isPay) {
+        this.isPay = isPay;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Long getDetectionSystemId() {
+        return detectionSystemId;
+    }
+
+    public void setDetectionSystemId(Long detectionSystemId) {
+        this.detectionSystemId = detectionSystemId;
+    }
+
+    public Date getPayTime() {
+        return payTime;
+    }
+
+    public void setPayTime(Date payTime) {
+        this.payTime = payTime;
+    }
+
+    public Date getRefundTime() {
+        return refundTime;
+    }
+
+    public void setRefundTime(Date refundTime) {
+        this.refundTime = refundTime;
+    }
+
+    public Integer getPayMethod() {
+        return payMethod;
+    }
+
+    public void setPayMethod(Integer payMethod) {
+        this.payMethod = payMethod;
+    }
+
+    public Integer getContactPhone() {
+        return contactPhone;
+    }
+
+    public void setContactPhone(Integer contactPhone) {
+        this.contactPhone = contactPhone;
     }
 }
