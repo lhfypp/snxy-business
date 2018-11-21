@@ -5,8 +5,10 @@ import com.snxy.business.dao.mapper.CompanyUserRelationMapper;
 import com.snxy.business.dao.mapper.QualitySheetMapper;
 import com.snxy.business.domain.CompanyUserRelation;
 import com.snxy.business.domain.QualitySheet;
+import com.snxy.business.domain.VegetableDeliveryRelation;
 import com.snxy.business.service.QualitySheetService;
 import com.snxy.common.util.PageInfo;
+
 
 
 
@@ -15,6 +17,13 @@ import com.snxy.business.biz.Util.JudgIdentityUtil;
 import com.snxy.business.domain.DeliveryOrder;
 
 import com.snxy.business.domain.VegetableDeliveryRelation;
+import com.snxy.business.service.*;
+import com.snxy.business.service.vo.*;
+import com.snxy.common.exception.BizException;
+
+
+import com.snxy.business.biz.Util.JudgIdentityUtil;
+import com.snxy.business.domain.DeliveryOrder;
 import com.snxy.business.service.*;
 import com.snxy.business.service.vo.*;
 import com.snxy.common.exception.BizException;
@@ -276,7 +285,7 @@ public class QualitySheetServiceImpl implements QualitySheetService {
                GoodPartVoList.add( GoodPartVo
                        .builder()
                        .weight(null)//载重
-                       .goodName(vegetableDeliveryRelation.getCategoryName())
+                       .goodName(vegetableDeliveryRelation.getVegetableName())
                        .build());
             }
             CheckSheetWillBeVOList.add(CheckSheetWillBeVO

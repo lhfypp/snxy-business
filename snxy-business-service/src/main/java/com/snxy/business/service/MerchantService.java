@@ -23,4 +23,6 @@ public interface MerchantService {
     CompanyVO showCompany(Long companyId);
 
     void employeeAdd(Long companyId, Long onlineUserId);
+
+    SocialVO distinguishSocial(MultipartFile file);
 }

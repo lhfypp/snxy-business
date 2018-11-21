@@ -5,8 +5,6 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
-import java.util.List;
-
 public interface VegetableDeliveryRelationMapper {
     int deleteByPrimaryKey(Long id);
 
@@ -25,4 +23,7 @@ public interface VegetableDeliveryRelationMapper {
 
     void insertGoodsVOList(@Param("vegetableDeliveryRelationList") List<VegetableDeliveryRelation> vegetableDeliveryRelationList);
 
+    List<VegetableDeliveryRelation> selectByDeliveryOrderIdList(@Param("deliveryOrderIdList") List<Long> deliveryOrderIdList);
+
+    List<VegetableDeliveryRelation> selectGoodsByDeliveryOrderId(Long deliveryOrderId);
 }

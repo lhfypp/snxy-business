@@ -1,5 +1,7 @@
 package com.snxy.business.biz.impl;
 
+import com.snxy.business.biz.config.IdentityTypeEnum;
+import com.snxy.business.biz.feign.FileService;
 import com.github.pagehelper.PageHelper;
 import com.snxy.business.dao.mapper.CompanyUserRelationMapper;
 import com.snxy.business.dao.mapper.DeliveryOrderMapper;
@@ -7,22 +9,19 @@ import com.snxy.business.dao.mapper.EntranceFeeDetailMapper;
 import com.snxy.business.domain.CompanyUserRelation;
 import com.snxy.business.domain.DeliveryOrder;
 import com.snxy.business.domain.EntranceFeeDetail;
-
-import com.snxy.business.dao.mapper.DeliveryOrderMapper;
-import com.snxy.business.domain.DeliveryOrder;
 import com.snxy.business.service.DeliveryOrderService;
 import com.snxy.common.util.PageInfo;
-
 import com.snxy.business.domain.*;
 import com.snxy.business.service.*;
 import com.snxy.business.service.vo.*;
-
+import com.snxy.common.exception.BizException;
+import com.snxy.common.util.MD5Util;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
@@ -30,12 +29,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
-
-
-
-import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.List;
 
 @Service
 @Slf4j
@@ -47,6 +41,26 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
     private CompanyUserRelationMapper companyUserRelationMapper;
     @Resource
     private EntranceFeeDetailMapper entranceFeeDetailMapper;
+    @Resource
+    private RedisTemplate redisTemplate;
+    @Resource
+    private OnlineUserService onlineUserService;
+    @Resource
+    private CompanyUserRelationService companyUserRelationService;
+    @Resource
+    private MerchantCompanyService merchantCompanyService;
+    @Resource
+    private SystemUserService systemUserService;
+    @Resource
+    private VegetableCertificateService vegetableCertificateService;
+    @Resource
+    private VegetableDeliveryRelationService vegetableDeliveryRelationService;
+    @Resource
+    private OrderLogService orderLogService;
+    @Resource
+    private UserIdentityService userIdentityService;
+    @Resource
+    private FileService fileService;
 
     //商户负责人查看在途订单列表
     @Override
@@ -99,94 +113,164 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
       }
         return statu;
     }
-    private RedisTemplate redisTemplate;
-    @Resource
-    private OnlineUserService onlineUserService;
-    @Resource
-    private CompanyUserRelationService companyUserRelationService;
-    @Resource
-    private MerchantCompanyService merchantCompanyService;
-    @Resource
-    private SystemUserService systemUserService;
-    @Resource
-    private VegetableCertificateService vegetableCertificateService;
-    @Resource
-    private VegetableDeliveryRelationService vegetableDeliveryRelationService;
-    @Resource
-    private OrderLogService orderLogService;
 
-    @Override
-    public BillVO createOrderNo(Long onlineUserId) {
-        String orderNo = this.getOrderNo();
-        OnlineUser onlineUser = onlineUserService.selectByOnlineUserId(onlineUserId);
-        CompanyUserRelation companyUserRelation = companyUserRelationService.selectCompanyUserRelation(onlineUserId);
-        MerchantCompany merchantCompany = merchantCompanyService.selectByCompanyId(companyUserRelation.getCompanyId());
-        BillVO billVO = BillVO.builder()
-                .orderNo(orderNo)
-                .companyName(merchantCompany.getMerchantName())
-                .userName(onlineUser.getUserName())
-                .build();
 
-        return billVO;
-    }
+//    @Override
+//    public BillVO createOrderNo(Long onlineUserId) {
+//        String orderNo = this.getOrderNo();
+//        OnlineUser onlineUser = onlineUserService.selectByOnlineUserId(onlineUserId);
+//        CompanyUserRelation companyUserRelation = companyUserRelationService.selectCompanyUserRelation(onlineUserId);
+//        MerchantCompany merchantCompany = merchantCompanyService.selectByCompanyId(companyUserRelation.getCompanyId());
+//        BillVO billVO = BillVO.builder()
+//                .orderNo(orderNo)
+//                .companyName(merchantCompany.getMerchantName())
+//                .userName(onlineUser.getUserName())
+//                .build();
+//
+//        return billVO;
+//    }
 
     @Override
     public void saveDeliveryOrder(SystemUserVO systemUserVO, DeliveryOrderVo deliveryOrderVo) {
+        String orderNo = this.getOrderNo();
+        String driverName = deliveryOrderVo.getDriverVO().getDriverName();
+        String driverMobile = deliveryOrderVo.getDriverVO().getDriverMobile();
+        String senderName = deliveryOrderVo.getSenderVO().getSenderName();
+        String senderMobile = deliveryOrderVo.getSenderVO().getSenderMobile();
         OnlineUser receiverOnlineUser = onlineUserService.selectByPhone(deliveryOrderVo.getReceiverVO().getReceiverMobile());
         OnlineUser driverOnlineUser = onlineUserService.selectByPhone(deliveryOrderVo.getDriverVO().getDriverMobile());
+        OnlineUser senderOnlineUser = onlineUserService.selectByPhone(deliveryOrderVo.getSenderVO().getSenderMobile());
 
         DeliveryOrder deliveryOrder = DeliveryOrder.builder()
                 .creatorId(systemUserVO.getOnlineUserId())
                 .gmtCreate(new Date())
-                .receiverOnlineUserId(receiverOnlineUser.getId())
-                .driverOnlineUserId(driverOnlineUser.getId())
                 .status(1)//初始已经接单状态
+                .creator(systemUserVO.getName())
+                .senderName(deliveryOrderVo.getSenderVO().getSenderName())
+                .senderMobile(deliveryOrderVo.getSenderVO().getSenderMobile())
+                .driverName(driverOnlineUser.getUserName())
+                .driverMobile(driverOnlineUser.getPhone())
+                .receiverMobile(deliveryOrderVo.getReceiverVO().getReceiverMobile())
+                .receiverName(deliveryOrderVo.getReceiverVO().getReceiverName())
+                .orderNo(orderNo)
+                .locationCertificate(deliveryOrderVo.getHasLocationCertificate()==true ? 1 : 0)
+                .qualityCertificate(deliveryOrderVo.getHasQualityCertificate()==true ? 1 : 0)
                 .build();
+        //收货人部分判断
+        if(receiverOnlineUser==null){
+            throw new BizException("收货人未使用APP，无法新建订单");
+        }
+        CompanyUserRelation companyUserRelation = companyUserRelationService.selectByOnlineUserId(receiverOnlineUser.getId());
+        if(companyUserRelation==null){
+            throw new BizException("收货人未绑定公司信息，无法新建订单");
+        }
+        MerchantCompany merchantCompany = merchantCompanyService.selectByCompanyId(companyUserRelation.getCompanyId());
+        deliveryOrder.setReceiverOnlineUserId(receiverOnlineUser.getId());
+        deliveryOrder.setReceiverCompanyId(companyUserRelation.getCompanyId());
+        deliveryOrder.setReceiverCompany(merchantCompany.getMerchantName());
+        //推送APP消息
 
-        //产地证明，质检单
-        List<ValicatePictureVO> certificates = deliveryOrderVo.getCertificates();
-        List<Integer> certificateTypes = certificates.parallelStream().map(ValicatePictureVO::getCertificateType).collect(Collectors.toList());
-        //如果有产地证明
-        if(certificateTypes.contains(1)){
-            deliveryOrder.setLocationCertificate(1);
+
+        //司机部分判断
+        if(driverOnlineUser==null){
+            OnlineUser driverUser = createUser(driverMobile, driverName);
+            UserIdentity userIdentity = UserIdentity.builder()
+                    .onlineUserId(driverUser.getId())
+                    .identityId(IdentityTypeEnum.Driver.getIdentityTypeId())
+                    .build();
+            userIdentityService.insertIdentity(userIdentity);
+            deliveryOrder.setDriverOnlineUserId(driverUser.getId());
         }else {
-            deliveryOrder.setLocationCertificate(0);
+            deliveryOrder.setDriverOnlineUserId(driverOnlineUser.getId());
+
+            List<UserIdentity> userIdentityList = userIdentityService.selectListByOnlineUserId(driverOnlineUser.getId());
+            List<Integer> identityIdList = userIdentityList.parallelStream().map(userIdentity -> userIdentity.getIdentityId()).collect(Collectors.toList());
+            if(!identityIdList.contains(IdentityTypeEnum.Driver.getIdentityTypeId())){
+                UserIdentity userIdentity = UserIdentity.builder()
+                        .identityId(IdentityTypeEnum.Driver.getIdentityTypeId())
+                        .onlineUserId(driverOnlineUser.getId())
+                        .build();
+                userIdentityService.insertIdentity(userIdentity);
+            }
+            //推送APP消息
+
+
         }
-        //如果有质检单
-        if(certificateTypes.contains(2)){
-            deliveryOrder.setQualityCertificate(1);
+
+        //发货人部分判断
+        if(senderOnlineUser==null){
+            OnlineUser senderUser = createUser(senderMobile, senderName);
+            UserIdentity userIdentity = UserIdentity.builder()
+                    .onlineUserId(senderUser.getId())
+                    .identityId(IdentityTypeEnum.Agency.getIdentityTypeId())
+                    .build();
+            userIdentityService.insertIdentity(userIdentity);
         }else {
-            deliveryOrder.setQualityCertificate(0);
+            //推送APP消息
+
+
         }
+
         //二维码生成url添加
+//        MultipartFile file = CreateQRCode.createCode(deliveryOrderVo.getOrderNo());
+//        ResultData<String> upload = fileService.upload(file);
+//        if (!upload.isResult()) {
+//            throw new BizException(upload.getMsg());
+//        }
+//        String url = upload.getData();
+//        deliveryOrder.setQrcodeUrl(url);
 
 
 
         deliveryOrderMapper.insertSelective(deliveryOrder);
 
         //产地证明，质检单图片上传保存
-        vegetableCertificateService.upload(deliveryOrder.getId(),certificates);
+        List<ValicatePictureVO> valicatePictureVOS = new ArrayList<>();
+        MultipartFile[] file = deliveryOrderVo.getFile();
+        if(deliveryOrderVo.getHasLocationCertificate()==true){
+            if(deliveryOrderVo.getHasQualityCertificate()==true){
+                ValicatePictureVO valicatePictureVO = ValicatePictureVO.builder()
+                        .certificateType(1)
+                        .file(file[0])
+                        .build();
+                ValicatePictureVO valicatePictureVO1 = ValicatePictureVO.builder()
+                        .certificateType(2)
+                        .file(file[1])
+                        .build();
+                valicatePictureVOS.add(valicatePictureVO);
+                valicatePictureVOS.add(valicatePictureVO1);
+            }else {
+                ValicatePictureVO valicatePictureVO = ValicatePictureVO.builder()
+                        .certificateType(1)
+                        .file(file[0])
+                        .build();
+                valicatePictureVOS.add(valicatePictureVO);
+            }
+        }else {
+            if(deliveryOrderVo.getHasQualityCertificate()==true){
+                ValicatePictureVO valicatePictureVO = ValicatePictureVO.builder()
+                        .certificateType(2)
+                        .file(file[0])
+                        .build();
+                valicatePictureVOS.add(valicatePictureVO);
+            }
+        }
+
+        vegetableCertificateService.upload(deliveryOrder.getId(),valicatePictureVOS);
 
         //货品信息保存
-        List<GoodsVO> goodsVOList = deliveryOrderVo.getGoodsVOList();
+        GoodsVO[] goodsVOS = deliveryOrderVo.getGoodsVOS();
+        List<GoodsVO> goodsVOList = new ArrayList<>();
+        for (GoodsVO goodsVO : goodsVOS) {
+            goodsVOList.add(goodsVO);
+        }
+
         vegetableDeliveryRelationService.insertGoodsVOList(goodsVOList,deliveryOrder.getId());
-
-        //远程调用自动计算进门费用接口，计算出预计的进门费用插入entryfree表
-
 
         //操作订单日志表
         OrderLog orderLog = createOrderLog(systemUserVO,deliveryOrder.getId(),0,"用户新建订单");
         orderLogService.insertLog(orderLog);
 
-        //发布订单对司机手机号进行判断是否注册
-        SystemUser systemUser = systemUserService.selectByMobile(systemUserVO.getPhone());
-        if (systemUser==null){
-            //当查询不到司机的手机号注册信息时给司机手机号发送app下载了短信链接
-            System.out.println("给司机发送APP下载短信链接");
-        }else {
-            //如果司机已经注册则app推送订单消息
-            System.out.println("通过APP给司机推送消息");
-        }
     }
 
     @Override
@@ -202,7 +286,7 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
         // 查询订单
 
         List<Integer> identityIdList = identityTypes.parallelStream().map(IdentityVO::getId).collect(Collectors.toList());
-        if(identityIdList.contains(1)){
+        if(identityIdList.contains(IdentityTypeEnum.Head.getIdentityTypeId())){
             //以负责人身份查询订单
             CompanyUserRelation companyUserRelation = companyUserRelationService.selectCompanyUserRelation(systemUserVO.getOnlineUserId());
             responsibleDeliverOrders = deliveryOrderMapper.selectByCompanyId(companyUserRelation.getCompanyId());
@@ -227,11 +311,14 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
         }
 
         if(driverUrgentDeliveryOrders.size() > 0){
-            if (identityIdList.contains(3)) {
+            if (identityIdList.contains(IdentityTypeEnum.Driver.getIdentityTypeId())) {
                 returnDeliveryOrder = this.getUrgentDeliverOrder(driverUrgentDeliveryOrders);
+                List<VegetableDeliveryRelation> vegetableDeliveryRelationList = vegetableDeliveryRelationService.selectGoodsByDeliveryId(returnDeliveryOrder.getId());
+
                 homePageOrderVO = HomePageOrderVO.builder()
                         .deliveryOrder(returnDeliveryOrder)
                         .code(1)
+                        .goodsName(vegetableDeliveryRelationList.get(0).getVegetableName())
                         .build();
                 return homePageOrderVO;
             }
@@ -250,11 +337,13 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
         }
 
         if(responsibleUrgentDeliveryOrders.size() > 0){
-            if (identityIdList.contains(1)) {
+            if (identityIdList.contains(IdentityTypeEnum.Head.getIdentityTypeId())) {
                 returnDeliveryOrder = this.getUrgentDeliverOrder(responsibleUrgentDeliveryOrders);
+                List<VegetableDeliveryRelation> vegetableDeliveryRelationList = vegetableDeliveryRelationService.selectGoodsByDeliveryId(returnDeliveryOrder.getId());
                 homePageOrderVO = HomePageOrderVO.builder()
                         .deliveryOrder(returnDeliveryOrder)
                         .code(2)
+                        .goodsName(vegetableDeliveryRelationList.get(0).getVegetableName())
                         .build();
                 return homePageOrderVO;
             }
@@ -264,12 +353,14 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
         responsibleDeliverOrders.addAll(otherRoleDeliveryOrders);
         if(responsibleDeliverOrders.isEmpty()){
             //没有未处理订单 怎么处理
-
+            return null;
 
         }else{
             returnDeliveryOrder = this.getUrgentDeliverOrder(responsibleUrgentDeliveryOrders);
+            List<VegetableDeliveryRelation> vegetableDeliveryRelationList = vegetableDeliveryRelationService.selectGoodsByDeliveryId(returnDeliveryOrder.getId());
             homePageOrderVO = HomePageOrderVO.builder()
                     .deliveryOrder(returnDeliveryOrder)
+                    .goodsName(vegetableDeliveryRelationList.get(0).getVegetableName())
                     .build();
         }
 
@@ -303,6 +394,12 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
     public DeliveryOrder showOrderDetails(Long deliveryOrderId) {
         DeliveryOrder deliveryOrder = deliveryOrderMapper.selectByPrimaryKey(deliveryOrderId);
         return deliveryOrder;
+    }
+
+    @Override
+    public List<DeliveryOrder> selectByCompanyId(Long companyId) {
+        List<DeliveryOrder> deliveryOrderList = deliveryOrderMapper.selectByCompanyId(companyId);
+        return deliveryOrderList;
     }
 
 
@@ -379,6 +476,33 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
                 .build();
         return orderLog;
 
+    }
+
+    //添加用户系统账户
+    public OnlineUser createUser(String phone,String name){
+        SystemUser systemUser = SystemUser.builder()
+                .account("系统生成账号"+phone)
+                .chineseName(name)
+                .mobile(phone)
+                .regDate(new Date())
+                .pwd(MD5Util.encrypt("111111"))
+                .accountStatus((byte)0)
+                .gmtCreate(new Date())
+                .build();
+        systemUserService.insertSystemUser(systemUser);
+
+        OnlineUser onlineUser = OnlineUser.builder()
+                .userName(name)
+                .phone(phone)
+                .systemUserId(systemUser.getId())
+                .build();
+        onlineUserService.insertOnlineUser(onlineUser);
+
+        //这种没有注册的情况下，调用短信通知接口，通知被添加的用户进行APP下载（预留）
+
+
+
+        return onlineUser;
     }
     @Override
     public DeliveryOrder searchDeliveryOrderById(Long id) {

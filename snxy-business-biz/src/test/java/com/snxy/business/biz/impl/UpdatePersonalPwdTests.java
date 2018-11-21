@@ -6,33 +6,20 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Slf4j
-public class GetUpdatePwdSmsCodeTests {
+public class UpdatePersonalPwdTests {
+
     @Resource
     private SystemUserService systemUserService;
-
-    /**
-     * 改密码前获取验证码
-     */
     @Test
-    public void getPwdSmsCode(){
-        String smsCode = systemUserService.updatePwdGetSmsCode("13611163210");
-        System.out.println("================"+smsCode);
+    @Transactional(rollbackFor = Exception.class)
+    public void updatePersonalPwd(){
+        systemUserService.updatePersonalPassWord("234","123",45L);
     }
-
-    /**
-     * 修改密码
-     */
-    @Test
-    public void updatePWD(){
-        systemUserService.updatePwd("13611163210","741634","123");
-    }
-
-
-
 }

@@ -3,6 +3,7 @@ package com.snxy.business.biz.impl;
 import com.snxy.business.dao.mapper.EntranceFeeCategoryMapper;
 import com.snxy.business.domain.EntranceFeeCategory;
 import com.snxy.business.service.EntranceFeeCategoryService;
+import com.snxy.business.service.vo.Goods;
 import com.snxy.common.exception.BizException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,11 +17,6 @@ public class EntranceFeeCategoryServiceImpl implements EntranceFeeCategoryServic
     @Resource
     private EntranceFeeCategoryMapper entranceFeeCategoryMapper;
 
-    @Override
-    public List<EntranceFeeCategory> showAllGoods() {
-        List<EntranceFeeCategory> entranceFeeCategoryList = entranceFeeCategoryMapper.selectAll();
-        return entranceFeeCategoryList;
-    }
 
     @Override
     public List<EntranceFeeCategory> selectByCategoryName(String categoryName) {

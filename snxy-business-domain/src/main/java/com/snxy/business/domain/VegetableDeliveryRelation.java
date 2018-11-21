@@ -5,29 +5,20 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.Date;
-
-@Data
 @Builder
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class VegetableDeliveryRelation {
     private Long id;
-    private String weight;
-
-    public String getWeight() {
-        return weight;
-    }
-
-    public void setWeight(String weight) {
-        this.weight = weight;
-    }
 
     private Long deliveryOrderId;
 
-    private Long entranceFeeCategoryId;
+    private Long vegetableId;
 
-    private String categoryName;
+    private String vegetableName;
 
     private Integer loadStatus;
 
@@ -37,5 +28,8 @@ public class VegetableDeliveryRelation {
 
     private Byte isDelete;
 
+    private BigDecimal vegetablePrice;
+
+    private BigDecimal vegetableWeight;
 
 }

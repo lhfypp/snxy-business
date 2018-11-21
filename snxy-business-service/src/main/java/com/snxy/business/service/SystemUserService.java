@@ -15,11 +15,17 @@ public interface SystemUserService {
 
     void updateSystemMobile(Long systemUserId, String newMobile);
 
-    String updatePwdGetSmsCode(String mobile);
-
-    void updatePwd(String mobile,String smsCode,String password);
-
     SystemUser selectByMobile(String phone);
 
+    void updatePersonalPassWord(String oldPwd, String newPwd, Long systemUserId);
+
     void updatePassword(String password, Long systemUserId);
+
+    void updatePersonalMobile(Long systemUserId, String newMobile, String smsCode);
+
+    void updateRegisterPWD(Long systemUserId, String newPwd);
+
+    void isTruePwd(Long systemUserId,String password);
+
+    String getSmsCode(String newMobile);
 }
