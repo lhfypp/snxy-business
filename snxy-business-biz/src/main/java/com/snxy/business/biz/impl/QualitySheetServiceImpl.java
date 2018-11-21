@@ -143,6 +143,7 @@ public class QualitySheetServiceImpl implements QualitySheetService {
                     .weight(weightTarget)
                     .qualified(null)//是否合格
                     .userId(userId)
+                     .contactPhone(checkSheetVO.getContactPhone())
                     .build();
         int result=qualitySheetMapper.insert(qualitySheet);
         if(1!=result){
