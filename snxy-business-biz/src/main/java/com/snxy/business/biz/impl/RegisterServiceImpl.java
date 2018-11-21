@@ -57,9 +57,9 @@ public class RegisterServiceImpl implements RegisterService {
                     .build();
 
         UserIdentity userIdentity1 = userIdentityService.selectByOnlineUserId(userIdentity.getOnlineUserId(),userIdentity.getIdentityId());
-//        if(userIdentity1!=null){
-//            throw new BizException("已添加，请勿重复添加");
-//        }
+        if(userIdentity1!=null){
+            throw new BizException("已添加，请勿重复添加");
+        }
         userIdentityService.insertIdentity(userIdentity);
     }
 

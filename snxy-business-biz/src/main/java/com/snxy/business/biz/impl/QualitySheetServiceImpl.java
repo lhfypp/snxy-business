@@ -193,7 +193,7 @@ public class QualitySheetServiceImpl implements QualitySheetService {
     }
 
     //创建待检测单，每隔 5分钟(是否写在支付接口中?)
-    @Scheduled(cron = "0 0/5 * * * *  ")
+//    @Scheduled(cron = "0 0/5 * * * *  ")
     public String createQualitySheet() {
         log.info("创建待检测单开始");
         List<DeliveryOrder>deliveryOrderList=new ArrayList<>();

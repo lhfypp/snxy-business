@@ -1,6 +1,9 @@
 package com.snxy.business.dao.mapper;
 
 import com.snxy.business.domain.Message;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface MessageMapper {
     int deleteByPrimaryKey(Long id);
@@ -14,4 +17,6 @@ public interface MessageMapper {
     int updateByPrimaryKeySelective(Message record);
 
     int updateByPrimaryKey(Message record);
+
+    void insertMessageList(@Param("messageList") List<Message> messageList);
 }

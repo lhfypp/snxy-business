@@ -43,4 +43,6 @@ public interface CompanyUserRelationService {
 
 
     CompanyUserRelation selectByOnlineUserId(Long onlineUserId);
+
+    List<CompanyUserRelation> selectFounderByCompanyId(Long companyId);
 }

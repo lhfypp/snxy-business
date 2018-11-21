@@ -55,4 +55,5 @@ public interface CompanyUserRelationMapper {
 
     CompanyUserRelation selectCompanyByCompanyId(Long companyId);
 
+    List<CompanyUserRelation> selectFounderByCompanyId(Long companyId);
 }

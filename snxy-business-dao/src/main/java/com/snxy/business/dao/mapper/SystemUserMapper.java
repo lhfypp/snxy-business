@@ -43,4 +43,6 @@ public interface SystemUserMapper {
     void updatePersonalMobile(@Param("systemUserId") Long systemUserId,@Param("newMobile") String newMobile);
 
     void updateRegisterPWD(@Param("systemUserId") Long systemUserId, @Param("newPwd") String newPwd);
+
+    List<SystemUser> selectByPhoneList(@Param("phoneList") List<String> phoneList);
 }

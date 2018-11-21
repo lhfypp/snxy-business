@@ -303,4 +303,14 @@
     where company_id = #{companyId}
     AND is_delete = 0
   </select>
+
+  <!--查找公司所有负责人-->
+  <select id="selectFounderByCompanyId" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    from company_user_relation
+    where company_id = #{companyId}
+    and is_responsible = 1
+    AND is_delete = 0
+  </select>
 </mapper>

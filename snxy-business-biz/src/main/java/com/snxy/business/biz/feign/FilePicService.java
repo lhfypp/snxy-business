@@ -7,18 +7,18 @@ import com.snxy.business.service.vo.IdCardInfoVO;
 import com.snxy.business.service.vo.VehicleLicenseVO;
 import com.snxy.common.response.ResultData;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.awt.*;
+
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 @FeignClient(name = "snxy-ocr",fallbackFactory = FilePicServiceFallBack.class,
         configuration = FeignMultipartSupportConfig.class)
 public interface FilePicService {
 
     //上传识别身份证正面
-   @PostMapping(value = "/ocr/idcardFront")
+   @PostMapping(value = "/ocr/idcardFront", consumes = MULTIPART_FORM_DATA_VALUE)
     ResultData<IdCardInfoVO> idcardFront(@RequestPart("file") MultipartFile idFrontUrl);
 
    //上传识别身份证反面
@@ -34,6 +34,6 @@ public interface FilePicService {
     ResultData<VehicleLicenseVO> vehicFront(@RequestPart("file") MultipartFile vehicleDrivingLicenseFrontUrl);
 
     //上传识别公司信用图片
-    @RequestMapping(value = "/ocr/businessLicense")
+    @RequestMapping(value = "/ocr/businessLicense", consumes = MULTIPART_FORM_DATA_VALUE)
     ResultData<BusinessLicenseVO> businessFront(@RequestPart("file") MultipartFile corporateCertificationUrl);
 }

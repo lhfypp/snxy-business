@@ -26,6 +26,7 @@ public class MerchantController {
     @RequestMapping("/company/new")
     public ResultData newCompany(MultipartFile file, NewCompanyVO newCompanyVO, @RequestAttribute("systemUser")SystemUserVO systemUserVO){
         Long companyId = merchantService.newCompany(file,newCompanyVO,systemUserVO);
+        log.info("newCompanyVo : [{}]",newCompanyVO);
         return ResultData.success(companyId);
     }
 
@@ -70,7 +71,7 @@ public class MerchantController {
 
 
     /*
-    * 没了
+    * 转移到商户后台管理中   没了
     * */
     /*
     * 添加员工

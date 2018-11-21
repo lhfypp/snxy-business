@@ -143,4 +143,16 @@
     where system_user_id = #{systemUserId}
     and is_delete = false
   </select>
+
+  <!--通过systemUserId集合查询-->
+  <select id="selectBySystemUserIdList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user_umeng_relation
+    where system_user_id in
+    <foreach collection="systemUserIdList" item="systemUserId" open="(" close=")" separator="," index="index">
+      #{systemUserId}
+    </foreach>
+    and is_delete = 0
+  </select>
 </mapper>

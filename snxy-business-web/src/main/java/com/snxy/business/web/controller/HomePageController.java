@@ -136,6 +136,7 @@ public class HomePageController {
     * */
     @RequestMapping("/order/list/show")
     public ResultData showOrderList(@RequestAttribute("systemUser")SystemUserVO systemUserVO,Integer pageNum,Integer pageSize,Integer status){
+        //status  未进门1   待检测2   已完成3
         PageInfo<HomePageOrderVO> homePageOrderVO = deliveryOrderService.showOrderList(systemUserVO,pageNum,pageSize,status);
         return ResultData.success(homePageOrderVO);
     }

@@ -25,4 +25,7 @@ public interface MerchantService {
     void employeeAdd(Long companyId, Long onlineUserId);
 
     SocialVO distinguishSocial(MultipartFile file);
+
+    void pushMessage(List<String> phoneList,String ticker,String title,String remark);
+
 }

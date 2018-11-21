@@ -3,6 +3,8 @@ package com.snxy.business.dao.mapper;
 import com.snxy.business.domain.UserUmengRelation;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 public interface UserUmengRelationMapper {
     int deleteByPrimaryKey(Long id);
 
@@ -17,4 +19,7 @@ public interface UserUmengRelationMapper {
     int updateByPrimaryKey(UserUmengRelation record);
 
     UserUmengRelation selectBySystemUserId(@Param("systemUserId")Long systemUserId);
+
+    List<UserUmengRelation> selectBySystemUserIdList(@Param("systemUserIdList") List<Long> systemUserIdList);
+
 }

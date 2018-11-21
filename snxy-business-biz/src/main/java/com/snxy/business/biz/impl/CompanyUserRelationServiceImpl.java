@@ -111,6 +111,11 @@ public class CompanyUserRelationServiceImpl implements CompanyUserRelationServic
         return companyUserRelation;
     }
 
+    @Override
+    public List<CompanyUserRelation> selectFounderByCompanyId(Long companyId) {
+        List<CompanyUserRelation> companyUserRelationList = companyUserRelationMapper.selectFounderByCompanyId(companyId);
+        return companyUserRelationList;
+    }
 
 
     @Override

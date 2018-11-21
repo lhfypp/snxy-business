@@ -133,5 +133,11 @@ public class SystemUserServiceImpl implements SystemUserService {
         return smsCode;
     }
 
+    @Override
+    public List<SystemUser> selectByMobileList(List<String> phoneList) {
+        List<SystemUser> systemUserList = systemUserMapper.selectByPhoneList(phoneList);
+        return systemUserList;
+    }
+
 
 }

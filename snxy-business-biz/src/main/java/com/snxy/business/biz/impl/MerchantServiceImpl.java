@@ -1,8 +1,11 @@
 package com.snxy.business.biz.impl;
 
+import com.snxy.business.biz.config.IdentityTypeEnum;
 import com.snxy.business.biz.feign.FilePicService;
 import com.snxy.business.biz.feign.FileService;
 
+import com.snxy.business.biz.feign.MessagePushService;
+import com.snxy.business.biz.feign.SmsService;
 import com.snxy.business.domain.*;
 import com.snxy.business.service.*;
 import com.snxy.business.service.vo.*;
@@ -13,9 +16,11 @@ import com.snxy.common.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -38,26 +43,37 @@ public class MerchantServiceImpl implements MerchantService {
     private FileService fileService;
     @Resource
     private FilePicService filePicService;
+    @Resource
+    private SmsService smsService;
+    @Resource
+    private MessagePushService messagePushService;
+    @Resource
+    private MessageService messageService;
+    @Resource
+    private UserUmengRelationService userUmengRelationService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Long newCompany(MultipartFile file, NewCompanyVO newCompanyVO, SystemUserVO systemUserVO) {
+        log.info("newCompanyVO [{}] :",newCompanyVO);
+
         //加上判断是否填写信息===姓名不能为空
         if(StringUtil.isBlank(newCompanyVO.getMerchantName())){
             throw new BizException("公司名称为空");
         }
-        //判断公司名为全中文
-        if(!StringUtil.isChinese(newCompanyVO.getMerchantName())){
-            throw new BizException("请输入中文公司名");
-        }
+//        //判断公司名为全中文
+//        if(!StringUtil.isChinese(newCompanyVO.getMerchantName())){
+//            throw new BizException("请输入中文公司名");
+//        }
         //判断公司名长度
         if(newCompanyVO.getMerchantName().length()>20){
-            throw new BizException("用户名长度应为20位以内");
+            throw new BizException("公司名长度应为20位以内");
         }
-        if(newCompanyVO.getHeadName().length()>5||!StringUtil.isChinese(newCompanyVO.getHeadName())){
-            throw new BizException("请输入5位以内中文姓名");
-        }
+//        if(newCompanyVO.getHeadName().length()>5||!StringUtil.isChinese(newCompanyVO.getHeadName())){
+//            throw new BizException("请输入5位以内中文姓名");
+//        }
 
+        //上传图片
         ResultData<String> upload = fileService.upload(file);
         if (!upload.isResult()) {
             throw new BizException(upload.getMsg());
@@ -80,22 +96,20 @@ public class MerchantServiceImpl implements MerchantService {
         merchantCompanyService.insertCompanyMessage(merchantCompany);
 
         //判断负责人是否为当前用户
-        if(newCompanyVO.getHeadPhone().equals(systemUserVO.getPhone())){
-            //如果是，则设置为负责人
-            userIdentityService.updateIdentityByOnlineUserId(systemUserVO.getOnlineUserId(),1);
-        }
-
         CompanyUserRelation companyUserRelation = CompanyUserRelation.builder()
                 .companyId(merchantCompany.getId())
                 .gmtCreate(new Date())
-                .isResponsible(0)
                 .build();
 
+        if(newCompanyVO.getHeadPhone().equals(systemUserVO.getPhone())) {
+            //如果是，则设置为负责人
+            userIdentityService.updateIdentityByOnlineUserId(systemUserVO.getOnlineUserId(), IdentityTypeEnum.Head.getIdentityTypeId());
+        }
         //判断传入的姓名手机号有没有注册
         OnlineUser onlineUser = onlineUserService.selectByPhone(newCompanyVO.getHeadPhone());
         if(onlineUser==null){
             SystemUser systemUser = SystemUser.builder()
-                    .account("系统生成账号"+newCompanyVO.getHeadPhone())
+                    .account(newCompanyVO.getHeadPhone())
                     .chineseName(newCompanyVO.getHeadName())
                     .mobile(newCompanyVO.getHeadPhone())
                     .regDate(new Date())
@@ -111,10 +125,30 @@ public class MerchantServiceImpl implements MerchantService {
                     .systemUserId(systemUser.getId())
                     .build();
             onlineUserService.insertOnlineUser(onlineUser1);
+            //没有注册，则为其手机号注册，并给该手机号发送短信，typeId换成APP下载短信的模板
+            String message = "您已被添加为公司负责人，请下载新发地APP";
+            smsService.sendSmsCode(newCompanyVO.getHeadPhone(), message, 1L);
 
             companyUserRelation.setOnlineUserId(onlineUser1.getId());
+        }else {
+            //已注册调用消息推送，判断是否已经绑定公司
+            CompanyUserRelation companyUserRelation1 = companyUserRelationService.selectByOnlineUserId(onlineUser.getId());
+            if(companyUserRelation1!=null){
+                throw new BizException("负责人用户已绑定其他公司，请进行核实");
+            }
+            companyUserRelation.setOnlineUserId(onlineUser.getId());
+            //消息推送
+
+            String ticker = "您已被设置成为公司负责人";
+            String title = "成为公司负责人";
+            String remark = "备注";
+            List<String> phoneList = new ArrayList<>();
+            phoneList.add(newCompanyVO.getHeadPhone());
+            pushMessage(phoneList,ticker,title,remark);
+
         }
-        companyUserRelation.setOnlineUserId(onlineUser.getId());
+        companyUserRelation.setIsResponsible(1);
+        companyUserRelation.setIsFounder(1);
         companyUserRelationService.insertCompanyUserRelation(companyUserRelation);
         return merchantCompany.getId();
     }
@@ -145,7 +179,6 @@ public class MerchantServiceImpl implements MerchantService {
             saveCompanyUserIdentity(onlineUser1.getId(),employeeVO.getCompanyId());
 
             //这种没有注册的情况下，调用短信通知接口，通知被添加的用户进行APP下载（预留）
-
 
 
         }else {
@@ -329,6 +362,7 @@ public class MerchantServiceImpl implements MerchantService {
     public List<CompanyVO> companyExist(String companyName,Integer showNum) {
         //判断公司名是否存在
         List<CompanyVO> companyVOList = merchantCompanyService.selectByCompanyName(companyName);
+        log.info("companyVOList : [{}]",companyVOList);
         if(companyVOList.size()>showNum){
             return companyVOList.subList(0,showNum);
         }
@@ -366,6 +400,14 @@ public class MerchantServiceImpl implements MerchantService {
                 .gmtCreate(new Date())
                 .isFounder(0)
                 .build();
+        List<CompanyUserRelation> companyUserRelationList = companyUserRelationService.selectFounderByCompanyId(companyId);
+        List<Long> onlineUserIdList = companyUserRelationList.parallelStream().map(CompanyUserRelation::getOnlineUserId).collect(Collectors.toList());
+        List<OnlineUser> onlineUserList = onlineUserService.selectByOnlineUserIdList(onlineUserIdList);
+        List<String> phoneList = onlineUserList.parallelStream().map(OnlineUser::getPhone).collect(Collectors.toList());
+        String ticker = "XXX申请加入公司";
+        String title = "申请加入公司";
+        String remark = "备注";
+        pushMessage(phoneList,ticker,title,remark);
         companyUserRelationService.insertCompanyUserRelation(companyUserRelation);
     }
 
@@ -378,7 +420,9 @@ public class MerchantServiceImpl implements MerchantService {
             socialVO.setIsTrue((byte)0);
         }
         BusinessLicenseVO data = resultData.getData();
-        socialVO.setSocialCreditCode(data.getSocialCreditCode());
+        if (data!=null) {
+            socialVO.setSocialCreditCode(data.getSocialCreditCode());
+        }
 
         return socialVO;
     }
@@ -398,4 +442,35 @@ public class MerchantServiceImpl implements MerchantService {
                 .build();
         userIdentityService.insertIdentity(userIdentity);
     }
+
+    //批量推送
+    public void pushMessage(List<String> phoneList,String ticker,String title,String remark){
+        List<SystemUser> systemUserList = systemUserService.selectByMobileList(phoneList);
+        List<Long> systemUserIdList = systemUserList.parallelStream().map(SystemUser::getId).collect(Collectors.toList());
+        List<UserUmengRelation> userUmengRelationList = userUmengRelationService.selectBySystemUserIdList(systemUserIdList);
+        List<MessageInfo.DeviceInfo> deviceInfoList = userUmengRelationList.parallelStream().map(s -> MessageInfo.DeviceInfo.builder()
+                                   .deviceToken(s.getDeviceToken())
+                                   .phoneType(s.getPhoneType())
+                                   .build())
+                                   .collect(Collectors.toList());
+
+        MessageInfo messageInfo = MessageInfo.builder()
+                .ticker(ticker)
+                .title(title)
+                .remark(remark)
+                .deviceInfos(deviceInfoList)
+                .build();
+        messagePushService.pushMessage(messageInfo);
+        List<OnlineUser> onlineUserList = onlineUserService.selectByPhoneList(phoneList);
+        List<Message> messageList = onlineUserList.parallelStream().map(s -> Message.builder()
+                                       .sender(s.getId())
+                                       .content(ticker)
+                                       .gmtCreate(new Date())
+                                       .remark(remark)
+                                       .title(title)
+                                       .build())
+                                       .collect(Collectors.toList());
+        messageService.insertMessageList(messageList);
+    }
+
 }

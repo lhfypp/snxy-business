@@ -7,6 +7,7 @@ import com.snxy.common.exception.BizException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @Author: zhangfeng233
@@ -37,8 +38,14 @@ public class UserUmengRelationServiceImpl implements UserUmengRelationService {
     }
 
     @Override
-    public UserUmengRelation selectBySystemUserId(Long systemUserId, String deviceToken) {
+    public UserUmengRelation selectBySystemUserId(Long systemUserId) {
         UserUmengRelation userUmengRelation = this.userUmengRelationMapper.selectBySystemUserId(systemUserId);
         return userUmengRelation;
+    }
+
+    @Override
+    public List<UserUmengRelation> selectBySystemUserIdList(List<Long> systemUserIdList) {
+        List<UserUmengRelation> userUmengRelationList = userUmengRelationMapper.selectBySystemUserIdList(systemUserIdList);
+        return userUmengRelationList;
     }
 }

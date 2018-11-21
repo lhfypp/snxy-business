@@ -3,6 +3,7 @@ package com.snxy.business.biz.impl;
 import com.snxy.business.biz.config.IdentityTypeEnum;
 import com.snxy.business.biz.feign.FileService;
 import com.github.pagehelper.PageHelper;
+import com.snxy.business.biz.feign.SmsService;
 import com.snxy.business.dao.mapper.CompanyUserRelationMapper;
 import com.snxy.business.dao.mapper.DeliveryOrderMapper;
 import com.snxy.business.dao.mapper.EntranceFeeDetailMapper;
@@ -29,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.math.BigDecimal;
 
@@ -66,6 +68,10 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
     private EntryFeeService entryFeeService;
     @Resource
     private GuaranteeDepositService guaranteeDepositService;
+    @Resource
+    private SmsService smsService;
+    @Resource
+    private MerchantService merchantService;
 
     //商户负责人查看在途订单列表
     @Override
@@ -137,6 +143,9 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
 
     @Override
     public void saveDeliveryOrder(SystemUserVO systemUserVO, DeliveryOrderVo deliveryOrderVo) {
+        //消息推送人电话集合
+        List<String> phoneList = new ArrayList<>();
+
         String orderNo = this.getOrderNo();
         String driverName = deliveryOrderVo.getDriverVO().getDriverName();
         String driverMobile = deliveryOrderVo.getDriverVO().getDriverMobile();
@@ -149,7 +158,7 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
         DeliveryOrder deliveryOrder = DeliveryOrder.builder()
                 .creatorId(systemUserVO.getOnlineUserId())
                 .gmtCreate(new Date())
-                .status(1)//初始已经接单状态
+                .status(0)//初始已经接单状态
                 .creator(systemUserVO.getName())
                 .senderName(deliveryOrderVo.getSenderVO().getSenderName())
                 .senderMobile(deliveryOrderVo.getSenderVO().getSenderMobile())
@@ -173,7 +182,9 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
         deliveryOrder.setReceiverOnlineUserId(receiverOnlineUser.getId());
         deliveryOrder.setReceiverCompanyId(companyUserRelation.getCompanyId());
         deliveryOrder.setReceiverCompany(merchantCompany.getMerchantName());
-        //推送APP消息
+        //推送APP消息给收货人
+        phoneList.add(receiverOnlineUser.getPhone());
+
 
 
         //司机部分判断
@@ -198,7 +209,7 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
                 userIdentityService.insertIdentity(userIdentity);
             }
             //推送APP消息
-
+            phoneList.add(driverOnlineUser.getPhone());
 
         }
 
@@ -212,7 +223,7 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
             userIdentityService.insertIdentity(userIdentity);
         }else {
             //推送APP消息
-
+            phoneList.add(senderOnlineUser.getPhone());
 
         }
 
@@ -275,6 +286,12 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
         //操作订单日志表
         OrderLog orderLog = createOrderLog(systemUserVO,deliveryOrder.getId(),0,"用户新建订单");
         orderLogService.insertLog(orderLog);
+
+        //收货人，发货人，司机APP消息推送
+        String ticker = "您有一个新的订单";
+        String title = "新订单";
+        String remark = "备注";
+        merchantService.pushMessage(phoneList,ticker,title,remark);
 
     }
 
@@ -348,8 +365,10 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
                 homePageOrderVO = HomePageOrderVO.builder()
                         .deliveryOrder(returnDeliveryOrder)
                         .code(2)
-                        .goodsName(vegetableDeliveryRelationList.get(0).getVegetableName())
                         .build();
+                if(vegetableDeliveryRelationList.size()>0){
+                    homePageOrderVO.setGoodsName(vegetableDeliveryRelationList.get(0).getVegetableName());
+                }
                 return homePageOrderVO;
             }
         }
@@ -357,7 +376,7 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
         // 没有需要司机及负责人确认的订单
         responsibleDeliverOrders.addAll(otherRoleDeliveryOrders);
         if(responsibleDeliverOrders.isEmpty()){
-            //没有未处理订单 怎么处理
+            //没有未处理订单 怎么处理  随便给个死图
             return null;
 
         }else{
@@ -379,16 +398,32 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
         BeanUtils.copyProperties(driverConfirmationVO,deliveryOrder);
         deliveryOrder.setGmtModified(new Date());
         deliveryOrderMapper.updateByPrimaryKeySelective(deliveryOrder);
+        DeliveryOrder deliveryOrder1 = deliveryOrderMapper.selectByPrimaryKey(driverConfirmationVO.getId());
 
         //身份判断
         String message = "";
         if(driverConfirmationVO.getStatus()==0){
+            List<CompanyUserRelation> companyUserRelationList = companyUserRelationService.selectFounderByCompanyId(deliveryOrder1.getReceiverCompanyId());
+            List<Long> onlineUserIdList = companyUserRelationList.parallelStream().map(CompanyUserRelation::getOnlineUserId).collect(Collectors.toList());
+            List<OnlineUser> onlineUserList = onlineUserService.selectByOnlineUserIdList(onlineUserIdList);
+            List<String> phoneList = onlineUserList.parallelStream().map(OnlineUser::getPhone).collect(Collectors.toList());
+
             message = "司机确认发货";
             //调用消息推送接口，给订单的负责人推送消息
-
+            phoneList.add(deliveryOrder1.getDriverMobile());
+            String ticker = "司机确认发货";
+            String title = "司机确认发货";
+            String remark = "备注";
+            merchantService.pushMessage(phoneList,ticker,title,remark);
 
         }else if(driverConfirmationVO.getStatus()==1){
             message = "商户确认订单";
+            List<String> phoneList = new ArrayList<>();
+            phoneList.add(deliveryOrder1.getDriverMobile());
+            String ticker = "商户确认订单";
+            String title = "商户确认订单";
+            String remark = "备注";
+            merchantService.pushMessage(phoneList,ticker,title,remark);
         }
 
         OrderLog orderLog = createOrderLog(systemUserVO,driverConfirmationVO.getId(),driverConfirmationVO.getStatus(),message);
@@ -561,7 +596,7 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
         onlineUserService.insertOnlineUser(onlineUser);
 
         //这种没有注册的情况下，调用短信通知接口，通知被添加的用户进行APP下载（预留）
-
+        smsService.sendSmsCode(phone,"您有一个订单，请下载APP",1L);
 
 
         return onlineUser;
@@ -577,12 +612,12 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
         List<IdentityVO> identityTypes = systemUserVO.getIdentityTypes();
         List<Integer> identityIdList = identityTypes.parallelStream().map(IdentityVO::getId).collect(Collectors.toList());
         //负责人身份查询出的集合
-        List<DeliveryOrder> responsibleDeliverOrders = new ArrayList<>();
+        List<DeliveryOrder> responsibleDeliverOrders ;
         //非负责人查询出的集合
         List<DeliveryOrder> otherRoleDeliveryOrders ;
         //所有订单货品关系集合
         List<VegetableDeliveryRelation> vegetableDeliveryRelationList = vegetableDeliveryRelationService.selectAll();
-        Map<Long,String> orderIdNameMap = vegetableDeliveryRelationList.parallelStream().collect(Collectors.toMap(VegetableDeliveryRelation::getDeliveryOrderId,VegetableDeliveryRelation::getVegetableName));
+        Map<Long,String> orderIdNameMap = vegetableDeliveryRelationList.parallelStream().collect(Collectors.toMap(VegetableDeliveryRelation::getDeliveryOrderId, VegetableDeliveryRelation::getVegetableName, (key1, key2) -> key1));
         //返回的集合
         List<HomePageOrderVO> homePageOrderVOList = new ArrayList<>();
         // 查询订单
@@ -595,12 +630,15 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
                                            .goodsName(orderIdNameMap.get(s.getId()))
                                            .build())
                                            .collect(Collectors.toList());
-            homePageOrderVOList.forEach(s -> {
-                    addCode(s,identityIdList);
+            List<HomePageOrderVO> homePageOrderVOS = checkStatus(homePageOrderVOList, status);
+            homePageOrderVOS.forEach(s -> {
+                addCode(s,identityIdList);
             });
+
+
             PageHelper.startPage(pageNum,pageSize);
             PageInfo<HomePageOrderVO> homePageOrderVOPageInfo = new PageInfo<>();
-            homePageOrderVOPageInfo.setData(homePageOrderVOList);
+            homePageOrderVOPageInfo.setData(homePageOrderVOS);
             return homePageOrderVOPageInfo;
         }
         // 以非负责人身份查询
@@ -612,18 +650,20 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
                     .goodsName(orderIdNameMap.get(s.getId()))
                     .build())
                     .collect(Collectors.toList());
-            homePageOrderVOList.forEach(s -> {
+            List<HomePageOrderVO> homePageOrderVOS = checkStatus(homePageOrderVOList, status);
+            homePageOrderVOS.forEach(s -> {
                 addCode(s,identityIdList);
             });
             PageHelper.startPage(pageNum,pageSize);
             PageInfo<HomePageOrderVO> homePageOrderVOPageInfo = new PageInfo<>();
-            homePageOrderVOPageInfo.setData(homePageOrderVOList);
+            homePageOrderVOPageInfo.setData(homePageOrderVOS);
             return homePageOrderVOPageInfo;
         }
 
+        List<HomePageOrderVO> homePageOrderVOS = checkStatus(homePageOrderVOList, status);
         PageHelper.startPage(pageNum,pageSize);
         PageInfo<HomePageOrderVO> homePageOrderVOPageInfo = new PageInfo<>();
-        homePageOrderVOPageInfo.setData(homePageOrderVOList);
+        homePageOrderVOPageInfo.setData(homePageOrderVOS);
         return homePageOrderVOPageInfo;
     }
 
@@ -674,5 +714,29 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
             }
         }
         return homePageOrderVO;
+    }
+
+    //根据查询状态返回
+    public List<HomePageOrderVO> checkStatus(List<HomePageOrderVO> homePageOrderVOList,Integer staus){
+        List<HomePageOrderVO> homePageOrderVOS = new ArrayList<>();
+
+        homePageOrderVOList.forEach(s -> {
+            if(staus==1){
+                if(s.getDeliveryOrder().getStatus()==0||s.getDeliveryOrder().getStatus()==1||s.getDeliveryOrder().getStatus()==2){
+                    homePageOrderVOS.add(s);
+                }
+            }
+            if(staus==2){
+                if(s.getDeliveryOrder().getStatus()==3){
+                    homePageOrderVOS.add(s);
+                }
+            }
+            if(staus==3){
+                if(s.getDeliveryOrder().getStatus()==-1||s.getDeliveryOrder().getStatus()==5||s.getDeliveryOrder().getStatus()==6){
+                    homePageOrderVOS.add(s);
+                }
+            }
+        });
+        return homePageOrderVOS;
     }
 }
