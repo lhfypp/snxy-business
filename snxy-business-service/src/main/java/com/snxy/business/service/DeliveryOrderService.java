@@ -26,5 +26,11 @@ public interface DeliveryOrderService {
 
     List<DeliveryOrder> selectByCompanyId(Long companyId);
     DeliveryOrder searchDeliveryOrderById(Long id);
+
+    DeliveryOrder selectDriverNumByOrderNo(String orderNo);
+
+    Long selectDeliveryIdByOrderNo(String orderNo);
+
+    List<Long> selectDeliveryIdByOrderList(List<String> orderNoList);
 }
 

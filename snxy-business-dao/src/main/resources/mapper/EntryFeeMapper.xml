@@ -172,4 +172,13 @@
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <!--查询进门费通过货运单号-->
+  <select id="selectFeeByOrderNo"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from entry_fee
+    where delivery_order_id = #{orderNo}
+  </select>
+
 </mapper>

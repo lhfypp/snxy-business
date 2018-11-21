@@ -5,6 +5,7 @@ import com.snxy.business.domain.Vehicle;
 import java.util.List;
 
 import com.snxy.business.domain.Vehicle;
+import org.apache.ibatis.annotations.Param;
 
 
 import java.util.Date;
@@ -24,5 +25,7 @@ public interface VehicleMapper {
 
     Vehicle selectByDriverId(Long driverOnlineUserId);
     List<Vehicle> selectByKey(Long dirverInfoId);
+
+    Vehicle selectTonnageByDriverNum(@Param("driverPlateNumber") String driverPlateNumber);
 
 }

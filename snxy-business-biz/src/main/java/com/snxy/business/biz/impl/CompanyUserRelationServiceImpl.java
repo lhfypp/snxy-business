@@ -3,11 +3,11 @@ package com.snxy.business.biz.impl;
 import com.snxy.business.dao.mapper.CompanyUserRelationMapper;
 import com.snxy.business.domain.CompanyUserRelation;
 import com.snxy.business.domain.MerchantCompany;
+import com.snxy.business.domain.OnlineUser;
 import com.snxy.business.service.CompanyUserRelationService;
 
 import com.snxy.business.service.OnlineUserService;
 import com.snxy.business.service.UserImageService;
-import com.snxy.business.service.vo.PersonalVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -81,29 +81,7 @@ public class CompanyUserRelationServiceImpl implements CompanyUserRelationServic
         return companyUserRelationMapper.selectCompanyIdByOnlineUserId(onlineUserId);
     }
 
-    /**
-     * 查询商户个人信息
-     * @param systemUserId
-     * @return
-     */
-    @Override
-    public PersonalVO selectPersonalByOnlineUserId(Long systemUserId) {
-//        根据systemUserId去userImage表中查出用户头像
-        String userImage = userImageService.selectImageBySystemUserId(systemUserId);
-//        根据systemUserId查询onlineUserId
-        Long onlineUserId = onlineUserService.selectOnlineUserIdBySystemUserId(systemUserId);
-//        根据company_user_relation和online_user两张表中onlineUserId相等，得到userName
-        String bossName = companyUserRelationMapper.selectUserNameByOlineUserId(onlineUserId);
-//        查询电话号
-        String bossPhone = companyUserRelationMapper.selectPhoneByOnlineUserId(onlineUserId);
 
-        PersonalVO personalVO = new PersonalVO();
-        personalVO.setUserName(bossName);
-        personalVO.setPhone(bossPhone);
-        personalVO.setUrl(userImage);
-//        因为用户身份标签放到前台的请求中，不用后台查询
-        return personalVO;
-    }
 
     @Override
     public CompanyUserRelation selectByOnlineUserId(Long onlineUserId) {
@@ -111,6 +89,11 @@ public class CompanyUserRelationServiceImpl implements CompanyUserRelationServic
         return companyUserRelation;
     }
 
+    @Override
+    public OnlineUser selectUserNameByOlineUserId(Long onlineUserId) {
+        OnlineUser onlineUser = onlineUserService.selectByOnlineUserId(onlineUserId);
+        return onlineUser;
+    }
 
 
     @Override

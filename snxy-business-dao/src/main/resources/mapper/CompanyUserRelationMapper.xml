@@ -141,12 +141,8 @@
     select
     <include refid="Base_Column_List" />
     from company_user_relation
-    where online_user_id = #{id}
-
-
-
+    where online_user_id = #{onlineUserId}
     AND is_delete = 0
-
   </select>
 
   <!--批量添加公司员工-->
@@ -185,8 +181,6 @@
     and is_delete = 0
   </update>
 
-  
-  
   <select id="selectByCompanyIdAndUserId" resultType="java.lang.Long">
     select id
       from

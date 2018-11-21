@@ -2,18 +2,20 @@ package com.snxy.business.web.controller;
 
 
 
+
 import com.snxy.business.biz.feign.FileService;
 import com.snxy.business.domain.CommonProblems;
 import com.snxy.business.service.*;
-import com.snxy.business.service.vo.CompanyVO;
-import com.snxy.business.service.vo.CustomerVO;
-import com.snxy.business.service.vo.SystemUserVO;
+import com.snxy.business.service.vo.*;
 import com.snxy.common.response.ResultData;
+import com.snxy.common.util.DateUtil;
+import com.snxy.common.util.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,6 +23,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -114,6 +117,18 @@ public class PersonalCenterController {
     public void updateSysUserName(Long systemUserId, String name){
         systemUserService.updateName(systemUserId,name);
     }
+
+    /**
+     * 查询个人信息
+     * @param systemUserVO
+     * @return
+     */
+    @RequestMapping("/personal/info")
+    public ResultData personalInfo(@RequestAttribute("systemUser") SystemUserVO systemUserVO){
+        System.out.print("================"+systemUserVO.getSystemUserId()+"============");
+        PersonalVO personalVO = personalCenterService.personalInfo(systemUserVO.getSystemUserId());
+        return ResultData.success(personalVO);
+    }
     /**
      * 下载版本
      * @param systemUserId
@@ -174,6 +189,7 @@ public class PersonalCenterController {
      */
     @RequestMapping("/identity/insert")
     public void insertIdentity(Integer  identityTypeId ,@RequestAttribute("systemUser") SystemUserVO systemUserVO){
+        System.out.print("================"+systemUserVO.getOnlineUserId()+"===============");
           identityTypeService.insertIdentity(identityTypeId,systemUserVO.getOnlineUserId());
     }
     /**
@@ -219,6 +235,49 @@ public class PersonalCenterController {
     @RequestMapping("/mobile/update")
     public void updatePersonalMobile(@RequestAttribute("systemUser") SystemUserVO systemUserVO,String newMobile,String smsCode){
         systemUserService.updatePersonalMobile(systemUserVO.getSystemUserId(),newMobile,smsCode);
+    }
+
+    /**
+     * 交易记录列表
+     * @param businessTypeId
+     * @param startTime
+     * @param endTime
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    @RequestMapping("/trade/list")
+    public ResultData tradeList( Long businessTypeId,Date startTime, Date endTime,@RequestParam(value = "pageNum",defaultValue = "1") Integer pageNum,
+                                 @RequestParam(value = "pageSize",defaultValue = "3") Integer pageSize){
+        log.info("channel : [{}]   ;   startTime : [{}]  ; endTime : [{}]  ; pageNum : [{}];pageSize :[{}]",businessTypeId,startTime,endTime,pageNum,pageSize);
+        PageInfo<List<tradeVO>> pageInfo = personalCenterService.tradeList( businessTypeId,startTime,endTime,pageNum,pageSize);
+        return  ResultData.success(pageInfo);
+    }
+
+    /**
+     * 交易详情
+     * @param orderNo
+     * @return
+     */
+    @RequestMapping("/trade/info")
+    public ResultData tradeInfo(String orderNo){
+       TradeInfoVO tradeInfoVO = personalCenterService.tradeInfo(orderNo);
+        return ResultData.success(tradeInfoVO);
+    }
+
+    /**
+     * 交易分析
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    @RequestMapping("/trade/analysis")
+    public ResultData tradeAnalysis(@RequestParam("startTime") String startTime,@RequestParam("endTime") String endTime){
+       log.info("startTime : [{}] ;  endTime : [{}]", DateUtil.str2Date(startTime,"yyyyMMddHHmmss"), DateUtil.str2Date(endTime,"yyyyMMddHHmmss"));
+        TradeAnalysisVO tradeAnalysisVO = personalCenterService.tradeAnalysis(DateUtil.str2Date(startTime,"yyyyMMddHHmmss"),
+                DateUtil.str2Date(endTime,"yyyyMMddHHmmss"));
+      //  return  ResultData.success(tradeAnalysisVO);
+        return null;
     }
 
 }

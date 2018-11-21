@@ -11,4 +11,6 @@ public interface IdentityTypeService {
     List<IdentityType> listAll(boolean b);
 
     void insertIdentity(Integer identityTypeId,Long onlineUserId);
+
+    List<String> selectIdNameByIdList(List<Integer> identityIdList);
 }

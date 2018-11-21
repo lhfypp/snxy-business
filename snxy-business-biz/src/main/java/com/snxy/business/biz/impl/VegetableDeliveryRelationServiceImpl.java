@@ -75,4 +75,10 @@ public class VegetableDeliveryRelationServiceImpl implements VegetableDeliveryRe
         List<VegetableDeliveryRelation> vegetableDeliveryRelationList = vegetableDeliveryRelationMapper.selectGoodsByDeliveryOrderId(deliveryOrderId);
         return vegetableDeliveryRelationList;
     }
+
+    @Override
+    public List<VegetableDeliveryRelation> selectNameWeightByDeliveryIdList(List<Long> deliveryIdList) {
+
+        return  vegetableDeliveryRelationMapper.selectNameWeightByDeliveryIdList(deliveryIdList);
+    }
 }

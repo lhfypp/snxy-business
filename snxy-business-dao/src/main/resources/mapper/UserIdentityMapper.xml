@@ -123,7 +123,7 @@
     </select>
     <!--查询当前用户身份-->
     <select id="selectIdentityIdByOnlineUserId" resultType="Integer">
-        SELECT
+        SELECT DISTINCT
         ui.identity_id
         from user_identity as ui
         where online_user_id = #{onlineUserId}

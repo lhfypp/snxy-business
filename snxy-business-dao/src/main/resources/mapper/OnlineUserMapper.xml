@@ -121,8 +121,6 @@
          system_user_id=#{SystemUserId}
   </select>
 
-
-
   <!--添加用户名字W-->
   <update id="updateNameBySystemUserId">
     update online_user

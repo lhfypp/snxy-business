@@ -475,4 +475,43 @@
     from delivery_order
     where order_no = #{orderNo}
   </select>
+<!--查询货运单车牌号-->
+  <select id="selectDriverNumByTypeId" resultType="java.lang.String">
+     select
+   de.driver_plate_number
+  from trade_result as trade
+  INNER JOIN delivery_order as de
+  on trade.out_trade_no=de.order_no
+  where de.order_no=#{orderNo} and
+  trade.business_type_id=#{businessTypeId}
+  </select>
+
+
+  <!--根据货运单号查询车牌号-->
+  <select id="selectDriverNumByOrderNo" resultMap="BaseResultMap">
+     select
+    <include refid="Base_Column_List" />
+    from delivery_order as de
+    where order_no=#{orderNo}
+  </select>
+
+  <!--根据orderNo查询deliveryId-->
+  <select id="selectDeliveryIdByOrderNo" resultType="Long">
+    SELECT
+    id
+    from delivery_order
+    where order_no  =#{orderNo}
+  </select>
+
+  <!--根据orderNoList查询deliveryIdList-->
+  <select id="selectDeliveryIdByOrderList" resultType="Long">
+    SELECT
+    id
+    from delivery_order
+    where order_no  in
+    <foreach collection="orderNoList" index="index" item="orderNo" open="(" separator="," close=")">
+      #{orderNo}
+    </foreach>
+  </select>
+
 </mapper>

@@ -1,6 +1,7 @@
 package com.snxy.business.biz.impl;
 
 import com.snxy.business.biz.config.IdentityTypeEnum;
+import com.snxy.business.dao.mapper.IdentityTypeMapper;
 import com.snxy.business.domain.IdentityType;
 import com.snxy.business.service.IdentityTypeService;
 import com.snxy.business.service.UserIdentityService;
@@ -18,6 +19,8 @@ import java.util.List;
 public class IdentityTypeServiceImpl implements IdentityTypeService {
     @Resource
     private UserIdentityService userIdentityService;
+    @Resource
+    private IdentityTypeMapper identityTypeMapper;
 
     @Override
     public List<IdentityVO> selectAllIdentity() {
@@ -52,5 +55,11 @@ public class IdentityTypeServiceImpl implements IdentityTypeService {
             }
         }
         userIdentityService.insertIdentityByOnlineUserId(identityTypeId,onlineUserId);
+    }
+
+    @Override
+    public List<String> selectIdNameByIdList(List<Integer> identityIdList) {
+       List<String>  identityNameList = identityTypeMapper.selectIdNameByIdList(identityIdList);
+        return identityNameList;
     }
 }

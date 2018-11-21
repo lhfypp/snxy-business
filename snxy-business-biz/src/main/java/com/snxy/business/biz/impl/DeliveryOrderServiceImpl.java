@@ -510,6 +510,28 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
 
 }
 
+
+
+    @Override
+    public DeliveryOrder selectDriverNumByOrderNo(String orderNo) {
+        if (orderNo==null){
+            throw new BizException("订单号不能为空");
+        }
+        DeliveryOrder deliveryOrder = deliveryOrderMapper.selectDriverNumByOrderNo(orderNo);
+        return deliveryOrder;
+    }
+
+    @Override
+    public Long selectDeliveryIdByOrderNo(String orderNo) {
+
+        return   deliveryOrderMapper.selectDeliveryIdByOrderNo(orderNo);
+    }
+
+    @Override
+    public List<Long> selectDeliveryIdByOrderList(List<String> orderNoList) {
+        return deliveryOrderMapper.selectDeliveryIdByOrderList(orderNoList);
+    }
+
     //计算收费
     @Override
     public String chargeCount(EntranceFeeDetail entranceFeeDetail) {

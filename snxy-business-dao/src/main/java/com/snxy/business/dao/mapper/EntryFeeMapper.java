@@ -1,6 +1,9 @@
 package com.snxy.business.dao.mapper;
 
 import com.snxy.business.domain.EntryFee;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface EntryFeeMapper {
     int deleteByPrimaryKey(Long id);
@@ -14,4 +17,7 @@ public interface EntryFeeMapper {
     int updateByPrimaryKeySelective(EntryFee record);
 
     int updateByPrimaryKey(EntryFee record);
+
+    EntryFee selectFeeByOrderNo(@Param("orderNo") String orderNo);
+
 }

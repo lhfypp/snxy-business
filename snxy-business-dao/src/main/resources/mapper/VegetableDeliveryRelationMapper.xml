@@ -168,4 +168,17 @@
     from vegetable_delivery_relation
     where delivery_order_id = #{deliveryOrderId}
   </select>
+
+  <!--根据货运单id查询货物名和重量-->
+  <select id="selectNameWeightByDeliveryIdList" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    from vegetable_delivery_relation
+    where delivery_order_id in
+    <foreach collection="deliveryIdList" index="index" item="deliveryOrderId" open="(" separator="," close=")">
+      #{deliveryOrderId}
+    </foreach>
+
+  </select>
+
 </mapper>

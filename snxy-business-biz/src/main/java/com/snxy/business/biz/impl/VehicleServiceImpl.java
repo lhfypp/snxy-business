@@ -39,4 +39,13 @@ public class VehicleServiceImpl implements VehicleService {
     public List<Vehicle> vehicleList(Long dirverInfoId) {
         return vehicleMapper.selectByKey(dirverInfoId);
     }
+
+    @Override
+    public Vehicle selectTonnageByDriverNum(String driverPlateNumber) {
+        if (driverPlateNumber==null){
+            throw new BizException("车牌号不能为空");
+        }
+        Vehicle vehicle = vehicleMapper.selectTonnageByDriverNum(driverPlateNumber);
+        return vehicle;
+    }
 }

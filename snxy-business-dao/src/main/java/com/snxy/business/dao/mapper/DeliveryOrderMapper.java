@@ -26,4 +26,10 @@ public interface DeliveryOrderMapper {
 
     List<DeliveryOrder> selectByCompanyId(Long companyId);
 
+
+    DeliveryOrder selectDriverNumByOrderNo(@Param("orderNo")String orderNo);
+
+    Long selectDeliveryIdByOrderNo(@Param("orderNo")String orderNo);
+
+    List<Long> selectDeliveryIdByOrderList(@Param("orderNoList")List<String> orderNoList);
 }

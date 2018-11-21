@@ -122,6 +122,7 @@ public class OnlineUserServiceImpl implements OnlineUserService {
         return onlineUserMapper.selectOnlineUserIdBySystemUserId(systemUserId);
     }
 
+
     @Override
     public OnlineUser selectByOnlineUserId(Long onlineUserId) {
         OnlineUser onlineUser = onlineUserMapper.selectByPrimaryKey(onlineUserId);

@@ -184,4 +184,12 @@
     where driver_info_id = #{dirverInfoId}
     and a.entrance_fee_capacity_id = b.id
   </select>
+
+  <!--根据车牌号查询吨位-->
+  <select id="selectTonnageByDriverNum" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from vehicle
+    where plate_number = #{driverPlateNumber}
+  </select>
 </mapper>

@@ -2,7 +2,7 @@ package com.snxy.business.service;
 
 import com.snxy.business.domain.CompanyUserRelation;
 import com.snxy.business.domain.MerchantCompany;
-import com.snxy.business.service.vo.PersonalVO;
+import com.snxy.business.domain.OnlineUser;
 
 
 import java.util.List;
@@ -39,8 +39,8 @@ public interface CompanyUserRelationService {
 
     List<Long> selectCompanyIdByOnlineUserId(Long onlineUserId);
 
-    PersonalVO selectPersonalByOnlineUserId(Long systemUserId);
-
-
     CompanyUserRelation selectByOnlineUserId(Long onlineUserId);
+
+    OnlineUser selectUserNameByOlineUserId(Long onlineUserId);
+
 }

@@ -109,4 +109,18 @@
     from identity_type
     where is_delete = 0
   </select>
+
+  <!--查询所有身份W-->
+  <select id="selectIdNameByIdList" resultType="String">
+    SELECT
+    identity_name
+    from identity_type
+    where id in
+    <foreach collection="identityIdList" index="index" item="identityId" open="(" separator="," close=")">
+      #{identityId}
+    </foreach>
+  </select>
+
+
+
 </mapper>

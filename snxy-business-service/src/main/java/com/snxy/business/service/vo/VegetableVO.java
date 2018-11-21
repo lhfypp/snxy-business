@@ -5,14 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.math.BigDecimal;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PersonalVO {
-    private String userName;//员工姓名
-    private String phone;//手机号
-    private List<String> identityNameList;//身份名称
+public class VegetableVO {
+    private String vegetableName;//菜品名
+    private BigDecimal vegetableWeight;//菜品重量
 }

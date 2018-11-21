@@ -515,4 +515,143 @@
       remark = #{remark,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+<!--查询交易记录条数-->
+  <select id="searchTradeNum"  resultType="Long">
+    select
+    count(1)
+    from
+    trade_result as trade
+    INNER JOIN
+    delivery_order as de
+    ON  trade.out_trade_no = de.order_no
+    where
+    <if test="businessTypeId != null and businessTypeId > 0">
+      trade.business_type_id = #{businessTypeId}
+    </if>
+  </select>
+
+    <!--查询交易记录数据-->
+    <select id="tradeListAll"  resultMap="BaseResultMap">
+        select DISTINCT
+        trade.out_trade_no,
+        trade.trade_time,
+        trade.trade_method,
+        trade.body,
+        trade.business_type_id,
+        trade.channel
+        from trade_result as trade
+        INNER JOIN delivery_order as de
+        on trade.out_trade_no=de.order_no
+        where
+        <if test="businessTypeId != null and businessTypeId > 0">
+            trade.business_type_id = #{businessTypeId}
+        </if>
+    </select>
+
+  <!--查询带有起止时间的交易记录数据-->
+  <select id="tradeListTime"  resultMap="BaseResultMap">
+    select DISTINCT
+    trade.out_trade_no,
+    trade.trade_time,
+    trade.trade_method,
+    trade.body,
+    trade.business_type_id,
+    trade.channel
+    from trade_result as trade
+    INNER JOIN delivery_order as de
+    on trade.out_trade_no=de.order_no
+    where
+    <if test="businessTypeId != null and businessTypeId > 0">
+      trade.business_type_id = #{businessTypeId} and
+    </if>
+    trade.trade_time  between #{startTime}  AND #{endTime}
+  </select>
+
+  <!--查询交易记录详情-->
+  <select id="selectTradeInfo"  resultMap="BaseResultMap">
+    select DISTINCT
+    trade.trade_time,
+    trade.trade_method,
+    trade.body,
+    trade.business_type_id,
+    trade.out_trade_no
+    from trade_result as trade
+    where
+    <if test="orderNo != null">
+      trade.out_trade_no = #{orderNo}
+    </if>
+  </select>
+
+  <!--查询所有货运订单-->
+  <select id="selectOrderCount"  resultType="String">
+    select
+    count(out_trade_no)
+    from trade_result
+  </select>
+
+  <!--查询所有货运订单-->
+  <select id="selectOrderCountTime"  resultType="String">
+    select
+    count(out_trade_no)
+    from trade_result
+    where  trade_time between #{startTime} and #{endTime}
+  </select>
+
+  <!--查询所有货运订单号-->
+  <select id="selectOrderList"  resultType="String">
+    select
+     out_trade_no
+    from trade_result
+    where  str_to_date(trade_time,'%Y%m%d%H%i%s') between #{startTime} and #{endTime}
+  </select>
+
+  <!--查询所有微信支付总计-->
+  <select id="selectWeChatByOrderList"  resultType="String">
+    select
+     total_fee
+    from trade_result
+    where out_trade_no in
+    <foreach collection="orderNoList" index="index" item="orderNo" open="(" separator="," close=")">
+      #{orderNo}
+    </foreach>
+    and  channel = 1
+  </select>
+
+  <!--查询所有支付宝总计-->
+  <select id="selectAlipayByOrderList"  resultType="String">
+    select
+    out_trade_no
+    from trade_result
+    where out_trade_no in
+    <foreach collection="orderNoList" index="index" item="orderNo" open="(" separator="," close=")">
+      #{orderNo}
+    </foreach>
+    and  channel = 2
+  </select>
+
+  <!--查询一段时间内检测费-->
+  <select id="selectQualityTotalByOrderListAndTypeId"  resultType="String">
+    select
+    total_fee
+    from trade_result
+    where out_trade_no in
+    <foreach collection="orderNoList" index="index" item="orderNo" open="(" separator="," close=")">
+      #{orderNo}
+    </foreach>
+    and  business_type_id = 5
+  </select>
+
+  <!--查询 时间段内进门费-->
+  <select id="selectEntryCostTotalByOrderList"  resultType="String">
+    select
+    total_fee
+    from trade_result
+    where out_trade_no in
+    <foreach collection="orderNoList" index="index" item="outTradeNo" open="(" separator="," close=")">
+      #{outTradeNo}
+    </foreach>
+    and business_type_id = 1
+  </select>
+
 </mapper>

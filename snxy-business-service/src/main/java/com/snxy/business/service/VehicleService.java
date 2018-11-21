@@ -10,4 +10,6 @@ public interface VehicleService {
 
     List<Vehicle> vehicleList(Long dirverInfoId);
 
+    Vehicle selectTonnageByDriverNum(String driverPlateNumber);
+
 }

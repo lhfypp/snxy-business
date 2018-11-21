@@ -24,7 +24,7 @@ public interface CompanyUserRelationMapper {
 
     void insertCompanyRelation(CompanyUserRelation companyUserRelation);
 
-    CompanyUserRelation selectByOnlineUserId(Long id);
+    CompanyUserRelation selectByOnlineUserId(Long onlineUserId);
 
     void insertCompanyRelationList(List<CompanyUserRelation> companyUserRelationList);
 

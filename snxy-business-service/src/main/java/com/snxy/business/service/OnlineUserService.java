@@ -30,4 +30,5 @@ public interface OnlineUserService {
     OnlineUser selectByOnlineUserId(Long onlineUserId);
 
     Long selectOnlineUserIdBySystemUserId(Long systemUserId);
+
 }
