@@ -122,8 +122,12 @@ public class QualitySheetServiceImpl implements QualitySheetService {
         }else{
             weightTarget=null;
         }
+        Long orderId=null;
+        if(checkSheetVO.getDeliveryOrderId()!=null){
+            orderId=Long.parseLong(checkSheetVO.getDeliveryOrderId());
+        }
         QualitySheet qualitySheet= QualitySheet.builder()
-                    .deliveryOrderId(Long.parseLong(checkSheetVO.getDeliveryOrderId()))
+                    .deliveryOrderId(orderId)
                     .vehiclePlateNumber(checkSheetVO.getCarPlateNO())
                     .categoryName(checkSheetVO.getGoodName())
                     .checkTime(null)//检测时间
