@@ -80,7 +80,7 @@ public class SystemUserInterceptor implements HandlerInterceptor {
    private void setDebugSystemUser(HttpServletRequest request){
 
        List<IdentityVO> identityVOList = new ArrayList<>();
-       IdentityVO identityVO1 = IdentityVO.builder().id(1).identityName("商户负责人").build();
+       IdentityVO identityVO1 = IdentityVO.builder().id(2).identityName("商户员工").build();
        IdentityVO identityVO2 = IdentityVO.builder().id(3).identityName("司机").build();
        identityVOList.add(identityVO1);
        identityVOList.add(identityVO2);

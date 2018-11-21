@@ -20,11 +20,15 @@ public interface QualitySheetMapper {
 
     QualitySheet selectByOrderId(Long deliveryOrderId);
 
-    List<QualitySheet> selectByCompanyId(@Param("companyId") Long companyId);
+    List<QualitySheet> selectByCompanyId(@Param("companyId") String companyId);
+
     List<QualitySheet> selectQualitySheetList(@Param("useId") Long useId,@Param("searchName") String searchName);
+
     List<QualitySheet> selectAllQualitySheetList(@Param("useId") Long useId, @Param("searchName") String searchName);
+
     List<QualitySheet> selectAllQualitySheetListPart(@Param("useId") Long useId, @Param("searchName") String searchName);
 
     int deleteQualitySheetById(String  qualitySheetId);
-
+    List<QualitySheet> selectReportByCompanyId(@Param("companyId") Long companyId);
+    List<QualitySheet> selectReportAllQualitySheetList (@Param("useId") Long useId);
 }

@@ -24,7 +24,7 @@ public class DeliveryOrderTest {
         log.info(status);
     }
 
-    @Test
+ /*   @Test
     public void chargeCountTest(){
         EntranceFeeDetail entranceFeeDetail = new EntranceFeeDetail();
         entranceFeeDetail.setEntranceFeeCapacityId(1L);
@@ -32,5 +32,5 @@ public class DeliveryOrderTest {
         entranceFeeDetail.setStatus(3L);
         String cost = deliveryOrderService.chargeCount(entranceFeeDetail);
         log.info(cost);
-    }
+    }*/
 }

@@ -17,6 +17,7 @@ public interface VegetableMapper {
 
     int updateByPrimaryKey(Vegetable record);
 
+    Long selectByVegetableId(Long entranceFeeCategoryId);
     List<Vegetable> selectAll();
 
     List<Vegetable> selectByCategoryId(Long vegetableCategoryId);

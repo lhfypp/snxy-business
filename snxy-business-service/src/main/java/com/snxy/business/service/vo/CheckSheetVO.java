@@ -15,6 +15,7 @@ import org.hibernate.validator.constraints.NotBlank;
 public class CheckSheetVO {
     @NotBlank(message = "订单id不能为空")
     private String deliveryOrderId;//订单id
+    private String checkNO;//检测号
     @NotBlank(message = "公司名称不能为空")
     private String companyName;//公司名称
     @NotBlank(message = "负责人名称不能为空")
@@ -29,5 +30,6 @@ public class CheckSheetVO {
     private String goodName;//商品名称
     private String weight;//重量,可以为空
     private String userId;//用户id
+    private Integer contactPhone;//联系人手机号
     //缴费人姓名，手机号?
 }

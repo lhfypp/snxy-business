@@ -1,15 +1,15 @@
 package com.snxy.business.biz.impl;
 
 import com.snxy.business.biz.config.IdentityTypeEnum;
-import com.snxy.business.biz.feign.FileService;
 import com.github.pagehelper.PageHelper;
 import com.snxy.business.biz.feign.SmsService;
 import com.snxy.business.dao.mapper.CompanyUserRelationMapper;
 import com.snxy.business.dao.mapper.DeliveryOrderMapper;
 import com.snxy.business.dao.mapper.EntranceFeeDetailMapper;
+import com.snxy.business.dao.mapper.*;
 import com.snxy.business.domain.CompanyUserRelation;
 import com.snxy.business.domain.DeliveryOrder;
-import com.snxy.business.domain.EntranceFeeDetail;
+
 import com.snxy.business.service.DeliveryOrderService;
 import com.snxy.common.util.PageInfo;
 import com.snxy.business.domain.*;
@@ -30,8 +30,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
+
 import java.math.BigDecimal;
 
 @Service
@@ -44,6 +44,8 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
     private CompanyUserRelationMapper companyUserRelationMapper;
     @Resource
     private EntranceFeeDetailMapper entranceFeeDetailMapper;
+    @Resource
+    private VegetableMapper vegetableMapper;
     @Resource
     private RedisTemplate redisTemplate;
     @Resource
@@ -74,7 +76,6 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
     private MerchantService merchantService;
 
     //商户负责人查看在途订单列表
-    @Override
     public PageInfo<DeliveryOrder> selectByCreatorId(Long onlineUserId, Long status) {
         //查询公司id
         CompanyUserRelation companyUserRelation = companyUserRelationMapper.selectByOnlineUserId(onlineUserId);
@@ -86,7 +87,6 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
         deliveryOrderPageInfo.setData(deliveryOrderList);
         return deliveryOrderPageInfo;
     }
-
     //订单节点信息
     @Override
     public String selectByOrderNo(String orderNo) {
@@ -272,7 +272,9 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
             }
         }
 
+
         vegetableCertificateService.upload(deliveryOrder.getId(),valicatePictureVOS);
+
 
         //货品信息保存
         GoodsVO[] goodsVOS = deliveryOrderVo.getGoodsVOS();
@@ -378,7 +380,6 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
         if(responsibleDeliverOrders.isEmpty()){
             //没有未处理订单 怎么处理  随便给个死图
             return null;
-
         }else{
             returnDeliveryOrder = this.getUrgentDeliverOrder(responsibleUrgentDeliveryOrders);
             List<VegetableDeliveryRelation> vegetableDeliveryRelationList = vegetableDeliveryRelationService.selectGoodsByDeliveryId(returnDeliveryOrder.getId());
@@ -537,10 +538,6 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
         return deliveryOrders.get(0);
     }
 
-
-
-
-
     //创建订单号
     public String getOrderNo() {
         Integer lastOrderNo = (Integer) redisTemplate.opsForValue().get("orderNo");
@@ -572,7 +569,6 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
                 .operationDesc(message)
                 .build();
         return orderLog;
-
     }
 
     //添加用户系统账户
@@ -597,7 +593,6 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
 
         //这种没有注册的情况下，调用短信通知接口，通知被添加的用户进行APP下载（预留）
         smsService.sendSmsCode(phone,"您有一个订单，请下载APP",1L);
-
 
         return onlineUser;
     }
@@ -669,20 +664,26 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
 
     //计算收费
     @Override
-    public String chargeCount(EntranceFeeDetail entranceFeeDetail) {
+    public String chargeCount(ChargeCountVO chargeCountVO) {
+        //查询菜品大类
+        Long entranceFeeCategoryId = vegetableMapper.selectByVegetableId(chargeCountVO.getEntranceFeeCategoryId());
+        //价格
         String cost  ="";
         BigDecimal num = new BigDecimal("0.5");
-        BigDecimal num2 = new BigDecimal("3");
-        BigDecimal price = entranceFeeDetailMapper.selectPriceById(entranceFeeDetail);
+        BigDecimal num2 = new BigDecimal("4");
+        BigDecimal num3 = new BigDecimal("0.75");
+        BigDecimal price = entranceFeeDetailMapper.selectPriceById(chargeCountVO.getEntranceFeeCapacityId(),entranceFeeCategoryId);
         if (price.equals(null)){
             return "价格不存在";
         }else {
-            if (1 == entranceFeeDetail.getStatus()){
+            if (1 == chargeCountVO.getLoadStatus()){
                 cost = "当前收费为："+price;
-            }else if (2 == entranceFeeDetail.getStatus()){
+            }else if (2 == chargeCountVO.getLoadStatus()){
                 cost = "当前收费为："+price.multiply(num);
-            }else if (3 == entranceFeeDetail.getStatus()){
+            }else if (3 == chargeCountVO.getLoadStatus()){
                 cost = "当前收费为："+price.divide(num2,2,BigDecimal.ROUND_HALF_UP);
+            }else if (4 == chargeCountVO.getLoadStatus()){
+                cost = "当前收费为："+price.multiply(num3);
             }
             return cost;
         }

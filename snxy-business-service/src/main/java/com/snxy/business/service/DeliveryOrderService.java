@@ -14,7 +14,10 @@ public interface DeliveryOrderService {
 
     String selectByOrderNo(String orderNo);
 
-    String chargeCount(EntranceFeeDetail entranceFeeDetail);
+    String chargeCount(ChargeCountVO chargeCountVO);
+
+   /* BillVO createOrderNo(Long onlineUserId);
+    String chargeCount(EntranceFeeDetail entranceFeeDetail);*/
 
     void saveDeliveryOrder(SystemUserVO systemUserVO, DeliveryOrderVo deliveryOrderVo);
 

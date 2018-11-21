@@ -35,8 +35,6 @@ public class DeliveryOrder {
     private Long receiverCompanyId;
 
 
-
-
     private Long driverOnlineUserId;
 
     private String driverName;

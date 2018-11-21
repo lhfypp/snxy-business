@@ -18,12 +18,21 @@
     <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
     <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
     <result column="is_delete" jdbcType="TINYINT" property="isDelete" />
-    <result column="user_id" jdbcType="BIGINT" property="userId" />
+      <result column="check_fee" jdbcType="DECIMAL" property="checkFee" />
+      <result column="is_pay" jdbcType="INTEGER" property="isPay" />
+      <result column="user_id" jdbcType="BIGINT" property="userId" />
+      <result column="detection_system_id" jdbcType="BIGINT" property="detectionSystemId" />
+      <result column="pay_time" jdbcType="TIMESTAMP" property="payTime" />
+      <result column="refund_time" jdbcType="TIMESTAMP" property="refundTime" />
+      <result column="pay_method" jdbcType="INTEGER" property="payMethod" />
+      <result column="contact_phone" jdbcType="INTEGER" property="contactPhone" />
+
   </resultMap>
   <sql id="Base_Column_List">
-    id, code, delivery_order_id, weight, vegetable_category_id, category_name, vehicle_plate_number, 
-    production_location, check_time, qrcode_url, status, qualified, remark, gmt_create, 
-    gmt_modified, is_delete
+      id, code, delivery_order_id, weight, vegetable_category_id, category_name, vehicle_plate_number,
+    production_location, check_time, qrcode_url, status, qualified, remark, gmt_create,
+    gmt_modified, is_delete, check_fee, is_pay, user_id, detection_system_id, pay_time,
+    refund_time, pay_method, contact_phone
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -39,18 +48,22 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into quality_sheet (code, delivery_order_id, weight, 
-      vegetable_category_id, category_name, vehicle_plate_number, 
-      production_location, check_time, qrcode_url, 
-      status, qualified, remark, 
-      gmt_create, gmt_modified, is_delete
-      )
-    values (#{code,jdbcType=VARCHAR}, #{deliveryOrderId,jdbcType=BIGINT}, #{weight,jdbcType=REAL}, 
-      #{vegetableCategoryId,jdbcType=BIGINT}, #{categoryName,jdbcType=VARCHAR}, #{vehiclePlateNumber,jdbcType=VARCHAR}, 
-      #{productionLocation,jdbcType=VARCHAR}, #{checkTime,jdbcType=TIMESTAMP}, #{qrcodeUrl,jdbcType=VARCHAR}, 
-      #{status,jdbcType=INTEGER}, #{qualified,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
-      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=TINYINT}
-      )
+      insert into quality_sheet (code, delivery_order_id, weight,
+      vegetable_category_id, category_name, vehicle_plate_number,
+      production_location, check_time, qrcode_url,
+      status, qualified, remark,
+      gmt_create, gmt_modified, is_delete,
+      check_fee, is_pay, user_id,
+      detection_system_id, pay_time, refund_time,
+      pay_method, contact_phone)
+      values (#{code,jdbcType=VARCHAR}, #{deliveryOrderId,jdbcType=BIGINT}, #{weight,jdbcType=REAL},
+      #{vegetableCategoryId,jdbcType=BIGINT}, #{categoryName,jdbcType=VARCHAR}, #{vehiclePlateNumber,jdbcType=VARCHAR},
+      #{productionLocation,jdbcType=VARCHAR}, #{checkTime,jdbcType=TIMESTAMP}, #{qrcodeUrl,jdbcType=VARCHAR},
+      #{status,jdbcType=INTEGER}, #{qualified,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR},
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=TINYINT},
+      #{checkFee,jdbcType=DECIMAL}, #{isPay,jdbcType=INTEGER}, #{userId,jdbcType=BIGINT},
+      #{detectionSystemId,jdbcType=BIGINT}, #{payTime,jdbcType=TIMESTAMP}, #{refundTime,jdbcType=TIMESTAMP},
+      #{payMethod,jdbcType=INTEGER}, #{contactPhone,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.snxy.business.domain.QualitySheet">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
@@ -229,7 +242,8 @@
   when a.gmt_modified!="" or a.gmt_modified!=null then a.gmt_modified
   else a.gmt_create
  end as gmt_create,
-    a.gmt_modified as gmt_modified , a.is_delete as is_delete
+    a.gmt_modified as gmt_modified , a.is_delete as is_delete,a.check_fee as check_fee, a.is_pay as is_pay , a.user_id as user_id, a.detection_system_id as detection_system_id, a.pay_time as pay_time,
+    a.refund_time as refund_time, a.pay_method as pay_method, a.contact_phone as pay_method
     </sql>
 <select id="selectQualitySheetList" resultMap="BaseResultMap">
     select
@@ -264,9 +278,11 @@
     and( a.category_name like  concat("%",#{searchName},"%")
     or a.code like concat("%",#{searchName},"%")
     )
+  </if>
     and a.is_delete=0
      order by gmt_create desc
-  </if>
+
+
 </select>
 
   <select id="selectAllQualitySheetListPart" resultMap="BaseResultMap">
@@ -309,5 +325,42 @@
     where deo.receiver_company_id = #{companyId}
     and deo.id = qs.delivery_order_id
     order by qs.gmt_create DESC
+  </select>
+
+  <select id="selectReportByCompanyId" resultMap="BaseResultMap">
+    select
+    qs.id, qs.code, qs.delivery_order_id, qs.weight, qs.vegetable_category_id, qs.category_name, qs.vehicle_plate_number,
+    qs.production_location, qs.check_time, qs.qrcode_url, qs.status, qs.qualified, qs.remark,
+    qs.gmt_modified, qs.is_delete,
+    case
+    when qs.gmt_modified != "" or qs.gmt_modified != null then qs.gmt_modified
+    else qs.gmt_create
+    end as gmt_create
+    from quality_sheet qs,delivery_order deo
+    where deo.receiver_company_id = #{companyId}
+    and deo.id = qs.delivery_order_id
+    and( qs.qualified!=null and qs.qualified!='')
+    order by qs.gmt_create DESC
+  </select>
+
+  <select id="selectReportAllQualitySheetList" resultMap="BaseResultMap">
+    select
+    <include refid="selectBaseResult"/>
+    from quality_sheet a  left join  delivery_order b on  a.delivery_order_id=b.id
+    where
+    (a.user_id=#{useId}
+    or
+
+    ( b.receiver_online_user_id=#{useId}
+    or b.driver_online_user_id=#{useId}
+    or b.creator_id=#{useId}
+
+    ))
+
+      and a.is_delete=0
+      and( qs.qualified!=null and qs.qualified!='')
+      order by gmt_create desc
+
+
   </select>
 </mapper>

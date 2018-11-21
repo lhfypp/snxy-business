@@ -1,12 +1,15 @@
 package com.snxy.business.biz.impl;
 
+import com.snxy.business.biz.feign.FileService;
 import com.snxy.business.dao.mapper.VehicleMapper;
 import com.snxy.business.domain.EntranceFeeCapacity;
 import com.snxy.business.domain.Vehicle;
 import com.snxy.business.service.EntranceFeeCapacityService;
 import com.snxy.business.service.VehicleService;
 import com.snxy.business.service.vo.CarVO;
+import com.snxy.business.service.vo.VehicleVO;
 import com.snxy.common.exception.BizException;
+import com.snxy.common.response.ResultData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +26,8 @@ public class VehicleServiceImpl implements VehicleService {
     private VehicleMapper vehicleMapper;
     @Resource
     private EntranceFeeCapacityService entranceFeeCapacityService;
+    @Resource
+    private FileService fileService;
 
     @Override
     public List<CarVO> selectByDriverId(Long driverOnlineUserId) {
@@ -40,8 +45,23 @@ public class VehicleServiceImpl implements VehicleService {
 
     //保存行驶证
     @Override
-    public String saveVehicle(Vehicle vehicle) {
-        vehicle.setGmtCreate(new Date());
+    public String saveVehicle(VehicleVO vehicleVO) {
+        //上传图片
+        ResultData<String> resultData = fileService.upload(vehicleVO.getFile());
+        if (!resultData.isResult()){
+            throw new BizException("上传失败，请重试");
+        }
+        String url = resultData.getData();
+
+        Vehicle vehicle = Vehicle.builder()
+                .driverInfoId(vehicleVO.getDriverInfoId())
+                .vehicleDrivingLicenseNumber(vehicleVO.getVehicleDrivingLicenseNumber())
+                .vehicleDrivingLicenseUrl(url)
+                .entranceFeeCapacityId(vehicleVO.getEntranceFeeCapacityId())
+                .plateNumber(vehicleVO.getPlateNumber())
+                .tonnage(vehicleVO.getTonnage())
+                .gmtCreate(new Date())
+                .build();
         int result =vehicleMapper.insert(vehicle);
         if (result!=1){
             throw new BizException("保存失败，请重新再试");

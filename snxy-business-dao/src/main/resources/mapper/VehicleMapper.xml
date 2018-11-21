@@ -7,8 +7,7 @@
     <result column="plate_number" jdbcType="VARCHAR" property="plateNumber" />
     <result column="entrance_fee_capacity_id" jdbcType="BIGINT" property="entranceFeeCapacityId" />
     <result column="vehicle_driving_license_number" jdbcType="VARCHAR" property="vehicleDrivingLicenseNumber" />
-    <result column="vehicle_driving_license_front_url" jdbcType="VARCHAR" property="vehicleDrivingLicenseFrontUrl" />
-    <result column="vehicle_driving_license_back_url" jdbcType="VARCHAR" property="vehicleDrivingLicenseBackUrl" />
+    <result column="vehicle_driving_license_url" jdbcType="VARCHAR" property="vehicleDrivingLicenseUrl" />
     <result column="tonnage" jdbcType="VARCHAR" property="tonnage" />
     <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
     <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
@@ -18,7 +17,7 @@
   </resultMap>
   <sql id="Base_Column_List">
     id, driver_info_id, plate_number, entrance_fee_capacity_id, vehicle_driving_license_number, 
-    vehicle_driving_license_front_url, vehicle_driving_license_back_url, tonnage, gmt_create, gmt_modified, online_user_id, is_delete
+    vehicle_driving_license_url, tonnage, gmt_create, gmt_modified, online_user_id, is_delete
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -35,11 +34,11 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into vehicle (driver_info_id, plate_number, entrance_fee_capacity_id, 
-      vehicle_driving_license_number, vehicle_driving_license_back_url, vehicle_driving_license_front_url,
+      vehicle_driving_license_number, vehicle_driving_license_url,
       tonnage, gmt_create, gmt_modified, 
       online_user_id, is_delete)
     values (#{driverInfoId,jdbcType=BIGINT}, #{plateNumber,jdbcType=VARCHAR}, #{entranceFeeCapacityId,jdbcType=BIGINT}, 
-      #{vehicleDrivingLicenseNumber,jdbcType=VARCHAR}, #{vehicleDrivingLicenseBackUrl,jdbcType=VARCHAR}, #{vehicleDrivingLicenseFrontUrl,jdbcType=VARCHAR},
+      #{vehicleDrivingLicenseNumber,jdbcType=VARCHAR}, #{vehicleDrivingLicenseUrl,jdbcType=VARCHAR},
       #{tonnage,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, 
       #{onlineUserId,jdbcType=BIGINT}, #{isDelete,jdbcType=TINYINT})
   </insert>
@@ -61,11 +60,8 @@
       <if test="vehicleDrivingLicenseNumber != null">
         vehicle_driving_license_number,
       </if>
-      <if test="vehicleDrivingLicenseFrontUrl != null">
-        vehicle_driving_license_front_url,
-      </if>
-      <if test="vehicleDrivingLicenseBackUrl != null">
-        vehicle_driving_license_back_url,
+      <if test="vehicleDrivingLicenseUrl != null">
+        vehicle_driving_license_url,
       </if>
       <if test="tonnage != null">
         tonnage,
@@ -96,11 +92,8 @@
       <if test="vehicleDrivingLicenseNumber != null">
         #{vehicleDrivingLicenseNumber,jdbcType=VARCHAR},
       </if>
-      <if test="vehicleDrivingLicenseFrontUrl != null">
-        #{vehicle_driving_license_front_url,jdbcType=VARCHAR},
-      </if>
-      <if test="vehicleDrivingLicenseBackUrl != null">
-        #{vehicle_driving_license_back_url,jdbcType=VARCHAR},
+      <if test="vehicleDrivingLicenseUrl != null">
+        #{vehicle_driving_license_url,jdbcType=VARCHAR},
       </if>
       <if test="tonnage != null">
         #{tonnage,jdbcType=VARCHAR},
