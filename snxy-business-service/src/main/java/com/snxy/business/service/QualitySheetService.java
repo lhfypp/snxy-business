@@ -9,11 +9,15 @@ import com.snxy.business.service.vo.SystemUserVO;
 import com.snxy.common.util.PageInfo;
 
 public interface QualitySheetService {
-    QualitySheet qualitySheetByOrderId(Long deliveryOrderId);
+    QualitySheet qualitySheetByOrderId(Long checkId);
 
     PageInfo<QualitySheet> qualitySheetList(Long onlineUserId);
     String createQualitySheet(CheckSheetVO checkSheetVO,Long userId);
     PageInfo searchWillBeQualitySheet(SystemUserVO systemUserVO,String searchName);
     PageInfo searchQualitySheet(SystemUserVO systemUserVO,String searchName);
     int    deleteQualitySheetById(String qualitySheetId);
+    String createQualitySheet(String deliveryOrderId);
+    String generateCheckOderNo();
+    PageInfo searchQualitySheetReportList(SystemUserVO systemUserVO);
+
 }
