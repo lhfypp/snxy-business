@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.List;
+
 
 @Service
 @Slf4j
@@ -24,4 +24,8 @@ public class EntryFeeServiceImpl implements EntryFeeService {
         return entryFee;
     }
 
+    public EntryFee selectByDeliveryOrderId(Long deliveryOrderId) {
+        EntryFee entryFee = entryFeeMapper.selectByDeliveryOrderId(deliveryOrderId);
+        return entryFee;
+    }
 }

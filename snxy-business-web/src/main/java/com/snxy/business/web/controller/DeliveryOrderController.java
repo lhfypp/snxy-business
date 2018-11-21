@@ -2,6 +2,7 @@ package com.snxy.business.web.controller;
 
 import com.snxy.business.domain.EntranceFeeDetail;
 import com.snxy.business.service.DeliveryOrderService;
+import com.snxy.business.service.vo.ChargeCountVO;
 import com.snxy.common.response.ResultData;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,8 +27,8 @@ public class DeliveryOrderController {
 
     //收费计算
     @RequestMapping("/charge/count")
-    public ResultData chargeCount(EntranceFeeDetail entranceFeeDetail){
-        String price = deliveryOrderService.chargeCount(entranceFeeDetail);
+    public ResultData chargeCount(ChargeCountVO chargeCountVO){
+        String price = deliveryOrderService.chargeCount(chargeCountVO);
         return ResultData.success(price);
     }
 }

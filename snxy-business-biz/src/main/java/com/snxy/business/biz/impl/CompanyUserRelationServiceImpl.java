@@ -92,7 +92,11 @@ public class CompanyUserRelationServiceImpl implements CompanyUserRelationServic
     @Override
     public OnlineUser selectUserNameByOlineUserId(Long onlineUserId) {
         OnlineUser onlineUser = onlineUserService.selectByOnlineUserId(onlineUserId);
-        return onlineUser;
+        return onlineUser;}
+
+    public List<CompanyUserRelation> selectFounderByCompanyId(Long companyId) {
+        List<CompanyUserRelation> companyUserRelationList = companyUserRelationMapper.selectFounderByCompanyId(companyId);
+        return companyUserRelationList;
     }
 
 

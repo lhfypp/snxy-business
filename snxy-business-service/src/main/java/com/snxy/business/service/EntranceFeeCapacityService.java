@@ -6,4 +6,7 @@ import java.util.List;
 
 public interface EntranceFeeCapacityService {
     List<EntranceFeeCapacity> carTypeList();
+
+    List<EntranceFeeCapacity> selectAll();
+
 }

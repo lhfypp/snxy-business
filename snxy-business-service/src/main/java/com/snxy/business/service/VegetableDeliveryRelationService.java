@@ -21,4 +21,5 @@ public interface VegetableDeliveryRelationService {
 
     List<VegetableDeliveryRelation> selectNameWeightByDeliveryIdList(List<Long> deliveryIdList);
 
+    List<VegetableDeliveryRelation> selectAll();
 }

@@ -21,4 +21,6 @@ public interface GuaranteeDepositMapper {
     int updateIsGenerateQuality(Long orderId);
 
     GuaranteeDeposit selectGuaranteeByOrderNo(@Param("orderNo") String orderNo);
+
+    GuaranteeDeposit selectByDeliveryOrderId(Long id);
 }

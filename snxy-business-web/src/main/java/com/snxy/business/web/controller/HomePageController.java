@@ -1,6 +1,5 @@
 package com.snxy.business.web.controller;
 
-import com.snxy.business.domain.DeliveryOrder;
 import com.snxy.business.service.*;
 import com.snxy.business.service.vo.*;
 import com.snxy.common.response.ResultData;
@@ -28,6 +27,8 @@ public class HomePageController {
     private VegetableService vegetableService;
     @Resource
     private VegetableTempService vegetableTempService;
+    @Resource
+    private VehicleService vehicleService;
 
     /*
     * 获取当前最需要最新订单（一张）
@@ -78,8 +79,8 @@ public class HomePageController {
     * 具体货品展示
     * */
     @RequestMapping("/order/goods/show")
-    public ResultData showAllGoods(Long vegetableCategoryId){
-        PageInfo<Goods> goodsPageInfo = vegetableService.selectAllGoodsByCategoryId(vegetableCategoryId);
+    public ResultData showAllGoods(Long vegetableCategoryId,Integer pageNum,Integer pageSize){
+        PageInfo<Goods> goodsPageInfo = vegetableService.selectAllGoodsByCategoryId(vegetableCategoryId,pageNum,pageSize);
         return ResultData.success(goodsPageInfo);
     }
 
@@ -102,6 +103,15 @@ public class HomePageController {
     }
 
     /*
+    * 司机确认发货前车辆选择
+    * */
+    @RequestMapping("/order/vehicle/show")
+    public ResultData showVehicle(@RequestAttribute("systemUser")SystemUserVO systemUserVO){
+        List<CarVO> carVOList = vehicleService.selectByDriverId(systemUserVO.getOnlineUserId());
+        return ResultData.success(carVOList);
+    }
+
+    /*
     * 司机选择车辆确认发货
     * 商户确认订单，商确认订单时不需传递车辆信息
     * */
@@ -116,8 +126,18 @@ public class HomePageController {
     * */
     @RequestMapping("/order/details")
     public ResultData showOrderDetails(Long deliveryOrderId){
-        DeliveryOrder deliveryOrder = deliveryOrderService.showOrderDetails(deliveryOrderId);
+        DeliveryOrderMessageVO deliveryOrderMessageVO = deliveryOrderService.showOrderDetails(deliveryOrderId);
 
-        return ResultData.success(deliveryOrder);
+        return ResultData.success(deliveryOrderMessageVO);
+    }
+
+    /*
+    * 查看订单列表
+    * */
+    @RequestMapping("/order/list/show")
+    public ResultData showOrderList(@RequestAttribute("systemUser")SystemUserVO systemUserVO,Integer pageNum,Integer pageSize,Integer status){
+        //status  未进门1   待检测2   已完成3
+        PageInfo<HomePageOrderVO> homePageOrderVO = deliveryOrderService.showOrderList(systemUserVO,pageNum,pageSize,status);
+        return ResultData.success(homePageOrderVO);
     }
 }

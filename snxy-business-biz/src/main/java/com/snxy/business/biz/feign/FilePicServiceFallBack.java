@@ -16,6 +16,8 @@ public class FilePicServiceFallBack implements FilePicService {
         return ResultData.fail("身份证上传失败");
     }
 
+
+
     @Override
     public ResultData<IdCardInfoVO> idcardBack(MultipartFile idBackUrl) {
         return ResultData.fail("身份证上传失败");

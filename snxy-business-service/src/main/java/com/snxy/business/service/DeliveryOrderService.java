@@ -14,7 +14,10 @@ public interface DeliveryOrderService {
 
     String selectByOrderNo(String orderNo);
 
-    String chargeCount(EntranceFeeDetail entranceFeeDetail);
+    String chargeCount(ChargeCountVO chargeCountVO);
+
+   /* BillVO createOrderNo(Long onlineUserId);
+    String chargeCount(EntranceFeeDetail entranceFeeDetail);*/
 
     void saveDeliveryOrder(SystemUserVO systemUserVO, DeliveryOrderVo deliveryOrderVo);
 
@@ -22,7 +25,7 @@ public interface DeliveryOrderService {
 
     void confirmationOrder(SystemUserVO systemUserVO, DriverConfirmationVO driverConfirmationVO);
 
-    DeliveryOrder showOrderDetails(Long deliveryOrderId);
+    DeliveryOrderMessageVO showOrderDetails(Long deliveryOrderId);
 
     List<DeliveryOrder> selectByCompanyId(Long companyId);
     DeliveryOrder searchDeliveryOrderById(Long id);
@@ -32,5 +35,8 @@ public interface DeliveryOrderService {
     Long selectDeliveryIdByOrderNo(String orderNo);
 
     List<Long> selectDeliveryIdByOrderList(List<String> orderNoList);
+
+
+    PageInfo<HomePageOrderVO> showOrderList(SystemUserVO systemUserVO, Integer pageNum, Integer pageSize, Integer status);
 }
 

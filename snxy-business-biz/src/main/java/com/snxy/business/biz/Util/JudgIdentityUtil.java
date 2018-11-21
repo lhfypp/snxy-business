@@ -1,4 +1,4 @@
-package com.snxy.business.biz.Util;
+package com.snxy.business.biz.util;
 
 import com.snxy.business.domain.IdentityType;
 import com.snxy.business.service.vo.IdentityVO;

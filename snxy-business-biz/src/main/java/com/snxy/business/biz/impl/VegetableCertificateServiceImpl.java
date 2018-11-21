@@ -41,6 +41,12 @@ public class VegetableCertificateServiceImpl implements VegetableCertificateServ
         vegetableCertificateMapper.insertCertificateList(vegetableCertificateList);
     }
 
+    @Override
+    public List<VegetableCertificate> selectByDeliveryOrderId(Long deliveryOrderId) {
+        List<VegetableCertificate> vegetableCertificateList = vegetableCertificateMapper.selectByDeliveryOrderId(deliveryOrderId);
+        return vegetableCertificateList;
+    }
+
     public VegetableCertificate uploadImg(MultipartFile file,Long deliveryOrderId,Integer certificateType){
         ResultData<String> upload = fileService.upload(file);
         if (!upload.isResult()) {

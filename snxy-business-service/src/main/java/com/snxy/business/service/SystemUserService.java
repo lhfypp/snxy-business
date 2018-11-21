@@ -28,4 +28,6 @@ public interface SystemUserService {
     void isTruePwd(Long systemUserId,String password);
 
     String getSmsCode(String newMobile);
+
+    List<SystemUser> selectByMobileList(List<String> phoneList);
 }

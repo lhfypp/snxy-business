@@ -10,4 +10,5 @@ public interface GuaranteeDepositService {
 
     GuaranteeDeposit selectGuaranteeByOrderNo(String orderNo);
 
+    GuaranteeDeposit selectByDeliveryOrderId(Long id);
 }

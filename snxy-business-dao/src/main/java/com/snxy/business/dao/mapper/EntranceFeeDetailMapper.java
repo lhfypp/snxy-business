@@ -17,5 +17,5 @@ public interface EntranceFeeDetailMapper {
 
     int updateByPrimaryKey(EntranceFeeDetail record);
 
-    BigDecimal selectPriceById(EntranceFeeDetail entranceFeeDetail);
+    BigDecimal selectPriceById(Long entranceFeeCapacityId, Long entranceFeeCategoryId);
 }

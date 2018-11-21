@@ -21,5 +21,7 @@ public class QualitySheetVO {
     private Float load;//货物载重
     private String platNumber;//车牌号
     private Integer status;//状态信息
-    private Long userId;//用于判断是否可以删除
+    private Long userId;
+    private Integer qualified;
+
 }

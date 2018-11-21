@@ -20,4 +20,5 @@ public interface EntryFeeMapper {
 
     EntryFee selectFeeByOrderNo(@Param("orderNo") String orderNo);
 
+    EntryFee selectByDeliveryOrderId(Long deliveryOrderId);
 }

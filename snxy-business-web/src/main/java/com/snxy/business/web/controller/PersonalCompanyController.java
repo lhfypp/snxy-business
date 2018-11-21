@@ -22,13 +22,13 @@ public class PersonalCompanyController {
     @Resource
     private QualitySheetService qualitySheetService;
 
-    //商户负责人查看在途/已完成订单列表
+    //查看在途/已完成订单列表
     @RequestMapping("/onOrder/list")
     public ResultData onOrderList(Long onlineUserId,Long status){//status 2 运输中  5 已完成
         PageInfo<DeliveryOrder> deliveryOrderList = deliveryOrderService.selectByCreatorId(onlineUserId,status);
         return ResultData.success(deliveryOrderList);
     }
-    //商户负责人查看质量检测单
+    //查看质量检测单
     @RequestMapping("/qualitySheet/list")
     public ResultData qualitySheetList(Long onlineUserId){
         PageInfo<QualitySheet> qualitySheetList = qualitySheetService.qualitySheetList(onlineUserId);

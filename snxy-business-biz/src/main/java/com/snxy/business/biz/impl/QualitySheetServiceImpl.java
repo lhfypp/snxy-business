@@ -10,24 +10,33 @@ import com.snxy.business.service.QualitySheetService;
 import com.snxy.common.util.PageInfo;
 
 
-import com.snxy.business.biz.Util.JudgIdentityUtil;
+import com.snxy.business.biz.util.JudgIdentityUtil;
+
+
+
 import com.snxy.business.domain.DeliveryOrder;
+
 import com.snxy.business.service.*;
 import com.snxy.business.service.vo.*;
 import com.snxy.common.exception.BizException;
+
+
+
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.scheduling.annotation.Scheduled;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
 
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
 
 @Service
 @Slf4j
@@ -36,24 +45,22 @@ public class QualitySheetServiceImpl implements QualitySheetService {
     @Resource
     private QualitySheetMapper qualitySheetMapper;
     @Resource
+    private CompanyUserRelationService CompanyUserRelationService;
+    @Resource
+    private RedisTemplate<String,Object> redisTemplate;
+    @Resource
     private CompanyUserRelationMapper companyUserRelationMapper;
     @Resource
-    private GuaranteeDepositService guaranteeDepositService;
-    @Resource
     private DeliveryOrderService deliveryOrderService;
-    @Resource
-    private CompanyUserRelationService CompanyUserRelationService;
     @Resource
     private VegetableDeliveryRelationService vegetableDeliveryRelationService;
     @Resource
     private MerchantCompanyService merchantCompanyService;
-    @Resource
-    private RedisTemplate<String,Object> redisTemplate;
 
     //检测单详情
     @Override
-    public QualitySheet qualitySheetByOrderId(Long deliveryOrderId) {
-        QualitySheet qualitySheet = qualitySheetMapper.selectByOrderId(deliveryOrderId);
+    public QualitySheet qualitySheetByOrderId(Long checkId) {
+        QualitySheet qualitySheet = qualitySheetMapper.selectByPrimaryKey(checkId);
         return qualitySheet;
     }
 
@@ -61,8 +68,7 @@ public class QualitySheetServiceImpl implements QualitySheetService {
     @Override
     public PageInfo<QualitySheet> qualitySheetList(Long onlineUserId) {
         //获取公司id
-        CompanyUserRelation companyUserRelation = companyUserRelationMapper.selectByOnlineUserId(onlineUserId);
-        Long companyId = companyUserRelation.getCompanyId();
+        String  companyId = CompanyUserRelationService.searchComIdByUseId(onlineUserId);
         //查看质量检测单
         PageHelper.startPage(1,10);
         List<QualitySheet> qualitySheetList = qualitySheetMapper.selectByCompanyId(companyId);
@@ -71,12 +77,9 @@ public class QualitySheetServiceImpl implements QualitySheetService {
         return qualitySheetPageInfo;
     }
 
-
     //创建检测单
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public String createQualitySheet(CheckSheetVO checkSheetVO,Long userId) {
-        //用手机号查出用户id
+    public String generateCheckOderNo() {
         Integer lastQualityNo = (Integer) redisTemplate.opsForValue().get("qualityNo");
         String sixNumber;
         if (lastQualityNo == null || lastQualityNo.equals("")) {
@@ -93,6 +96,17 @@ public class QualitySheetServiceImpl implements QualitySheetService {
         sb.append("JC");
         sb.append(sf.format(now));
         sb.append(sixNumber);
+        return sb.toString();
+    }
+
+
+    //创建检测单
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public String createQualitySheet(CheckSheetVO checkSheetVO,Long userId) {
+        //用手机号查出用户id
+
+        Date now =new Date();
         String weightResource=checkSheetVO.getWeight();
         Float   weightTarget;
         if( weightResource!=null&&!"".equals(weightResource)){
@@ -100,14 +114,18 @@ public class QualitySheetServiceImpl implements QualitySheetService {
         }else{
             weightTarget=null;
         }
+        Long orderId=null;
+        if(checkSheetVO.getDeliveryOrderId()!=null){
+            orderId=Long.parseLong(checkSheetVO.getDeliveryOrderId());
+        }
         QualitySheet qualitySheet= QualitySheet.builder()
-                    .deliveryOrderId(Long.parseLong(checkSheetVO.getDeliveryOrderId()))
+                    .deliveryOrderId(orderId)
                     .vehiclePlateNumber(checkSheetVO.getCarPlateNO())
                     .categoryName(checkSheetVO.getGoodName())
                     .checkTime(null)//检测时间
                     .gmtCreate(now)
                     .gmtModified(null)//修改时间
-                    .code(sb.toString())
+                    .code(checkSheetVO.getCheckNO())
                     .isDelete((byte)0)
                     .productionLocation(checkSheetVO.getLocation())
                     .qrcodeUrl(null)//二维码地址
@@ -116,7 +134,8 @@ public class QualitySheetServiceImpl implements QualitySheetService {
                     .vegetableCategoryId(null)//货品id,无这张表
                     .weight(weightTarget)
                     .qualified(null)//是否合格
-                    .useId(userId)
+                    .userId(userId)
+                     .contactPhone(checkSheetVO.getContactPhone())
                     .build();
         int result=qualitySheetMapper.insert(qualitySheet);
         if(1!=result){
@@ -133,9 +152,10 @@ public class QualitySheetServiceImpl implements QualitySheetService {
         String judgIdentityStr= JudgIdentityUtil.judgIdentity(systemUserVO);
         if(judgIdentityStr.contains("1")){//查出商户负责人的所有质量检测单
             //用户查出公司id
-           String  companyId= CompanyUserRelationService.searchComIdByUseId(userId);
+          // String  companyId= CompanyUserRelationService.searchComIdByUseId(userId);
             //查出所有的质量检测单(已写)
-            PageHelper.startPage(1,10);
+           return qualitySheetList(userId);
+
 
         }else if(judgIdentityStr.contains("2")||judgIdentityStr.contains("3")){
             //查询出所有的与其相关待检测单(用在线用户查)
@@ -148,7 +168,7 @@ public class QualitySheetServiceImpl implements QualitySheetService {
                    .qrcode(qualitySheet.getQrcodeUrl())
                    .name(qualitySheet.getCategoryName())
                    .load(qualitySheet.getWeight())
-                   .userId(qualitySheet.getUseId())//用于判断是否可以删除
+                   .userId(qualitySheet.getUserId())//用于判断是否可以删除
                    .proposeTime(qualitySheet.getGmtCreate())
                    .build()
             ));
@@ -158,26 +178,77 @@ public class QualitySheetServiceImpl implements QualitySheetService {
         pageInfo.setData(qualitySheetVOList);
         return pageInfo;
     }
+
+    @Override
+    public PageInfo searchQualitySheetReportList(SystemUserVO systemUserVO) {
+        long userId=1;
+        List<QualitySheetVO> qualitySheetVOList=new ArrayList<>();
+        String judgIdentityStr= JudgIdentityUtil.judgIdentity(systemUserVO);
+        if(judgIdentityStr.contains("1")){//查出商户负责人的所有质量检测单
+            CompanyUserRelation companyUserRelation = companyUserRelationMapper.selectByOnlineUserId(userId);
+            Long companyId = companyUserRelation.getCompanyId();
+            //查看质量检测单
+            PageHelper.startPage(1,10);
+            List<QualitySheet> qualitySheetList = qualitySheetMapper.selectReportByCompanyId(companyId);
+            PageInfo<QualitySheet> qualitySheetPageInfo = new PageInfo<>();
+            qualitySheetPageInfo.setData(qualitySheetList);
+            return qualitySheetPageInfo;
+
+
+        }else if(judgIdentityStr.contains("2")||judgIdentityStr.contains("3")) {
+            PageHelper.startPage(1,10);
+            qualitySheetMapper.selectReportAllQualitySheetList(userId).forEach(qualitySheet ->qualitySheetVOList.add(QualitySheetVO.builder()
+                    .qualitySheerId(qualitySheet.getId().toString())
+                    .platNumber(qualitySheet.getVehiclePlateNumber())
+                    .status(qualitySheet.getStatus())
+                    .qualityNO(qualitySheet.getCode())
+                    .qrcode(qualitySheet.getQrcodeUrl())
+                    .name(qualitySheet.getCategoryName())
+                    .load(qualitySheet.getWeight())
+                    .userId(qualitySheet.getUserId())//用于判断是否可以删除
+                    .proposeTime(qualitySheet.getGmtCreate())
+                    .qualified(qualitySheet.getQualified())
+                    .build()
+            ));
+        }
+
+        PageInfo<QualitySheetVO> pageInfo;
+        pageInfo=new PageInfo<>();
+        pageInfo.setData(qualitySheetVOList);
+        return pageInfo;
+    }
+
     // 查询出所有的检测单
     @Override
     public PageInfo searchQualitySheet(SystemUserVO systemUserVO,String searchName){
+        //searchWillBeQualitySheet( systemUserVO, searchName);
         long userId=1;
-        List<QualitySheetVO> qualitySheetVOList=new ArrayList<>();
-        List<QualitySheet> qualitySheetList=new ArrayList<>();
-        PageHelper.startPage(1,10);
-        qualitySheetList.addAll(qualitySheetMapper.selectAllQualitySheetList(userId,searchName));
-        qualitySheetList.forEach(qualitySheet ->qualitySheetVOList.add(QualitySheetVO.builder()
-                .qualitySheerId(qualitySheet.getId().toString())
-                .platNumber(qualitySheet.getVehiclePlateNumber())
-                .status(qualitySheet.getStatus())
-                .qualityNO(qualitySheet.getCode())
-                .qrcode(qualitySheet.getQrcodeUrl())
-                .name(qualitySheet.getCategoryName())
-                .load(qualitySheet.getWeight())
-                .userId(qualitySheet.getUseId())//用于判断是否可以删除
-                .proposeTime(qualitySheet.getGmtCreate())
-                .build()
-        ));
+        List<QualitySheetVO> qualitySheetVOList = new ArrayList<>();
+        String judgIdentityStr= JudgIdentityUtil.judgIdentity(systemUserVO);
+        if(judgIdentityStr.contains("1")){//查出商户负责人的所有质量检测单
+            //用户查出公司id
+            String  companyId= CompanyUserRelationService.searchComIdByUseId(userId);
+
+            PageHelper.startPage(1,10);
+
+        }else if(judgIdentityStr.contains("2")||judgIdentityStr.contains("3")) {
+
+            List<QualitySheet> qualitySheetList = new ArrayList<>();
+            PageHelper.startPage(1, 10);
+            qualitySheetList.addAll(qualitySheetMapper.selectAllQualitySheetList(userId, searchName));
+            qualitySheetList.forEach(qualitySheet -> qualitySheetVOList.add(QualitySheetVO.builder()
+                    .qualitySheerId(qualitySheet.getId().toString())
+                    .platNumber(qualitySheet.getVehiclePlateNumber())
+                    .status(qualitySheet.getStatus())
+                    .qualityNO(qualitySheet.getCode())
+                    .qrcode(qualitySheet.getQrcodeUrl())
+                    .name(qualitySheet.getCategoryName())
+                    .load(qualitySheet.getWeight())
+                    .userId(qualitySheet.getUserId())//用于判断是否可以删除
+                    .proposeTime(qualitySheet.getGmtCreate())
+                    .build()
+            ));
+        }
         PageInfo<QualitySheetVO> pageInfo;
         pageInfo=new PageInfo<>();
         pageInfo.setData(qualitySheetVOList);
@@ -192,22 +263,18 @@ public class QualitySheetServiceImpl implements QualitySheetService {
         return 1;
     }
 
-    //创建待检测单，每隔 5分钟(是否写在支付接口中?)
-    @Scheduled(cron = "0 0/5 * * * *  ")
-    public String createQualitySheet() {
-        log.info("创建待检测单开始");
+     @Override
+    public String createQualitySheet(String deliveryOrderId) {
+
+        Long OrderId=Long.parseLong(deliveryOrderId);
         List<DeliveryOrder>deliveryOrderList=new ArrayList<>();
         List<CheckSheetWillBeVO>CheckSheetWillBeVOList=new ArrayList<>();
         List<GoodPartVo> GoodPartVoList=new ArrayList<>();
         //查询出所有的已付费没有生成待检测单的单子
-        guaranteeDepositService
-                .searchOrderIds()
-                    .forEach((OrderId)->deliveryOrderList
-                        .add(deliveryOrderService
-                                .searchDeliveryOrderById(OrderId)));
+        deliveryOrderList.add(deliveryOrderService
+                                .searchDeliveryOrderById(OrderId));
         if(deliveryOrderList.size()==0){
-            log.info("当前没有需要变成待检测单的单子");
-            return null;
+            throw new BizException("没有查询该订单有关信息");
         }
         for(DeliveryOrder deliveryOrder:deliveryOrderList){
            for(VegetableDeliveryRelation vegetableDeliveryRelation: vegetableDeliveryRelationService.searchAllVDRByOrderId(deliveryOrder.getId())){
@@ -256,8 +323,6 @@ public class QualitySheetServiceImpl implements QualitySheetService {
                 createQualitySheet(checkSheetVO,null);
             }
         }
-
-
 
         log.info("创建待检测单成功");
       return null;

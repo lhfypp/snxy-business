@@ -20,4 +20,6 @@ public interface EntranceFeeCapacityMapper {
     int updateByPrimaryKey(EntranceFeeCapacity record);
 
     List<EntranceFeeCapacity> selectcarList();
+
+    List<EntranceFeeCapacity> selectAll();
 }

@@ -240,4 +240,16 @@
     where id = #{systemUserId}
     and is_delete = 0
   </update>
+
+  <!--查询通过手机号集合-->
+  <select id="selectByPhoneList" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from system_user
+    where mobile in
+    <foreach collection="phoneList" index="index" open="(" close=")" item="phone" separator=",">
+      #{phone}
+    </foreach>
+    and is_delete = 0
+  </select>
 </mapper>

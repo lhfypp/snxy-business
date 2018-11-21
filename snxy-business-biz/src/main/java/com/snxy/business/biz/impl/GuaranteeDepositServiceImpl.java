@@ -33,10 +33,15 @@ public class GuaranteeDepositServiceImpl implements GuaranteeDepositService {
 
     @Override
     public GuaranteeDeposit selectGuaranteeByOrderNo(String orderNo) {
-        if (orderNo==null){
+        if (orderNo == null) {
             throw new BizException("货运单号不能为空");
         }
-       GuaranteeDeposit guaranteeDeposit =  guaranteeDepositMapper.selectGuaranteeByOrderNo(orderNo);
+        GuaranteeDeposit guaranteeDeposit = guaranteeDepositMapper.selectGuaranteeByOrderNo(orderNo);
+        return guaranteeDeposit;
+    }
+
+    public GuaranteeDeposit selectByDeliveryOrderId(Long id) {
+        GuaranteeDeposit guaranteeDeposit = guaranteeDepositMapper.selectByDeliveryOrderId(id);
         return guaranteeDeposit;
     }
 }

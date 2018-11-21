@@ -127,6 +127,12 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
 
+  <select id="selectByVegetableId" resultMap="BaseResultMap">
+    select vegetable_category_id
+    from vegetable
+    where id = #{entranceFeeCategoryId}
+</select>
+
   <!--查询所有菜品-->
   <select id="selectAll" resultMap="BaseResultMap">
     SELECT

@@ -172,4 +172,15 @@
       is_delete = #{isDelete,jdbcType=TINYINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <!--批量插入-->
+  <insert id="insertMessageList">
+    insert into message (title, content, remark,
+    sender, gmt_create)
+    values
+    <foreach collection="messageList" item="systemUser" separator=",">
+      (#{systemUser.title}, #{systemUser.content}, #{systemUser.remark},
+      #{systemUser.sender}, #{systemUser.gmtCreate})
+    </foreach>
+  </insert>
 </mapper>

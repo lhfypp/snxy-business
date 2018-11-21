@@ -25,5 +25,16 @@ public class IdCardInfoVO {
 
     private String issueDate;
 
+    private String effectiveStartDate;
 
+    private String driverLicenseNo;
+
+    private String country;
+
+    private String initialLicenseDate;
+
+    private String driveType;
+
+    private String validityTime;
+    
 }
