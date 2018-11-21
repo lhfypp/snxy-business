@@ -120,8 +120,12 @@ public class QualitySheetServiceImpl implements QualitySheetService {
         }else{
             weightTarget=null;
         }
+        Long orderId=null;
+        if(checkSheetVO.getDeliveryOrderId()!=null){
+            orderId=Long.parseLong(checkSheetVO.getDeliveryOrderId());
+        }
         QualitySheet qualitySheet= QualitySheet.builder()
-                    .deliveryOrderId(Long.parseLong(checkSheetVO.getDeliveryOrderId()))
+                    .deliveryOrderId(orderId)
                     .vehiclePlateNumber(checkSheetVO.getCarPlateNO())
                     .categoryName(checkSheetVO.getGoodName())
                     .checkTime(null)//检测时间
@@ -137,6 +141,7 @@ public class QualitySheetServiceImpl implements QualitySheetService {
                     .weight(weightTarget)
                     .qualified(null)//是否合格
                     .userId(userId)
+                     .contactPhone(checkSheetVO.getContactPhone())
                     .build();
         int result=qualitySheetMapper.insert(qualitySheet);
         if(1!=result){
